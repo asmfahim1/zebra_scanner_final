@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zebra_scanner_final/controller/server_controller.dart';
-import 'package:zebra_scanner_final/view/login_screen.dart';
 import 'package:zebra_scanner_final/widgets/const_colors.dart';
-
-import '../widgets/appBar_widget.dart';
 import '../widgets/reusable_textfield.dart';
 
 class ServerSetupScreen extends StatefulWidget {
@@ -63,18 +60,19 @@ class _ServerSetupScreenState extends State<ServerSetupScreen> {
               const SizedBox(
                 height: 20,
               ),
-              GestureDetector(
-                onTap: () async {
-                  print('Login Button pressed');
-                  Get.to(() => const LoginScreen());
-                },
-                child: Container(
-                  height: 50,
-                  width: 150,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    color: colors.comColor,
-                    /*gradient: LinearGradient(
+              Obx(() {
+                return GestureDetector(
+                  onTap: () async {
+                    //serverController.saveValue();
+                    serverController.serverSetup();
+                  },
+                  child: Container(
+                    height: 50,
+                    width: 150,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: colors.comColor,
+                      /*gradient: LinearGradient(
                         begin: Alignment.topRight,
                         end: Alignment.bottomLeft,
                         colors: [
@@ -82,19 +80,24 @@ class _ServerSetupScreenState extends State<ServerSetupScreen> {
                           colors.comColor.withOpacity(600),
                         ],
                       ),*/
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Save and Go',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    ),
+                    child: Center(
+                      child: serverController.isLoading1.value
+                          ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                          : const Text(
+                              'Save and Go',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                     ),
                   ),
-                ),
-              ),
+                );
+              }),
             ],
           );
         }),

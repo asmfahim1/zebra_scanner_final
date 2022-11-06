@@ -6,12 +6,17 @@ import 'package:flutter_datawedge/flutter_datawedge.dart';
 import 'package:zebra_scanner_final/controller/online_controller.dart';
 import 'package:zebra_scanner_final/widgets/appBar_widget.dart';
 import 'package:zebra_scanner_final/widgets/const_colors.dart';
-import 'dart:convert';
-
-import '../model/productList_model.dart';
 
 class OnlineMode extends StatefulWidget {
-  const OnlineMode({Key? key}) : super(key: key);
+  String tagId;
+  String storeId;
+  String userId;
+  OnlineMode(
+      {Key? key,
+      required this.tagId,
+      required this.storeId,
+      required this.userId})
+      : super(key: key);
 
   @override
   State<OnlineMode> createState() => _OnlineModeState();
@@ -19,6 +24,8 @@ class OnlineMode extends StatefulWidget {
 
 class _OnlineModeState extends State<OnlineMode> {
   OnlineController onlineController = Get.put(OnlineController());
+  bool _isEnabled = true;
+  ConstantColors colors = ConstantColors();
   /* String _scannerStatus = "Scanner status";
   String _lastCode = '';
   bool _isEnabled = true;
@@ -68,27 +75,27 @@ class _OnlineModeState extends State<OnlineMode> {
   @override
   void initState() {
     super.initState();
-    /*productList();
-    initScanner();*/
+    /*productList();*/
+    initScanner();
   }
 
   //controlling the scanner button
-  /* void initScanner() async {
+  void initScanner() async {
     FlutterDataWedge.initScanner(
         profileName: 'FlutterDataWedge',
         onScan: (result) {
           setState(() {
-            _lastCode = result.data;
-            autoScan(_lastCode);
+            onlineController.lastCode = result.data;
+            //onlineController.autoScan();
           });
         },
         onStatusUpdate: (result) {
           ScannerStatusType status = result.status;
           setState(() {
-            _scannerStatus = status.toString().split('.')[1];
+            onlineController.scannerStatus = status.toString().split('.')[1];
           });
         });
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -159,9 +166,9 @@ class _OnlineModeState extends State<OnlineMode> {
           Expanded(
               child: Container(
             child: ListView.builder(
-                itemCount: products.length,
+                itemCount: onlineController.products.length,
                 itemBuilder: (context, index) {
-                  if (products.isEmpty) {
+                  if (onlineController.products.isEmpty) {
                     return const Center(
                       child: Text(
                         "No Product Added.",
@@ -169,7 +176,7 @@ class _OnlineModeState extends State<OnlineMode> {
                       ),
                     );
                   } else {
-                    if (haveProduct == true) {
+                    if (onlineController.haveProduct.value) {
                       return const Center(
                         child: SizedBox(
                           height: 25,
@@ -203,14 +210,14 @@ class _OnlineModeState extends State<OnlineMode> {
                                         MainAxisAlignment.spaceEvenly,
                                     children: [
                                       Text(
-                                        "Item Code : ${products[index].xitem}",
+                                        "Item Code : ${onlineController.products[index].xitem}",
                                         style: GoogleFonts.urbanist(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w800,
                                         ),
                                       ),
                                       Text(
-                                        "Item Name :  ${products[index].xdesc}",
+                                        "Item Name :  ${onlineController.products[index].xdesc}",
                                         overflow: TextOverflow.ellipsis,
                                         style: GoogleFonts.urbanist(
                                           color: Colors.black,
@@ -218,7 +225,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                         ),
                                       ),
                                       Text(
-                                        "Supplier Name :  ${products[index].xcusname}",
+                                        "Supplier Name :  ${onlineController.products[index].xcusname}",
                                         overflow: TextOverflow.ellipsis,
                                         style: GoogleFonts.urbanist(
                                           color: Colors.black,
@@ -226,14 +233,14 @@ class _OnlineModeState extends State<OnlineMode> {
                                         ),
                                       ),
                                       Text(
-                                        "Total Quantity :  ${products[index].xcount}",
+                                        "Total Quantity :  ${onlineController.products[index].xcount}",
                                         style: GoogleFonts.urbanist(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w400,
                                         ),
                                       ),
                                       Text(
-                                        "Last Added Quantity :  ${products[index].lastqty}",
+                                        "Last Added Quantity :  ${onlineController.products[index].lastqty}",
                                         style: GoogleFonts.urbanist(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w400,
@@ -256,7 +263,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "Date : ${products[index].xbodycode}",
+                                          "Date : ${onlineController.products[index].xbodycode}",
                                           style: GoogleFonts.urbanist(
                                             color: Colors.black,
                                             fontSize: 12,
@@ -264,7 +271,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                           ),
                                         ),
                                         Text(
-                                          "Time: ${products[index].xitem}",
+                                          "Time: ${onlineController.products[index].xitem}",
                                           style: GoogleFonts.urbanist(
                                             color: Colors.black,
                                             fontSize: 12,
@@ -292,7 +299,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                       CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
-                                                      'Item Code:    ${products[index].xitem}',
+                                                      'Item Code:    ${onlineController.products[index].xitem}',
                                                       style:
                                                           GoogleFonts.urbanist(
                                                               fontSize: 15,
@@ -303,7 +310,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                                   .black54),
                                                     ),
                                                     Text(
-                                                      "Item Name :  ${products[index].xdesc}",
+                                                      "Item Name :  ${onlineController.products[index].xdesc}",
                                                       overflow:
                                                           TextOverflow.ellipsis,
                                                       style:
@@ -316,7 +323,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                                   .black54),
                                                     ),
                                                     Text(
-                                                      "Supplier Name:   ${products[index].xcusname}",
+                                                      "Supplier Name:   ${onlineController.products[index].xcusname}",
                                                       style:
                                                           GoogleFonts.urbanist(
                                                               fontSize: 15,
@@ -327,7 +334,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                                   .black54),
                                                     ),
                                                     Text(
-                                                      "Total Quantity:   ${products[index].xcount}",
+                                                      "Total Quantity:   ${onlineController.products[index].xcount}",
                                                       style:
                                                           GoogleFonts.urbanist(
                                                               fontSize: 15,
@@ -354,7 +361,9 @@ class _OnlineModeState extends State<OnlineMode> {
                                                           height: 60,
                                                           width: 30,
                                                           child: TextField(
-                                                            controller: qtyCon,
+                                                            controller:
+                                                                onlineController
+                                                                    .qtyCon,
                                                             textAlign: TextAlign
                                                                 .center,
                                                             keyboardType:
@@ -369,7 +378,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                               //     OutlineInputBorder(),
                                                               counterText: ' ',
                                                               hintText:
-                                                                  " ${products[index].lastqty}",
+                                                                  " ${onlineController.products[index].lastqty}",
                                                               hintStyle: GoogleFonts
                                                                   .urbanist(
                                                                       color: Colors
@@ -422,11 +431,18 @@ class _OnlineModeState extends State<OnlineMode> {
                                                         ),
                                                       ));
                                                       //post to api
-                                                      await updateQty(
-                                                          qtyCon.text,
-                                                          '${products[index].xitem}');
-                                                      await productList();
-                                                      qtyCon.clear();
+                                                      await onlineController
+                                                          .updateQty(
+                                                              onlineController
+                                                                  .qtyCon.text,
+                                                              onlineController
+                                                                  .products[
+                                                                      index]
+                                                                  .xitem);
+                                                      /*await onlineController
+                                                          .productList();*/
+                                                      onlineController.qtyCon
+                                                          .clear();
                                                       Navigator.pop(context);
 
                                                       // var snackBar = SnackBar(

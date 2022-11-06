@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import 'package:device_info_plus/device_info_plus.dart';
+import 'package:http/http.dart' as http;
 import 'package:device_info/device_info.dart';
+import 'package:zebra_scanner_final/remote_services.dart';
+import 'package:zebra_scanner_final/widgets/const_colors.dart';
 import 'dart:io';
+import '../view/login_screen.dart';
 
 class ServerController extends GetxController {
   RxBool isLoading = false.obs;
+  RxBool isLoading1 = false.obs;
   String deviceName = '', deviceId = '', normalId = '';
   TextEditingController server = TextEditingController();
+  ApiNameLink apiNameLink = ApiNameLink();
+  ConstantColors colors = ConstantColors();
 
   @override
   void onInit() {
@@ -34,24 +40,57 @@ class ServerController extends GetxController {
         print('=========${build.host}===========${build.manufacturer}');
         print('=========${build.product}===========${build.version}');
         print('=========${build.type}===========${build.tags}');
-        print('=========${build.id}===========${build.tags}');*/
+        print('=========${build.id}===========${build.tags}');
+*/
       }
     } catch (e) {
       print("Something occurs $e");
     }
     isLoading(false);
+    update();
   }
-/*  String _udid = 'Unknown';
-  Future<void> initPlatformState() async {
-    isLoading(true);
-    String udid;
-    try {
-      udid = await FlutterUdid.udid;
-    } on PlatformException {
-      udid = 'Failed to get UDID.';
+
+  Future<void> serverSetup() async {
+    isLoading1(true);
+    if (server.text.isEmpty) {
+      Get.snackbar('Error', "Field is empty",
+          borderWidth: 1.5,
+          borderColor: Colors.black54,
+          colorText: Colors.white,
+          backgroundColor: colors.comColor);
+      isLoading1(false);
+    } else {
+      var response = await http.post(
+          Uri.parse(
+              'http://${server.text}/sina/unistock/zebra/server_config.php'),
+          body: <String, dynamic>{
+            "device": deviceId,
+            "ip_add": server.text,
+          });
+      if (response.statusCode == 200) {
+        print("Connection Established----$deviceId-----${server.text}");
+        saveValue(server.text);
+        isLoading1(false);
+        Get.to(() => LoginScreen());
+      } else {
+        //need to specify more about what to do with this IP address and DeviceId,
+        Get.snackbar('Warning!', "Invalid IP Address",
+            borderWidth: 1.5,
+            borderColor: Colors.black54,
+            colorText: Colors.white,
+            backgroundColor: colors.comColor);
+        isLoading1(false);
+      }
     }
-    _udid = udid;
-    print(_udid);
-    isLoading(false);
-  }*/
+  }
+
+  String deviceID = '';
+  String ipAddress = '';
+  void saveValue(String serverIP) {
+    deviceID = deviceId;
+    ipAddress = serverIP;
+    print('-----------------$deviceID');
+    print('=================$ipAddress');
+    update();
+  }
 }
