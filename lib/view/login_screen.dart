@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zebra_scanner_final/controller/login_controller.dart';
 import 'package:zebra_scanner_final/view/online_mode_screen.dart';
+import 'package:zebra_scanner_final/view/tag_selection.dart';
 import 'package:zebra_scanner_final/widgets/appBar_widget.dart';
 import 'package:zebra_scanner_final/widgets/const_colors.dart';
 import 'package:zebra_scanner_final/widgets/reusable_passfield.dart';
@@ -33,7 +34,6 @@ class _LoginScreenState extends State<LoginScreen> {
             color: Colors.black,
             iconSize: 30,
           ),
-          action: [],
           color: Colors.white,
         ),
       ),
@@ -44,6 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
             key: loginController.loginKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ReusableTextFormField(
                     hintText: "Enter User Name",
@@ -90,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 GestureDetector(
                   onTap: () async {
                     print('Login Button pressed');
-                    Get.to(() => OnlineMode());
+                    Get.to(() => TagSelectScreen());
                   },
                   child: Container(
                     height: 50,
