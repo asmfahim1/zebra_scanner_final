@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:flutter_datawedge/flutter_datawedge.dart';
+import 'package:zebra_scanner_final/controller/online_controller.dart';
 import 'package:zebra_scanner_final/widgets/appBar_widget.dart';
 import 'package:zebra_scanner_final/widgets/const_colors.dart';
 import 'dart:convert';
@@ -17,7 +18,8 @@ class OnlineMode extends StatefulWidget {
 }
 
 class _OnlineModeState extends State<OnlineMode> {
-  String _scannerStatus = "Scanner status";
+  OnlineController onlineController = Get.put(OnlineController());
+  /* String _scannerStatus = "Scanner status";
   String _lastCode = '';
   bool _isEnabled = true;
   TextEditingController qtyCon = TextEditingController();
@@ -61,17 +63,17 @@ class _OnlineModeState extends State<OnlineMode> {
         }));
     print(response.body);
     productList();
-  }
+  }*/
 
   @override
   void initState() {
     super.initState();
-    productList();
-    initScanner();
+    /*productList();
+    initScanner();*/
   }
 
   //controlling the scanner button
-  void initScanner() async {
+  /* void initScanner() async {
     FlutterDataWedge.initScanner(
         profileName: 'FlutterDataWedge',
         onScan: (result) {
@@ -86,7 +88,7 @@ class _OnlineModeState extends State<OnlineMode> {
             _scannerStatus = status.toString().split('.')[1];
           });
         });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -121,11 +123,11 @@ class _OnlineModeState extends State<OnlineMode> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text('Last code:'),
-                    Text(_lastCode,
+                    Text(onlineController.lastCode,
                         style: Theme.of(context).textTheme.headline5),
                     SizedBox(width: 10.0),
                     Text('Status:'),
-                    Text(_scannerStatus,
+                    Text(onlineController.scannerStatus,
                         style: Theme.of(context).textTheme.headline6),
                   ],
                 ),
