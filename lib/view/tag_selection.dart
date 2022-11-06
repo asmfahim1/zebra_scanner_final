@@ -14,7 +14,15 @@ class TagSelectScreen extends StatefulWidget {
 
 class _TagSelectScreenState extends State<TagSelectScreen> {
   TagController tagController = Get.put(TagController());
-
+  
+  //need to call taglist at the time of this screen build
+    @override
+  void initState() {
+    // TODO: implement initState
+    tagController.listOfTags();
+    super.initState();
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
