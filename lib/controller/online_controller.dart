@@ -1,34 +1,43 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_datawedge/flutter_datawedge.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:zebra_scanner_final/controller/server_controller.dart';
 import '../model/productList_model.dart';
 import '../widgets/const_colors.dart';
 
 class OnlineController extends GetxController {
-  String scannerStatus = "Scanner status";
-  String lastCode = '';
+  RxString scannerStatus = "Scanner status".obs;
+  RxString lastCode = ''.obs;
   TextEditingController qtyCon = TextEditingController();
   ConstantColors colors = ConstantColors();
 
+  ServerController serverController = Get.put(ServerController());
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    print("++++++++++++++++${serverController.deviceID}");
+    productList();
+    super.onInit();
+  }
+
   //API for ProductList
   RxBool haveProduct = false.obs;
-  List<ProductList> products = [];
-  Future<void> productList(String deviceId) async {
+  List<ProductListModel> products = [];
+  Future<void> productList() async {
     haveProduct(true);
-    var response = await http.post(
-        Uri.parse("http://172.20.20.69/sina/unistock/allProductList.php"),
-        body: <String, dynamic>{"deviceId": deviceId});
-
+    var response = await http.get(Uri.parse(
+        "http://172.20.20.69/sina/unistock/zebra/productlist_device.php"));
+    /*body: <String, dynamic>{"device": serverController.deviceID});*/
     if (response.statusCode == 200) {
-      products = productListFromJson(response.body);
       print(response.body);
+      haveProduct(false);
+      products = productListModelFromJson(response.body);
     } else {
+      haveProduct(false);
       products = [];
     }
-    haveProduct(false);
   }
 
   //update quantity
@@ -39,22 +48,22 @@ class OnlineController extends GetxController {
     print("=======$response");
   }
 
-  //autoscann
-  Future<void> autoScan(String tagNum, String adminId, String outlet,
-      String storeId, String deviceId) async {
+  //addItem(automatically)
+  Future<void> addItem(String itemCode, String userId, String tagNum,
+      String adminId, String outlet, String storeId) async {
     var response = await http.post(
-        Uri.parse("http://172.20.20.69/sina/unistock/scan_only.php"),
+        Uri.parse("http://172.20.20.69/sina/unistock/zebra/add_item.php"),
         body: jsonEncode(<String, dynamic>{
-          "item": lastCode.toString(),
+          "item": itemCode,
           "user_id": "010340",
           "qty": 1,
-          "tag_no": "010340",
-          "admin_id": "010340",
-          "outlet": "010340",
-          "store": "010340",
-          "device": deviceId
+          "tag_no": tagNum,
+          "admin_id": adminId,
+          "outlet": outlet,
+          "store": storeId,
+          "device": serverController.deviceID
         }));
     print("==========${response.body}");
-    //productList();
+    productList();
   }
 }
