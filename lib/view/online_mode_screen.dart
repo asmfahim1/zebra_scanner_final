@@ -29,7 +29,6 @@ class OnlineMode extends StatefulWidget {
 
 class _OnlineModeState extends State<OnlineMode> {
   OnlineController onlineController = Get.put(OnlineController());
-  bool _isEnabled = true;
   ConstantColors colors = ConstantColors();
 
   /* String _scannerStatus = "Scanner status";
@@ -153,18 +152,19 @@ class _OnlineModeState extends State<OnlineMode> {
               ],
             ),
           ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                primary: _isEnabled ? colors.comColor : Colors.grey),
-            child: Text(
-              _isEnabled ? 'Disactivate' : 'Activate',
+          Obx(
+            () => ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: onlineController.isEnabled.value
+                      ? colors.comColor
+                      : Colors.grey),
+              child: Text(
+                onlineController.isEnabled.value ? 'Disactivate' : 'Activate',
+              ),
+              onPressed: () {
+                onlineController.enableButton();
+              },
             ),
-            onPressed: () {
-              FlutterDataWedge.enableScanner(!_isEnabled);
-              setState(() {
-                _isEnabled = !_isEnabled;
-              });
-            },
           ),
           Text(
             "List of Products added",

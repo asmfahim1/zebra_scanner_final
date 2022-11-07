@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:zebra_scanner_final/controller/server_controller.dart';
+import 'package:flutter_datawedge/flutter_datawedge.dart';
 import '../model/productList_model.dart';
 import '../widgets/const_colors.dart';
 
@@ -68,5 +69,12 @@ class OnlineController extends GetxController {
     print("==========${response.body}");
     postProduct(false);
     productList();
+  }
+
+  //make the active and di-active function
+  RxBool isEnabled = true.obs;
+  void enableButton() {
+    FlutterDataWedge.enableScanner(!isEnabled.value);
+    isEnabled.value = !isEnabled.value;
   }
 }
