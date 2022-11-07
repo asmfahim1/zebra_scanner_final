@@ -16,6 +16,8 @@ class TagSelectScreen extends StatefulWidget {
 class _TagSelectScreenState extends State<TagSelectScreen> {
   TagController tagController = Get.put(TagController());
   ConstantColors colors = ConstantColors();
+  
+  //need to call the tagList for first build
   @override
   void initState() {
     // TODO: implement initState
@@ -54,6 +56,7 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
             ),
             Expanded(
               child: Container(
+                //wrap ListView with Obc() for state-management. So that the product will show at the time when the screen is built.
                 child: Obx(() {
                   if (tagController.isLoading.value) {
                     return Center(
