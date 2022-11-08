@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:flutter_datawedge/flutter_datawedge.dart';
 import 'package:zebra_scanner_final/controller/online_controller.dart';
-import 'package:zebra_scanner_final/controller/server_controller.dart';
 import 'package:zebra_scanner_final/widgets/appBar_widget.dart';
 import 'package:zebra_scanner_final/widgets/const_colors.dart';
 
@@ -30,7 +29,6 @@ class OnlineMode extends StatefulWidget {
 
 class _OnlineModeState extends State<OnlineMode> {
   OnlineController onlineController = Get.put(OnlineController());
-  bool _isEnabled = true;
   ConstantColors colors = ConstantColors();
 
   /* String _scannerStatus = "Scanner status";
@@ -47,7 +45,6 @@ class _OnlineModeState extends State<OnlineMode> {
     });
     var response = await http
         .get(Uri.parse("http://172.20.20.69/sina/unistock/allProductList.php"));
-
     if (response.statusCode == 200) {
       products = productListFromJson(response.body);
       print(response.body);
@@ -58,14 +55,12 @@ class _OnlineModeState extends State<OnlineMode> {
       haveProduct = false;
     });
   }
-
   //update quantity
   Future<void> updateQty(String amt, String item) async {
     var response = await http.post(
         Uri.parse("http://172.20.20.69/sina/unistock/update_item.php"),
         body: jsonEncode(<String, dynamic>{"item": item, "qty": amt}));
   }
-
   //autoscann
   Future<void> autoScan(String lastCode) async {
     var response = await http.post(
@@ -154,18 +149,19 @@ class _OnlineModeState extends State<OnlineMode> {
               ],
             ),
           ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                primary: _isEnabled ? colors.comColor : Colors.grey),
-            child: Text(
-              _isEnabled ? 'Disactivate' : 'Activate',
+          Obx(
+            () => ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: onlineController.isEnabled.value
+                      ? colors.comColor
+                      : Colors.grey),
+              child: Text(
+                onlineController.isEnabled.value ? 'Disactivate' : 'Activate',
+              ),
+              onPressed: () {
+                onlineController.enableButton();
+              },
             ),
-            onPressed: () {
-              FlutterDataWedge.enableScanner(!_isEnabled);
-              setState(() {
-                _isEnabled = !_isEnabled;
-              });
-            },
           ),
           Text(
             "List of Products added",
@@ -185,7 +181,7 @@ class _OnlineModeState extends State<OnlineMode> {
                 );
               } else {
                 if (onlineController.products.isEmpty) {
-                  return Center(
+                  return const Center(
                     child: Text("No Product present"),
                   );
                 } else {
@@ -194,7 +190,7 @@ class _OnlineModeState extends State<OnlineMode> {
                       itemBuilder: (context, index) {
                         return Container(
                           height: 150,
-                          padding: EdgeInsets.only(
+                          padding: const EdgeInsets.only(
                               top: 5, bottom: 5, left: 5, right: 5),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20.0),
@@ -209,7 +205,8 @@ class _OnlineModeState extends State<OnlineMode> {
                               children: [
                                 Expanded(
                                   child: Container(
-                                    padding: EdgeInsets.only(left: 10, top: 5),
+                                    padding:
+                                        const EdgeInsets.only(left: 10, top: 5),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -259,7 +256,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                 ),
                                 Container(
                                   width: 120,
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                       top: 10, right: 5, bottom: 5),
                                   child: Column(
                                     mainAxisAlignment:

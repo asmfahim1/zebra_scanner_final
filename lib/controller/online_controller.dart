@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:zebra_scanner_final/controller/server_controller.dart';
+import 'package:flutter_datawedge/flutter_datawedge.dart';
 import '../model/productList_model.dart';
 import '../widgets/const_colors.dart';
 
@@ -24,6 +25,7 @@ class OnlineController extends GetxController {
 
   //API for ProductList
   RxBool haveProduct = false.obs;
+  RxBool postProduct = false.obs;
   List<ProductListModel> products = [];
   Future<void> productList() async {
     haveProduct(true);
@@ -51,6 +53,7 @@ class OnlineController extends GetxController {
   //addItem(automatically)
   Future<void> addItem(String itemCode, String userId, String tagNum,
       String adminId, String outlet, String storeId) async {
+    postProduct(true);
     var response = await http.post(
         Uri.parse("http://172.20.20.69/sina/unistock/zebra/add_item.php"),
         body: jsonEncode(<String, dynamic>{
@@ -64,6 +67,14 @@ class OnlineController extends GetxController {
           "device": serverController.deviceID
         }));
     print("==========${response.body}");
+    postProduct(false);
     productList();
+  }
+
+  //make the active and di-active function
+  RxBool isEnabled = true.obs;
+  void enableButton() {
+    FlutterDataWedge.enableScanner(!isEnabled.value);
+    isEnabled.value = !isEnabled.value;
   }
 }

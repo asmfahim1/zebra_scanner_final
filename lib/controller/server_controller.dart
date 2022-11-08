@@ -60,6 +60,7 @@ class ServerController extends GetxController {
           backgroundColor: colors.comColor);
       isLoading1(false);
     } else {
+      //'http://${server.text}/sina/unistock/zebra/server_config.php'
       var response = await http.post(
           Uri.parse(
               'http://${server.text}/sina/unistock/zebra/server_config.php'),
