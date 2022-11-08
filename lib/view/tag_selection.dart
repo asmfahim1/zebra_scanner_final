@@ -57,6 +57,7 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
             Expanded(
               child: Container(
                 //wrap ListView with Obc() for state-management. So that the product will show at the time when the screen is built.
+                margin: EdgeInsets.only(left: 05, right: 05),
                 child: Obx(() {
                   if (tagController.isLoading.value) {
                     return Center(
@@ -161,7 +162,7 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
                                         ),
                                         Container(
                                           width: 120,
-                                          padding: EdgeInsets.only(
+                                          padding: const EdgeInsets.only(
                                               top: 10, right: 5, bottom: 5),
                                           child: Column(
                                             mainAxisAlignment:
