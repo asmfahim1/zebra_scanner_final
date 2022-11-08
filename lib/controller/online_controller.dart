@@ -19,7 +19,6 @@ class OnlineController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     print("++++++++++++++++${serverController.deviceID}");
-    productList();
     super.onInit();
   }
 
@@ -27,11 +26,11 @@ class OnlineController extends GetxController {
   RxBool haveProduct = false.obs;
   RxBool postProduct = false.obs;
   List<ProductListModel> products = [];
-  Future<void> productList() async {
+  Future<void> productList(String tagNum) async {
+    print('${serverController.deviceID}');
     haveProduct(true);
     var response = await http.get(Uri.parse(
-        "http://172.20.20.69/sina/unistock/zebra/productlist_device.php"));
-    /*body: <String, dynamic>{"device": serverController.deviceID});*/
+        "http://172.20.20.69/sina/unistock/zebra/productlist_tag_device.php?tag_no=$tagNum"));
     if (response.statusCode == 200) {
       print(response.body);
       haveProduct(false);
@@ -43,11 +42,42 @@ class OnlineController extends GetxController {
   }
 
   //update quantity
-  Future<void> updateQty(String amt, String item) async {
-    var response = await http.post(
-        Uri.parse("http://172.20.20.69/sina/unistock/update_item.php"),
-        body: jsonEncode(<String, dynamic>{"item": item, "qty": amt}));
-    print("=======$response");
+  Future<void> updateQty(String itemCode, String userId, String tagNum,
+      String adminId, String outlet, String storeId) async {
+    if (qtyCon.text.isEmpty) {
+      qtyCon.text = quantity.value.toString();
+      print('=========${qtyCon.text}');
+      var response = await http.post(
+          Uri.parse("http://172.20.20.69/sina/unistock/zebra/add_item.php"),
+          body: jsonEncode(<String, dynamic>{
+            "item": itemCode,
+            "user_id": "010340",
+            "qty": qtyCon.text.toString(),
+            "tag_no": tagNum,
+            "admin_id": adminId,
+            "outlet": outlet,
+            "store": storeId,
+            "device": serverController.deviceID
+          }));
+      print("=======$response");
+    } else {
+      print('=========${qtyCon.text}');
+      var response = await http.post(
+          Uri.parse("http://172.20.20.69/sina/unistock/zebra/add_item.php"),
+          body: jsonEncode(<String, dynamic>{
+            "item": itemCode,
+            "user_id": "010340",
+            "qty": qtyCon.text.toString(),
+            "tag_no": tagNum,
+            "admin_id": adminId,
+            "outlet": outlet,
+            "store": storeId,
+            "device": serverController.deviceID
+          }));
+      print("=======$response");
+    }
+    qtyCon.clear();
+    quantity.value = 0;
   }
 
   //addItem(automatically)
@@ -68,7 +98,6 @@ class OnlineController extends GetxController {
         }));
     print("==========${response.body}");
     postProduct(false);
-    productList();
   }
 
   //make the active and di-active function
@@ -76,5 +105,19 @@ class OnlineController extends GetxController {
   void enableButton() {
     FlutterDataWedge.enableScanner(!isEnabled.value);
     isEnabled.value = !isEnabled.value;
+  }
+
+  //increment function
+  RxInt quantity = 0.obs;
+  void incrementQuantity() {
+    quantity.value = quantity.value + 1;
+  }
+
+  void decrementQuantity() {
+    if (quantity.value <= 0) {
+      Get.snackbar('Warning!', "You do not have quantity for decrement");
+    } else {
+      quantity.value = quantity.value - 1;
+    }
   }
 }
