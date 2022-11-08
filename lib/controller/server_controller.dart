@@ -53,11 +53,12 @@ class ServerController extends GetxController {
   Future<void> serverSetup() async {
     isLoading1(true);
     if (server.text.isEmpty) {
-      Get.snackbar('Error', "Field is empty",
+      server.text = '172.20.20.69';
+/*      Get.snackbar('Error', "Field is empty",
           borderWidth: 1.5,
           borderColor: Colors.black54,
           colorText: Colors.white,
-          backgroundColor: colors.comColor);
+          backgroundColor: colors.comColor);*/
       isLoading1(false);
     } else {
       //'http://${server.text}/sina/unistock/zebra/server_config.php'

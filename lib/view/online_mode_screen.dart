@@ -6,6 +6,7 @@ import 'package:flutter_datawedge/flutter_datawedge.dart';
 import 'package:zebra_scanner_final/controller/online_controller.dart';
 import 'package:zebra_scanner_final/widgets/appBar_widget.dart';
 import 'package:zebra_scanner_final/widgets/const_colors.dart';
+import 'package:zebra_scanner_final/widgets/reusable_textfield.dart';
 
 class OnlineMode extends StatefulWidget {
   //apadoto storeId and outlet same e rakhtesi
@@ -77,7 +78,8 @@ class _OnlineModeState extends State<OnlineMode> {
   @override
   void initState() {
     super.initState();
-    onlineController.productList();
+    onlineController.productList(widget.tagNum);
+    print('======${widget.tagNum}');
     initScanner(widget.userId, widget.tagNum, widget.adminId, widget.outlet,
         widget.storeId);
   }
@@ -92,6 +94,7 @@ class _OnlineModeState extends State<OnlineMode> {
             onlineController.lastCode.value = result.data;
             onlineController.addItem(onlineController.lastCode.value, userId,
                 tagNum, adminId, outlet, storeId);
+            onlineController.productList(widget.tagNum);
           });
         },
         onStatusUpdate: (result) {
@@ -291,7 +294,9 @@ class _OnlineModeState extends State<OnlineMode> {
                                               builder: (context) {
                                                 return AlertDialog(
                                                   title: Text(
-                                                    'Edit quantity',
+                                                    onlineController
+                                                        .products[index]
+                                                        .itemCode,
                                                     style: GoogleFonts.urbanist(
                                                         fontSize: 30,
                                                         fontWeight:
@@ -304,7 +309,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                             .start,
                                                     children: [
                                                       Text(
-                                                        'Item Code: ${onlineController.products[index].itemCode}',
+                                                        '${onlineController.products[index].itemDesc}',
                                                         style: GoogleFonts
                                                             .urbanist(
                                                                 fontSize: 15,
@@ -315,20 +320,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                                     .black54),
                                                       ),
                                                       Text(
-                                                        "Item Name : ${onlineController.products[index].itemDesc}",
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: GoogleFonts
-                                                            .urbanist(
-                                                                fontSize: 15,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w800,
-                                                                color: Colors
-                                                                    .black54),
-                                                      ),
-                                                      Text(
-                                                        "Supplier Name: ${onlineController.products[index].xcus}",
+                                                        "${onlineController.products[index].xcus}",
                                                         style: GoogleFonts
                                                             .urbanist(
                                                                 fontSize: 15,
@@ -349,10 +341,16 @@ class _OnlineModeState extends State<OnlineMode> {
                                                                 color: Colors
                                                                     .black54),
                                                       ),
+                                                      SizedBox(
+                                                        height: 10,
+                                                      ),
                                                       Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
                                                         children: [
-                                                          Text(
-                                                            "Last added quantity : ",
+                                                          /*Text(
+                                                            "Quantity : ",
                                                             style: GoogleFonts
                                                                 .urbanist(
                                                                     fontSize:
@@ -362,54 +360,100 @@ class _OnlineModeState extends State<OnlineMode> {
                                                                             .w800,
                                                                     color: Colors
                                                                         .black54),
-                                                          ),
+                                                          ),*/
+                                                          GestureDetector(
+                                                              onTap: () {
+                                                                onlineController
+                                                                    .decrementQuantity();
+                                                              },
+                                                              child:
+                                                                  CircleAvatar(
+                                                                backgroundColor:
+                                                                    colors
+                                                                        .comColor,
+                                                                radius: 15,
+                                                                child:
+                                                                    const Icon(
+                                                                  Icons.remove,
+                                                                  size: 20,
+                                                                ),
+                                                              )),
                                                           SizedBox(
-                                                            height: 60,
-                                                            width: 30,
-                                                            child: TextField(
-                                                              controller:
-                                                                  onlineController
-                                                                      .qtyCon,
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              keyboardType:
-                                                                  TextInputType
-                                                                      .number,
-                                                              cursorColor: Theme
-                                                                      .of(context)
-                                                                  .primaryColorDark,
-                                                              decoration:
-                                                                  InputDecoration(
-                                                                // border:
-                                                                //     OutlineInputBorder(),
-                                                                counterText:
-                                                                    ' ',
-                                                                hintText:
-                                                                    " ${onlineController.products[index].manualQty}",
-                                                                hintStyle: GoogleFonts
-                                                                    .urbanist(
-                                                                        color: Colors
-                                                                            .black),
+                                                            width: 10,
+                                                          ),
+                                                          Obx(
+                                                            () => Container(
+                                                              width: 100,
+                                                              child: TextField(
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                controller:
+                                                                    onlineController
+                                                                        .qtyCon,
+                                                                decoration:
+                                                                    InputDecoration(
+                                                                  focusedBorder:
+                                                                      OutlineInputBorder(
+                                                                    borderSide:
+                                                                        BorderSide(
+                                                                      width:
+                                                                          1.5,
+                                                                      color: colors
+                                                                          .comColor,
+                                                                    ),
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            5.5),
+                                                                  ),
+                                                                  enabledBorder:
+                                                                      const OutlineInputBorder(
+                                                                    borderSide:
+                                                                        BorderSide(
+                                                                      width:
+                                                                          1.5,
+                                                                      color: Colors
+                                                                          .blue,
+                                                                    ),
+                                                                  ),
+                                                                  filled: true,
+                                                                  hintText:
+                                                                      '${onlineController.quantity.value}',
+                                                                  hintStyle: const TextStyle(
+                                                                      color: Colors
+                                                                          .black,
+                                                                      fontSize:
+                                                                          25,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600),
+                                                                  fillColor:
+                                                                      Colors.blueGrey[
+                                                                          50],
+                                                                ),
                                                               ),
-                                                              // onChanged:
-                                                              //     (value) {
-                                                              //   //focus scope next and previous use for control the controller movement.
-                                                              //   if (value
-                                                              //           .length ==
-                                                              //       1) {
-                                                              //     FocusScope.of(
-                                                              //             context)
-                                                              //         .nextFocus();
-                                                              //   } else if (value
-                                                              //       .isEmpty) {
-                                                              //     FocusScope.of(
-                                                              //             context)
-                                                              //         .previousFocus();
-                                                              //   }
-                                                              // },
                                                             ),
                                                           ),
+                                                          SizedBox(
+                                                            width: 10,
+                                                          ),
+                                                          GestureDetector(
+                                                              onTap: () {
+                                                                onlineController
+                                                                    .incrementQuantity();
+                                                              },
+                                                              child:
+                                                                  CircleAvatar(
+                                                                backgroundColor:
+                                                                    colors
+                                                                        .comColor,
+                                                                radius: 15,
+                                                                child:
+                                                                    const Icon(
+                                                                  Icons.add,
+                                                                  size: 20,
+                                                                ),
+                                                              )),
                                                         ],
                                                       ),
                                                     ],
@@ -443,17 +487,18 @@ class _OnlineModeState extends State<OnlineMode> {
                                                         //post to api
                                                         await onlineController
                                                             .updateQty(
-                                                                onlineController
-                                                                    .qtyCon
-                                                                    .text,
-                                                                onlineController
-                                                                    .products[
-                                                                        index]
-                                                                    .itemCode);
-                                                        /*await onlineController
-                                                          .productList();*/
-                                                        onlineController.qtyCon
-                                                            .clear();
+                                                          onlineController
+                                                              .products[index]
+                                                              .itemCode,
+                                                          widget.userId,
+                                                          widget.tagNum,
+                                                          widget.adminId,
+                                                          widget.outlet,
+                                                          widget.storeId,
+                                                        );
+                                                        await onlineController
+                                                            .productList(
+                                                                widget.tagNum);
                                                         Navigator.pop(context);
 
                                                         // var snackBar = SnackBar(
