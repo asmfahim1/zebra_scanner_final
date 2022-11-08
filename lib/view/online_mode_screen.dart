@@ -90,11 +90,11 @@ class _OnlineModeState extends State<OnlineMode> {
     FlutterDataWedge.initScanner(
         profileName: 'FlutterDataWedge',
         onScan: (result) {
-          setState(() {
+          setState(() async {
             onlineController.lastCode.value = result.data;
-            onlineController.addItem(onlineController.lastCode.value, userId,
-                tagNum, adminId, outlet, storeId);
-            onlineController.productList(widget.tagNum);
+            await onlineController.addItem(onlineController.lastCode.value,
+                userId, tagNum, adminId, outlet, storeId);
+            await onlineController.productList(widget.tagNum);
           });
         },
         onStatusUpdate: (result) {
@@ -174,7 +174,8 @@ class _OnlineModeState extends State<OnlineMode> {
               fontWeight: FontWeight.w700,
             ),
           ),
-          Expanded(child: Container(
+          Expanded(
+              child: Container(
             child: Obx(() {
               if (onlineController.haveProduct.value) {
                 return Center(
