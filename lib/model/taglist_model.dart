@@ -44,20 +44,20 @@ class TagListModel {
   String datecom;
 
   factory TagListModel.fromJson(Map<String, dynamic> json) => TagListModel(
-        ztime: json["ztime"],
-        zutime: json["zutime"],
-        zid: json["zid"],
-        zauserid: json["zauserid"],
-        zuuserid: json["zuuserid"],
-        xtagnum: json["xtagnum"],
-        xlong: json["xlong"],
-        xref: json["xref"],
-        xwh: json["xwh"],
-        xstatustag: json["xstatustag"],
-        zaip: json["zaip"],
-        zuip: json["zuip"],
+        ztime: json["ztime"] ?? '',
+        zutime: json["zutime"] ?? '',
+        zid: json["zid"] ?? '',
+        zauserid: json["zauserid"] ?? '',
+        zuuserid: json["zuuserid"] ?? '',
+        xtagnum: json["xtagnum"] ?? '',
+        xlong: json["xlong"] ?? '',
+        xref: json["xref"] ?? '',
+        xwh: json["xwh"] ?? '',
+        xstatustag: json["xstatustag"] ?? '',
+        zaip: json["zaip"] ?? '',
+        zuip: json["zuip"] ?? '',
         date: json["date"] ?? '',
-        datecom: json["datecom"],
+        datecom: json["datecom"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
