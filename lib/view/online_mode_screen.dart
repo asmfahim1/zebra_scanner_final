@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
@@ -31,49 +32,6 @@ class OnlineMode extends StatefulWidget {
 class _OnlineModeState extends State<OnlineMode> {
   OnlineController onlineController = Get.put(OnlineController());
   ConstantColors colors = ConstantColors();
-
-  /* String _scannerStatus = "Scanner status";
-  String _lastCode = '';
-  bool _isEnabled = true;
-  TextEditingController qtyCon = TextEditingController();
-  ConstantColors colors = ConstantColors();
-  //API for ProductList
-  bool haveProduct = false;
-  List<ProductList> products = [];
-  Future<void> productList() async {
-    setState(() {
-      haveProduct = true;
-    });
-    var response = await http
-        .get(Uri.parse("http://172.20.20.69/sina/unistock/allProductList.php"));
-    if (response.statusCode == 200) {
-      products = productListFromJson(response.body);
-      print(response.body);
-    } else {
-      products = [];
-    }
-    setState(() {
-      haveProduct = false;
-    });
-  }
-  //update quantity
-  Future<void> updateQty(String amt, String item) async {
-    var response = await http.post(
-        Uri.parse("http://172.20.20.69/sina/unistock/update_item.php"),
-        body: jsonEncode(<String, dynamic>{"item": item, "qty": amt}));
-  }
-  //autoscann
-  Future<void> autoScan(String lastCode) async {
-    var response = await http.post(
-        Uri.parse("http://172.20.20.69/sina/unistock/scan_only.php"),
-        body: jsonEncode(<String, dynamic>{
-          "item": lastCode,
-          "xwh": "Sina",
-          "prep_id": "6"
-        }));
-    print(response.body);
-    productList();
-  }*/
 
   @override
   void initState() {
@@ -289,7 +247,9 @@ class _OnlineModeState extends State<OnlineMode> {
                                         ],
                                       ),
                                       GestureDetector(
-                                        onTap: () {
+                                        onTap: () async {
+                                          onlineController.updateTQ(
+                                              '${onlineController.products[index].scanQty}');
                                           showDialog(
                                               context: context,
                                               builder: (context) {
@@ -382,16 +342,87 @@ class _OnlineModeState extends State<OnlineMode> {
                                                           SizedBox(
                                                             width: 10,
                                                           ),
-                                                          Obx(
-                                                            () => Container(
+                                                          Container(
                                                               width: 100,
                                                               child: TextField(
+                                                                inputFormatters: [
+                                                                  FilteringTextInputFormatter
+                                                                      .deny(RegExp(
+                                                                          r'^0')),
+                                                                  FilteringTextInputFormatter
+                                                                      .deny(RegExp(
+                                                                          r'-')),
+                                                                  FilteringTextInputFormatter
+                                                                      .deny(RegExp(
+                                                                          r'\.')),
+                                                                  FilteringTextInputFormatter
+                                                                      .deny(RegExp(
+                                                                          r',')),
+                                                                  FilteringTextInputFormatter
+                                                                      .deny(RegExp(
+                                                                          r'\+')),
+                                                                  FilteringTextInputFormatter
+                                                                      .deny(RegExp(
+                                                                          r'\*')),
+                                                                  FilteringTextInputFormatter
+                                                                      .deny(RegExp(
+                                                                          r'/')),
+                                                                  FilteringTextInputFormatter
+                                                                      .deny(RegExp(
+                                                                          r'=')),
+                                                                  FilteringTextInputFormatter
+                                                                      .deny(RegExp(
+                                                                          r'%')),
+                                                                  FilteringTextInputFormatter
+                                                                      .deny(RegExp(
+                                                                          r' ')),
+                                                                ],
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,
                                                                 controller:
                                                                     onlineController
                                                                         .qtyCon,
+                                                                /*onChanged:
+                                                                    (value) {
+                                                                  if (value
+                                                                      .isEmpty) {
+                                                                    onlineController
+                                                                        .qtyCon
+                                                                        .text = '0';
+                                                                    print(
+                                                                        '====${onlineController.quantity.value}======${onlineController.qtyCon.text}');
+                                                                  } else {
+                                                                    onlineController
+                                                                            .quantity
+                                                                            .value =
+                                                                        int.parse(
+                                                                            value);
+                                                                    print(
+                                                                        '====${onlineController.quantity.value}======${onlineController.qtyCon.text}');
+                                                                  }
+                                                                },*/
+
+                                                                //by using on submitted function, it will immediately after pressing the value done
+                                                                onSubmitted:
+                                                                    (value) {
+                                                                  if (value
+                                                                      .isEmpty) {
+                                                                    onlineController
+                                                                        .qtyCon
+                                                                        .text = '0';
+                                                                    print(
+                                                                        '====${onlineController.quantity.value}======${onlineController.qtyCon.text}');
+                                                                  } else {
+                                                                    onlineController
+                                                                            .quantity
+                                                                            .value =
+                                                                        int.parse(
+                                                                            value);
+                                                                    print(
+                                                                        '====${onlineController.quantity.value}======${onlineController.qtyCon.text}');
+                                                                  }
+                                                                },
                                                                 decoration:
                                                                     InputDecoration(
                                                                   focusedBorder:
@@ -407,24 +438,14 @@ class _OnlineModeState extends State<OnlineMode> {
                                                                         BorderRadius.circular(
                                                                             5.5),
                                                                   ),
-                                                                  enabledBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width:
-                                                                          1.5,
-                                                                      color: Colors
-                                                                          .blue,
-                                                                    ),
-                                                                  ),
                                                                   filled: true,
                                                                   hintText:
-                                                                      '${onlineController.quantity.value}',
+                                                                      '${onlineController.products[index].scanQty}',
                                                                   hintStyle: const TextStyle(
                                                                       color: Colors
-                                                                          .black,
+                                                                          .white,
                                                                       fontSize:
-                                                                          25,
+                                                                          50,
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .w600),
@@ -432,9 +453,14 @@ class _OnlineModeState extends State<OnlineMode> {
                                                                       Colors.blueGrey[
                                                                           50],
                                                                 ),
-                                                              ),
-                                                            ),
-                                                          ),
+                                                                style:
+                                                                    const TextStyle(
+                                                                        fontSize:
+                                                                            50),
+                                                                keyboardType:
+                                                                    TextInputType
+                                                                        .number,
+                                                              )),
                                                           SizedBox(
                                                             width: 10,
                                                           ),

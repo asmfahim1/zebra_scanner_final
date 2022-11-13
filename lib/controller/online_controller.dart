@@ -41,45 +41,6 @@ class OnlineController extends GetxController {
     }
   }
 
-  //update quantity
-  Future<void> updateQty(String itemCode, String userId, String tagNum,
-      String adminId, String outlet, String storeId) async {
-    if (qtyCon.text.isEmpty) {
-      qtyCon.text = quantity.value.toString();
-      print('=========${qtyCon.text}');
-      var response = await http.post(
-          Uri.parse("http://172.20.20.69/sina/unistock/zebra/add_item.php"),
-          body: jsonEncode(<String, dynamic>{
-            "item": itemCode,
-            "user_id": "010340",
-            "qty": qtyCon.text.toString(),
-            "tag_no": tagNum,
-            "admin_id": adminId,
-            "outlet": outlet,
-            "store": storeId,
-            "device": serverController.deviceID
-          }));
-      print("=======$response");
-    } else {
-      print('=========${qtyCon.text}');
-      var response = await http.post(
-          Uri.parse("http://172.20.20.69/sina/unistock/zebra/add_item.php"),
-          body: jsonEncode(<String, dynamic>{
-            "item": itemCode,
-            "user_id": "010340",
-            "qty": qtyCon.text.toString(),
-            "tag_no": tagNum,
-            "admin_id": adminId,
-            "outlet": outlet,
-            "store": storeId,
-            "device": serverController.deviceID
-          }));
-      print("=======$response");
-    }
-    qtyCon.clear();
-    quantity.value = 0;
-  }
-
   //addItem(automatically)
   Future<void> addItem(String itemCode, String userId, String tagNum,
       String adminId, String outlet, String storeId) async {
@@ -100,6 +61,37 @@ class OnlineController extends GetxController {
     postProduct(false);
   }
 
+  //update quantity
+  Future<void> updateQty(String itemCode, String userId, String tagNum,
+      String adminId, String outlet, String storeId) async {
+    if (qtyCon.text.isEmpty) {
+      qtyCon.text = quantity.value.toString();
+      print('=========${qtyCon.text}');
+      var response = await http.post(
+          Uri.parse("http://172.20.20.69/sina/unistock/zebra/update.php"),
+          body: jsonEncode(<String, dynamic>{
+            "item": itemCode,
+            "user_id": "010340",
+            "qty": qtyCon.text.toString(),
+            "device": serverController.deviceID
+          }));
+      print("=======$response");
+    } else {
+      print('=========${qtyCon.text}');
+      var response = await http.post(
+          Uri.parse("http://172.20.20.69/sina/unistock/zebra/update.php"),
+          body: jsonEncode(<String, dynamic>{
+            "item": itemCode,
+            "user_id": "010340",
+            "qty": qtyCon.text.toString(),
+            "device": serverController.deviceID
+          }));
+      print("=======$response");
+    }
+    qtyCon.clear();
+    quantity.value = 0;
+  }
+
   //make the active and di-active function
   RxBool isEnabled = true.obs;
   void enableButton() {
@@ -109,8 +101,18 @@ class OnlineController extends GetxController {
 
   //increment function
   RxInt quantity = 0.obs;
+  //making textField iterable update the value of both textController and quantity
+  void updateTQ(String value) {
+    qtyCon.text = value;
+    quantity.value = int.parse(value);
+    print('update first quantity with the total amount : ${quantity.value}');
+    print('update first textController with the total amount : ${qtyCon.text}');
+  }
+
   void incrementQuantity() {
     quantity.value = quantity.value + 1;
+    qtyCon.text = quantity.value.toString();
+    print('--------${qtyCon.text}==========${quantity.value}');
   }
 
   void decrementQuantity() {
@@ -118,6 +120,7 @@ class OnlineController extends GetxController {
       Get.snackbar('Warning!', "You do not have quantity for decrement");
     } else {
       quantity.value = quantity.value - 1;
+      qtyCon.text = quantity.value.toString();
     }
   }
 }

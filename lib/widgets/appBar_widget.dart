@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zebra_scanner_final/widgets/const_colors.dart';
 
 class ReusableAppBar extends StatelessWidget {
   Color? color;
@@ -8,6 +9,8 @@ class ReusableAppBar extends StatelessWidget {
   ReusableAppBar(
       {Key? key, this.color, this.elevation, this.leading, this.action})
       : super(key: key);
+
+  ConstantColors colors = ConstantColors();
 
   @override
   Widget build(BuildContext context) {
@@ -23,23 +26,23 @@ class ReusableAppBar extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
+            Text(
               "Uni",
               style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.w800,
-                  color: Colors.black),
+                  color: colors.comColor),
             ),
-            Image.asset(
+            /*Image.asset(
               'images/s.png',
               width: 30,
-            ),
-            const Text(
-              "tock",
+            ),*/
+            Text(
+              "Stock",
               style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.w800,
-                  color: Colors.black),
+                  color: colors.uniGreen),
             ),
           ],
         ),
