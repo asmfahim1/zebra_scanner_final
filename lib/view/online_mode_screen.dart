@@ -324,8 +324,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                           GestureDetector(
                                                               onTap: () {
                                                                 onlineController
-                                                                    .decrementQuantity(
-                                                                        '${onlineController.products[index].scanQty}');
+                                                                    .decrementQuantity();
                                                               },
                                                               child:
                                                                   CircleAvatar(
@@ -453,9 +452,10 @@ class _OnlineModeState extends State<OnlineMode> {
                                                                       Colors.blueGrey[
                                                                           50],
                                                                 ),
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        50),
+                                                                style:
+                                                                    const TextStyle(
+                                                                        fontSize:
+                                                                            50),
                                                                 keyboardType:
                                                                     TextInputType
                                                                         .number,
@@ -466,8 +466,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                           GestureDetector(
                                                               onTap: () {
                                                                 onlineController
-                                                                    .incrementQuantity(
-                                                                        '${onlineController.products[index].scanQty}');
+                                                                    .incrementQuantity();
                                                               },
                                                               child:
                                                                   CircleAvatar(
