@@ -91,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   GestureDetector(
                     onTap: () async {
                       print('Login Button pressed');
-                      Get.to(() => TagSelectScreen());
+                      Get.offAll(() => TagSelectScreen());
                     },
                     child: Container(
                       height: 50,

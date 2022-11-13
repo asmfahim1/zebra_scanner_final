@@ -38,15 +38,26 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
         preferredSize: Size.fromHeight(50),
         child: ReusableAppBar(
           elevation: 0,
-          leading: IconButton(
-            onPressed: () {
+          /*leading: GestureDetector(
+            onTap: () {
               Get.back();
             },
-            icon: Icon(Icons.arrow_back),
-            color: Colors.black,
-            iconSize: 30,
-          ),
+            child: Icon(Icons.arrow_back,color: Colors.black, size: 30,),
+
+          ),*/
           color: Colors.white,
+          action: [
+            GestureDetector(
+              onTap: () {
+                Get.back();
+              },
+              child: Icon(
+                Icons.logout_sharp,
+                color: colors.uniGreen,
+                size: 30,
+              ),
+            ),
+          ],
         ),
       ),
       body: Container(
