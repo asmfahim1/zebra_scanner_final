@@ -94,9 +94,9 @@ class OnlineController extends GetxController {
 
   //make the active and di-active function
   RxBool isEnabled = true.obs;
-  void enableButton() {
-    FlutterDataWedge.enableScanner(!isEnabled.value);
-    isEnabled.value = !isEnabled.value;
+  void enableButton(bool value) {
+    FlutterDataWedge.enableScanner(value);
+    isEnabled.value = value;
   }
 
   //increment function
@@ -121,6 +121,7 @@ class OnlineController extends GetxController {
     } else {
       quantity.value = quantity.value - 1;
       qtyCon.text = quantity.value.toString();
+      print('--------${qtyCon.text}==========${quantity.value}');
     }
   }
 }

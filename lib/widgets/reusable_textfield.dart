@@ -28,14 +28,14 @@ class ReusableTextFormField extends StatelessWidget {
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
               width: 1.5,
-              color: colors.comColor,
+              color: colors.uniGreen,
             ),
             borderRadius: BorderRadius.circular(5.5),
           ),
-          enabledBorder: const OutlineInputBorder(
+          enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(
               width: 1.5,
-              color: Colors.blue,
+              color: colors.comColor,
             ),
           ),
           prefixIcon: icon,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
@@ -90,38 +91,46 @@ class _OnlineModeState extends State<OnlineMode> {
             height: 10,
           ),
           Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Last code:'),
-                    Text(onlineController.lastCode.value,
-                        style: Theme.of(context).textTheme.headline5),
-                    SizedBox(width: 10.0),
-                    Text('Status:'),
-                    Text(onlineController.scannerStatus.value,
-                        style: Theme.of(context).textTheme.headline6),
-                  ],
-                ),
-                SizedBox(height: 10.0),
-              ],
-            ),
-          ),
-          Obx(
-            () => ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  primary: onlineController.isEnabled.value
-                      ? colors.comColor
-                      : Colors.grey),
-              child: Text(
-                onlineController.isEnabled.value ? 'Disactivate' : 'Activate',
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Last code:'),
+                      Text(onlineController.lastCode.value,
+                          style: Theme.of(context).textTheme.headline5),
+                      SizedBox(width: 10.0),
+                      Obx(
+                        () => FlutterSwitch(
+                          value: onlineController.isEnabled.value,
+                          activeColor: colors.uniGreen,
+                          inactiveColor: colors.comColor,
+                          /*activeText: 'ON',
+                          activeTextColor: Colors.white,
+                          inactiveText: 'OFF',
+                          inactiveTextColor: Colors.white,*/
+                          showOnOff: true,
+                          onToggle: (value) {
+                            onlineController.enableButton(value);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  /*SizedBox(height: 10.0),
+                  Row(
+                    children: [
+                      Text('Status:'),
+                      Text(onlineController.scannerStatus.value,
+                          style: Theme.of(context).textTheme.headline6),
+                    ],
+                  )*/
+                ],
               ),
-              onPressed: () {
-                onlineController.enableButton();
-              },
             ),
           ),
           Text(
@@ -150,7 +159,7 @@ class _OnlineModeState extends State<OnlineMode> {
                       itemCount: onlineController.products.length,
                       itemBuilder: (context, index) {
                         return Container(
-                          height: 150,
+                          height: 115,
                           padding: const EdgeInsets.only(
                               top: 5, bottom: 5, left: 5, right: 5),
                           decoration: BoxDecoration(
@@ -166,8 +175,9 @@ class _OnlineModeState extends State<OnlineMode> {
                               children: [
                                 Expanded(
                                   child: Container(
-                                    padding:
-                                        const EdgeInsets.only(left: 10, top: 5),
+                                    padding: const EdgeInsets.only(
+                                      left: 10,
+                                    ),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -182,7 +192,8 @@ class _OnlineModeState extends State<OnlineMode> {
                                           ),
                                         ),
                                         Text(
-                                          "Item Name :  ${onlineController.products[index].itemDesc}",
+                                          onlineController
+                                              .products[index].itemDesc,
                                           overflow: TextOverflow.ellipsis,
                                           style: GoogleFonts.urbanist(
                                             color: Colors.black,
@@ -190,18 +201,18 @@ class _OnlineModeState extends State<OnlineMode> {
                                           ),
                                         ),
                                         Text(
-                                          "Supplier Name :  ${onlineController.products[index].xcus}",
+                                          onlineController.products[index].xcus,
                                           overflow: TextOverflow.ellipsis,
                                           style: GoogleFonts.urbanist(
                                             color: Colors.black,
-                                            fontWeight: FontWeight.w400,
+                                            fontWeight: FontWeight.w800,
                                           ),
                                         ),
                                         Text(
                                           "Total Quantity :  ${onlineController.products[index].scanQty}",
                                           style: GoogleFonts.urbanist(
                                             color: Colors.black,
-                                            fontWeight: FontWeight.w400,
+                                            fontWeight: FontWeight.w800,
                                           ),
                                         ),
                                         /*Text(
@@ -401,7 +412,6 @@ class _OnlineModeState extends State<OnlineMode> {
                                                                         '====${onlineController.quantity.value}======${onlineController.qtyCon.text}');
                                                                   }
                                                                 },*/
-
                                                                 //by using on submitted function, it will immediately after pressing the value done
                                                                 onSubmitted:
                                                                     (value) {
@@ -422,6 +432,13 @@ class _OnlineModeState extends State<OnlineMode> {
                                                                         '====${onlineController.quantity.value}======${onlineController.qtyCon.text}');
                                                                   }
                                                                 },
+                                                                /*onEditingComplete:(){
+                                                                  if(onlineController.qtyCon.text.isEmpty){
+                                                                    onlineController.qtyCon.text = '0';
+                                                                  }else{
+                                                                    onlineController.qtyCon.text = '0';
+                                                                  }
+                                                                },*/
                                                                 decoration:
                                                                     InputDecoration(
                                                                   focusedBorder:
