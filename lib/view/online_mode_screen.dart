@@ -322,7 +322,8 @@ class _OnlineModeState extends State<OnlineMode> {
                                                           GestureDetector(
                                                               onTap: () {
                                                                 onlineController
-                                                                    .decrementQuantity();
+                                                                    .decrementQuantity(
+                                                                        '${onlineController.products[index].scanQty}');
                                                               },
                                                               child:
                                                                   CircleAvatar(
@@ -408,7 +409,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                                   ),*/
                                                                   filled: true,
                                                                   hintText:
-                                                                      '${onlineController.quantity.value}',
+                                                                      '${onlineController.products[index].scanQty}',
                                                                   hintStyle: const TextStyle(
                                                                       color: Colors
                                                                           .black,
@@ -436,7 +437,8 @@ class _OnlineModeState extends State<OnlineMode> {
                                                           GestureDetector(
                                                               onTap: () {
                                                                 onlineController
-                                                                    .incrementQuantity();
+                                                                    .incrementQuantity(
+                                                                        '${onlineController.products[index].scanQty}');
                                                               },
                                                               child:
                                                                   CircleAvatar(

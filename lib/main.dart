@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zebra_scanner_final/view/server_setup_screen.dart';
+import 'package:zebra_scanner_final/view/splash_screen.dart';
 
 void main() {
+  //ensure initializing dewa hoy app a jeisob async function ase oigula surute initialize kore newa.
   runApp(const MyApp());
 }
 
@@ -24,7 +26,7 @@ class MyApp extends StatelessWidget {
               ),
         ),
       ),
-      home: const ServerSetupScreen(),
+      home: const SplashScreen(),
     );
   }
 }

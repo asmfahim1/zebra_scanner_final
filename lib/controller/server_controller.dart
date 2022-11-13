@@ -19,7 +19,6 @@ class ServerController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     getDeviceDetails();
-    //initPlatformState();
     super.onInit();
   }
 
@@ -54,28 +53,38 @@ class ServerController extends GetxController {
     isLoading1(true);
     if (server.text.isEmpty) {
       server.text = '172.20.20.69';
-/*      Get.snackbar('Error', "Field is empty",
+      Get.snackbar('Error', "Field is empty",
           borderWidth: 1.5,
           borderColor: Colors.black54,
           colorText: Colors.white,
-          backgroundColor: colors.comColor);*/
+          backgroundColor: colors.comColor);
       isLoading1(false);
     } else {
       //'http://${server.text}/sina/unistock/zebra/server_config.php'
-      var response = await http.post(
-          Uri.parse(
-              'http://${server.text}/sina/unistock/zebra/server_config.php'),
-          body: <String, dynamic>{
-            "device": deviceId,
-            "ip_add": server.text,
-          });
-      if (response.statusCode == 200) {
-        print("Connection Established----$deviceId-----${server.text}");
-        saveValue(server.text);
-        isLoading1(false);
-        Get.to(() => LoginScreen());
+      //server er ip address gula static kore na dile asole connection check disturb hoy
+      if (server.text == '172.20.20.69' || server.text == '152.10.10.12') {
+        var response = await http.post(
+            Uri.parse(
+                'http://${server.text}/sina/unistock/zebra/server_config.php'),
+            body: <String, dynamic>{
+              "device": deviceId,
+              "ip_add": server.text,
+            });
+        if (response.statusCode == 200) {
+          print("Connection Established----$deviceId-----${server.text}");
+          saveValue(server.text);
+          isLoading1(false);
+          Get.to(() => const LoginScreen());
+        } else {
+          //need to specify more about what to do with this IP address and DeviceId,
+          Get.snackbar('Warning!', "Invalid IP Address",
+              borderWidth: 1.5,
+              borderColor: Colors.black54,
+              colorText: Colors.white,
+              backgroundColor: colors.comColor);
+          isLoading1(false);
+        }
       } else {
-        //need to specify more about what to do with this IP address and DeviceId,
         Get.snackbar('Warning!', "Invalid IP Address",
             borderWidth: 1.5,
             borderColor: Colors.black54,
