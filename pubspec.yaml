@@ -39,6 +39,7 @@ dependencies:
   device_info: ^2.0.3
   flutter_datawedge: ^0.0.3
   device_info_plus: ^8.0.0
+  flutter_switch: ^0.3.2
 
 dev_dependencies:
   flutter_test:

@@ -37,90 +37,91 @@ class _LoginScreenState extends State<LoginScreen> {
           color: Colors.white,
         ),
       ),
-      body: Container(
-        child: Padding(
-          padding: EdgeInsets.only(left: 10, right: 10),
-          child: Form(
-            key: loginController.loginKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ReusableTextFormField(
-                    hintText: "Enter User Name",
-                    labelText: "User",
-                    server: loginController.user,
-                    icon: Icon(Icons.person)),
-                SizedBox(
-                  height: 10,
-                ),
-                ReusableTextPassField(
-                  hintText: "Enter Password",
-                  labelText: "Password",
-                  server: loginController.pass,
-                  prefIcon: Icon(Icons.vpn_key_outlined),
-                  sufIcon: Icon(
-                    Icons.remove_red_eye_outlined,
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Padding(
+            padding: EdgeInsets.only(left: 10, right: 10),
+            child: Form(
+              key: loginController.loginKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ReusableTextFormField(
+                      hintText: "Enter User Name",
+                      labelText: "User name",
+                      server: loginController.user,
+                      icon: Icon(Icons.person)),
+                  SizedBox(
+                    height: 10,
                   ),
-                ),
-                Row(
-                  children: [
-                    Theme(
-                      data: Theme.of(context)
-                          .copyWith(unselectedWidgetColor: Colors.black),
-                      child: Checkbox(
-                        value: true,
-                        activeColor: colors.comColor,
-                        checkColor: Colors.black,
-                        onChanged: (value) {},
+                  ReusableTextPassField(
+                    hintText: "Enter Password",
+                    labelText: "Password",
+                    server: loginController.pass,
+                    prefIcon: const Icon(Icons.vpn_key_outlined),
+                    sufIcon: const Icon(Icons.remove_red_eye_outlined),
+                  ),
+                  Row(
+                    children: [
+                      Theme(
+                        data: Theme.of(context)
+                            .copyWith(unselectedWidgetColor: Colors.black),
+                        child: Checkbox(
+                          value: true,
+                          activeColor: colors.comColor,
+                          checkColor: Colors.black,
+                          onChanged: (value) {},
+                        ),
                       ),
-                    ),
-                    Text(
-                      "Remember me",
-                      style: TextStyle(
-                        color: Colors.black54,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 05,
-                ),
-                GestureDetector(
-                  onTap: () async {
-                    print('Login Button pressed');
-                    Get.to(() => TagSelectScreen());
-                  },
-                  child: Container(
-                    height: 50,
-                    width: 150,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      color: colors.comColor,
-                      /*gradient: LinearGradient(
-                        begin: Alignment.topRight,
-                        end: Alignment.bottomLeft,
-                        colors: [
-                          colors.comColor.withOpacity(50),
-                          colors.comColor.withOpacity(600),
-                        ],
-                      ),*/
-                    ),
-                    child: Center(
-                      child: Text(
-                        'LOGIN',
+                      Text(
+                        "Remember me",
                         style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
+                          color: Colors.black54,
+                          fontSize: 16,
                           fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 05,
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      print('Login Button pressed');
+                      Get.to(() => TagSelectScreen());
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 150,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: colors.comColor,
+                        /*gradient: LinearGradient(
+                          begin: Alignment.topRight,
+                          end: Alignment.bottomLeft,
+                          colors: [
+                            colors.comColor.withOpacity(50),
+                            colors.comColor.withOpacity(600),
+                          ],
+                        ),*/
+                      ),
+                      child: Center(
+                        child: Text(
+                          'LOGIN',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
