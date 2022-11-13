@@ -53,7 +53,7 @@ class TagListModel {
         xlong: json["xlong"] ?? '',
         xref: json["xref"] ?? '',
         xwh: json["xwh"] ?? '',
-        xstatustag: json["xstatustag"],
+        xstatustag: json["xstatustag"] ?? '',
         zaip: json["zaip"] ?? '',
         zuip: json["zuip"] ?? '',
         date: json["date"] ?? '',

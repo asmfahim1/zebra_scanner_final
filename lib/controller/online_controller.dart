@@ -41,37 +41,6 @@ class OnlineController extends GetxController {
     }
   }
 
-  //update quantity
-  Future<void> updateQty(String itemCode, String userId, String tagNum,
-      String adminId, String outlet, String storeId) async {
-    if (qtyCon.text.isEmpty) {
-      qtyCon.text = quantity.value.toString();
-      print('=========${qtyCon.text}');
-      var response = await http.post(
-          Uri.parse("http://172.20.20.69/sina/unistock/zebra/update.php"),
-          body: jsonEncode(<String, dynamic>{
-            "item": itemCode,
-            "user_id": "010340",
-            "qty": qtyCon.text.toString(),
-            "device": serverController.deviceID,
-          }));
-      print("=======$response");
-    } else {
-      print('=========${qtyCon.text}');
-      var response = await http.post(
-          Uri.parse("http://172.20.20.69/sina/unistock/zebra/update.php"),
-          body: jsonEncode(<String, dynamic>{
-            "item": itemCode,
-            "user_id": "010340",
-            "qty": qtyCon.text.toString(),
-            "device": serverController.deviceID,
-          }));
-      print("=======$response");
-    }
-    qtyCon.clear();
-    quantity.value = 0;
-  }
-
   //addItem(automatically)
   Future<void> addItem(String itemCode, String userId, String tagNum,
       String adminId, String outlet, String storeId) async {
@@ -92,6 +61,37 @@ class OnlineController extends GetxController {
     postProduct(false);
   }
 
+  //update quantity
+  Future<void> updateQty(String itemCode, String userId, String tagNum,
+      String adminId, String outlet, String storeId) async {
+    if (qtyCon.text.isEmpty) {
+      qtyCon.text = quantity.value.toString();
+      print('=========${qtyCon.text}');
+      var response = await http.post(
+          Uri.parse("http://172.20.20.69/sina/unistock/zebra/update.php"),
+          body: jsonEncode(<String, dynamic>{
+            "item": itemCode,
+            "user_id": "010340",
+            "qty": qtyCon.text.toString(),
+            "device": serverController.deviceID
+          }));
+      print("=======$response");
+    } else {
+      print('=========${qtyCon.text}');
+      var response = await http.post(
+          Uri.parse("http://172.20.20.69/sina/unistock/zebra/update.php"),
+          body: jsonEncode(<String, dynamic>{
+            "item": itemCode,
+            "user_id": "010340",
+            "qty": qtyCon.text.toString(),
+            "device": serverController.deviceID
+          }));
+      print("=======$response");
+    }
+    qtyCon.clear();
+    quantity.value = 0;
+  }
+
   //make the active and di-active function
   RxBool isEnabled = true.obs;
   void enableButton() {
@@ -101,41 +101,26 @@ class OnlineController extends GetxController {
 
   //increment function
   RxInt quantity = 0.obs;
-  void incrementQuantity(String tAmount) {
-    quantity.value = int.parse(tAmount);
-    quantity.value = quantity.value + 1;
-    qtyCon.text = quantity.value.toString();
+  //making textField iterable update the value of both textController and quantity
+  void updateTQ(String value) {
+    qtyCon.text = value;
+    quantity.value = int.parse(value);
+    print('update first quantity with the total amount : ${quantity.value}');
+    print('update first textController with the total amount : ${qtyCon.text}');
   }
 
-  void decrementQuantity(String tAmount) {
-    quantity.value = int.parse(tAmount);
-    if (quantity.value == 0) {
+  void incrementQuantity() {
+    quantity.value = quantity.value + 1;
+    qtyCon.text = quantity.value.toString();
+    print('--------${qtyCon.text}==========${quantity.value}');
+  }
+
+  void decrementQuantity() {
+    if (quantity.value <= 0) {
       Get.snackbar('Warning!', "You do not have quantity for decrement");
     } else {
       quantity.value = quantity.value - 1;
+      qtyCon.text = quantity.value.toString();
     }
   }
 }
-
-/*
-if (qtyCon.text.isEmpty && quantity.value.toString().isEmpty) {
-quantity.value = quantity.value + 1;
-qtyCon.text = quantity.value.toString();
-print('controller value = $qtyCon\nquantity value = ${quantity.value}');
-} else if (qtyCon.text.isNotEmpty && quantity.value.toString().isEmpty) {
-quantity.value = int.parse(qtyCon.text);
-quantity.value = quantity.value + 1;
-qtyCon.text = quantity.value.toString();
-print('controller value = $qtyCon\nquantity value = ${quantity.value}');
-} else if (qtyCon.text.isEmpty && quantity.value.toString().isNotEmpty) {
-quantity.value = quantity.value + 1;
-qtyCon.text = quantity.value.toString();
-} else if (qtyCon.text.isNotEmpty && quantity.value.toString().isNotEmpty) {
-quantity.value = quantity.value + 1;
-qtyCon.text = quantity.value.toString();
-print('controller value = $qtyCon\nquantity value = ${quantity.value}');
-} else {
-quantity.value = quantity.value + 1;
-qtyCon.text = quantity.value.toString();
-print('controller value = $qtyCon\nquantity value = ${quantity.value}');
-}*/
