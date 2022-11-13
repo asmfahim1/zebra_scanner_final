@@ -36,32 +36,28 @@ class _OnlineModeState extends State<OnlineMode> {
 
   @override
   void initState() {
-    super.initState();
     onlineController.productList(widget.tagNum);
     print('======${widget.tagNum}');
     initScanner(widget.userId, widget.tagNum, widget.adminId, widget.outlet,
         widget.storeId);
+    super.initState();
   }
 
   //controlling the scanner button
-  void initScanner(String userId, String tagNum, String adminId, String outlet,
-      String storeId) async {
+  Future<void> initScanner(String userId, String tagNum, String adminId,
+      String outlet, String storeId) async {
     FlutterDataWedge.initScanner(
         profileName: 'FlutterDataWedge',
-        onScan: (result) {
-          setState(() async {
-            onlineController.lastCode.value = result.data;
-            await onlineController.addItem(onlineController.lastCode.value,
-                userId, tagNum, adminId, outlet, storeId);
-            await onlineController.productList(widget.tagNum);
-          });
+        onScan: (result) async {
+          onlineController.lastCode.value = result.data;
+          await onlineController.addItem(onlineController.lastCode.value,
+              userId, tagNum, adminId, outlet, storeId);
+          await onlineController.productList(widget.tagNum);
         },
         onStatusUpdate: (result) {
           ScannerStatusType status = result.status;
-          setState(() {
-            onlineController.scannerStatus.value =
-                status.toString().split('.')[1];
-          });
+          onlineController.scannerStatus.value =
+              status.toString().split('.')[1];
         });
   }
 
@@ -83,6 +79,28 @@ class _OnlineModeState extends State<OnlineMode> {
               color: Colors.black,
             ),
           ),
+          action: [
+            Padding(
+              padding: const EdgeInsets.only(right: 5),
+              child: Obx(
+                () => FlutterSwitch(
+                  height: 30,
+                  width: 65,
+                  value: onlineController.isEnabled.value,
+                  activeColor: colors.uniGreen,
+                  inactiveColor: colors.comColor,
+                  activeText: 'ON',
+                  activeTextColor: Colors.white,
+                  inactiveText: 'OFF',
+                  inactiveTextColor: Colors.white,
+                  showOnOff: true,
+                  onToggle: (value) {
+                    onlineController.enableButton(value);
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
       ),
       body: Column(
@@ -98,27 +116,12 @@ class _OnlineModeState extends State<OnlineMode> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text('Last code:'),
+                      const Text('Last code:'),
                       Text(onlineController.lastCode.value,
                           style: Theme.of(context).textTheme.headline5),
-                      SizedBox(width: 10.0),
-                      Obx(
-                        () => FlutterSwitch(
-                          value: onlineController.isEnabled.value,
-                          activeColor: colors.uniGreen,
-                          inactiveColor: colors.comColor,
-                          /*activeText: 'ON',
-                          activeTextColor: Colors.white,
-                          inactiveText: 'OFF',
-                          inactiveTextColor: Colors.white,*/
-                          showOnOff: true,
-                          onToggle: (value) {
-                            onlineController.enableButton(value);
-                          },
-                        ),
-                      ),
+                      const SizedBox(width: 10.0),
                     ],
                   ),
                   /*SizedBox(height: 10.0),
@@ -161,7 +164,7 @@ class _OnlineModeState extends State<OnlineMode> {
                         return Container(
                           height: 115,
                           padding: const EdgeInsets.only(
-                              top: 5, bottom: 5, left: 5, right: 5),
+                              bottom: 5, left: 5, right: 5),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20.0),
                           ),
@@ -185,9 +188,11 @@ class _OnlineModeState extends State<OnlineMode> {
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
                                         Text(
-                                          "Item Code : ${onlineController.products[index].itemCode}",
+                                          onlineController
+                                              .products[index].itemCode,
                                           style: GoogleFonts.urbanist(
                                             color: Colors.black,
+                                            fontSize: 20,
                                             fontWeight: FontWeight.w800,
                                           ),
                                         ),
