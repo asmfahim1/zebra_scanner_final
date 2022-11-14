@@ -6,6 +6,8 @@ import 'package:zebra_scanner_final/widgets/appBar_widget.dart';
 import 'package:get/get.dart';
 import 'package:zebra_scanner_final/widgets/const_colors.dart';
 
+import '../controller/server_controller.dart';
+
 class TagSelectScreen extends StatefulWidget {
   const TagSelectScreen({Key? key}) : super(key: key);
 
@@ -15,24 +17,19 @@ class TagSelectScreen extends StatefulWidget {
 
 class _TagSelectScreenState extends State<TagSelectScreen> {
   TagController tagController = Get.put(TagController());
+  ServerController serverController = Get.put(ServerController());
   ConstantColors colors = ConstantColors();
 
   //need to call the tagList for first build
   @override
   void initState() {
     // TODO: implement initState
-    tagController.listOfTags();
+    tagController.listOfTags(serverController.ipAddress.value.toString());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    const double fillPercent = 52; // fills 56.23% for container from bottom
-    const double fillStop = (100 - fillPercent) / 95;
-    final List<double> stops = [
-      fillStop,
-      fillStop,
-    ];
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(50),
@@ -102,7 +99,7 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
                                 child: Text(
                                   "No Product Added.",
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 25),
+                                      color: Colors.black, fontSize: 50),
                                 ),
                               );
                             } else {
@@ -133,12 +130,12 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20.0),
                                       gradient: LinearGradient(
-                                        stops: stops,
+                                        stops: tagController.stops,
                                         /*(for controlling Colors opacity)*/
                                         // colors: gradient,
                                         colors: [
-                                          colors.comColor,
-                                          colors.uniGreen,
+                                          Colors.red.shade300,
+                                          Colors.green.shade300,
                                         ],
                                         begin: Alignment.topLeft,
                                         end: Alignment.bottomRight,
@@ -149,7 +146,7 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          "${tagController.tagList[index].xtagnum}",
+                                          tagController.tagList[index].xtagnum,
                                           style: GoogleFonts.urbanist(
                                             color: Colors.white,
                                             fontSize: 25,
@@ -157,7 +154,7 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
                                           ),
                                         ),
                                         Text(
-                                          "${tagController.tagList[index].xwh}",
+                                          tagController.tagList[index].xwh,
                                           overflow: TextOverflow.ellipsis,
                                           style: GoogleFonts.urbanist(
                                             color: Colors.white,
@@ -166,7 +163,7 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
                                           ),
                                         ),
                                         Text(
-                                          "${tagController.tagList[index].date}",
+                                          tagController.tagList[index].date,
                                           overflow: TextOverflow.ellipsis,
                                           style: GoogleFonts.urbanist(
                                             color: Colors.white,

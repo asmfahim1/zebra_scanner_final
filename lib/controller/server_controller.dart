@@ -12,7 +12,6 @@ class ServerController extends GetxController {
   RxBool isLoading1 = false.obs;
   String deviceName = '', deviceId = '', normalId = '';
   TextEditingController server = TextEditingController();
-  ApiNameLink apiNameLink = ApiNameLink();
   ConstantColors colors = ConstantColors();
 
   @override
@@ -62,7 +61,9 @@ class ServerController extends GetxController {
     } else {
       //'http://${server.text}/sina/unistock/zebra/server_config.php'
       //server er ip address gula static kore na dile asole connection check disturb hoy
-      if (server.text == '172.20.20.69' || server.text == '152.10.10.12') {
+      if (server.text == '172.20.20.69' ||
+          server.text == '152.10.10.12' ||
+          server.text == '138.22.20.36') {
         var response = await http.post(
             Uri.parse(
                 'http://${server.text}/sina/unistock/zebra/server_config.php'),
@@ -72,7 +73,7 @@ class ServerController extends GetxController {
             });
         if (response.statusCode == 200) {
           print("Connection Established----$deviceId-----${server.text}");
-          saveValue(server.text);
+          saveValue(server.text.toString());
           isLoading1(false);
           Get.to(() => const LoginScreen());
         } else {
@@ -95,11 +96,11 @@ class ServerController extends GetxController {
     }
   }
 
-  String deviceID = '';
-  String ipAddress = '';
+  RxString deviceID = ''.obs;
+  RxString ipAddress = ''.obs;
   void saveValue(String serverIP) {
-    deviceID = deviceId;
-    ipAddress = serverIP;
+    deviceID.value = deviceId;
+    ipAddress.value = serverIP;
     print('-----------------$deviceID');
     print('=================$ipAddress');
     update();

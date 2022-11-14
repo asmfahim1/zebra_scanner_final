@@ -13,12 +13,9 @@ class OnlineController extends GetxController {
   TextEditingController qtyCon = TextEditingController();
   ConstantColors colors = ConstantColors();
 
-  ServerController serverController = Get.put(ServerController());
-
   @override
   void onInit() {
     // TODO: implement onInit
-    print("++++++++++++++++${serverController.deviceID}");
     super.onInit();
   }
 
@@ -26,27 +23,39 @@ class OnlineController extends GetxController {
   RxBool haveProduct = false.obs;
   RxBool postProduct = false.obs;
   List<ProductListModel> products = [];
-  Future<void> productList(String tagNum) async {
-    print('${serverController.deviceID}');
+  Future<void> productList(String tagNum, String ipAddress) async {
+    print(ipAddress);
     haveProduct(true);
     var response = await http.get(Uri.parse(
-        "http://172.20.20.69/sina/unistock/zebra/productlist_tag_device.php?tag_no=$tagNum"));
+        "http://$ipAddress/sina/unistock/zebra/productlist_tag_device.php?tag_no=$tagNum"));
     if (response.statusCode == 200) {
       print(response.body);
+      print("++++++++++++++++$tagNum");
+      print("++++++++++++++++$ipAddress");
       haveProduct(false);
       products = productListModelFromJson(response.body);
     } else {
       haveProduct(false);
+      print(response.body);
+      print("++++++++++++++++$tagNum");
+      print("++++++++++++++++$ipAddress");
       products = [];
     }
   }
 
   //addItem(automatically)
-  Future<void> addItem(String itemCode, String userId, String tagNum,
-      String adminId, String outlet, String storeId) async {
+  Future<void> addItem(
+      String ipAddress,
+      String itemCode,
+      String userId,
+      String tagNum,
+      String adminId,
+      String outlet,
+      String storeId,
+      String deviceID) async {
     postProduct(true);
     var response = await http.post(
-        Uri.parse("http://172.20.20.69/sina/unistock/zebra/add_item.php"),
+        Uri.parse("http://$ipAddress/sina/unistock/zebra/add_item.php"),
         body: jsonEncode(<String, dynamic>{
           "item": itemCode,
           "user_id": "010340",
@@ -55,38 +64,51 @@ class OnlineController extends GetxController {
           "admin_id": adminId,
           "outlet": outlet,
           "store": storeId,
-          "device": serverController.deviceID
+          "device": deviceID
         }));
     print("==========${response.body}");
+    print("==========$ipAddress");
+    print("==========$deviceID");
     postProduct(false);
   }
 
   //update quantity
-  Future<void> updateQty(String itemCode, String userId, String tagNum,
-      String adminId, String outlet, String storeId) async {
+  Future<void> updateQty(
+      String ipAddress,
+      String itemCode,
+      String userId,
+      String tagNum,
+      String adminId,
+      String outlet,
+      String storeId,
+      String deviceID) async {
     if (qtyCon.text.isEmpty) {
       qtyCon.text = quantity.value.toString();
       print('=========${qtyCon.text}');
       var response = await http.post(
-          Uri.parse("http://172.20.20.69/sina/unistock/zebra/update.php"),
+          Uri.parse("http://$ipAddress/sina/unistock/zebra/update.php"),
           body: jsonEncode(<String, dynamic>{
             "item": itemCode,
             "user_id": "010340",
             "qty": qtyCon.text.toString(),
-            "device": serverController.deviceID
+            "device": deviceID
           }));
-      print("=======$response");
+      print("==========${response.body}");
+      print("==========$ipAddress");
+      print("==========$deviceID");
     } else {
       print('=========${qtyCon.text}');
       var response = await http.post(
-          Uri.parse("http://172.20.20.69/sina/unistock/zebra/update.php"),
+          Uri.parse("http://$ipAddress/sina/unistock/zebra/update.php"),
           body: jsonEncode(<String, dynamic>{
             "item": itemCode,
             "user_id": "010340",
             "qty": qtyCon.text.toString(),
-            "device": serverController.deviceID
+            "device": deviceID
           }));
-      print("=======$response");
+      print("==========${response.body}");
+      print("==========$ipAddress");
+      print("==========$deviceID");
     }
     qtyCon.clear();
     quantity.value = 0;

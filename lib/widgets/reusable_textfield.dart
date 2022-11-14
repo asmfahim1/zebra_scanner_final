@@ -20,8 +20,8 @@ class ReusableTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 5),
-      margin: const EdgeInsets.only(left: 10, right: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      //margin: const EdgeInsets.only(left: 10, right: 10),
       child: TextFormField(
         controller: server,
         decoration: InputDecoration(
@@ -30,23 +30,24 @@ class ReusableTextFormField extends StatelessWidget {
               width: 1.5,
               color: colors.uniGreen,
             ),
-            borderRadius: BorderRadius.circular(5.5),
+            borderRadius: BorderRadius.circular(40.0),
           ),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(
               width: 1.5,
               color: colors.comColor,
             ),
+            borderRadius: BorderRadius.circular(40.0),
           ),
           prefixIcon: icon,
           filled: true,
           hintText: hintText,
           hintStyle: const TextStyle(
-              color: Colors.grey, fontSize: 18, fontWeight: FontWeight.w600),
-          fillColor: Colors.blueGrey[50],
+              color: Colors.black54, fontSize: 18, fontWeight: FontWeight.w600),
+          fillColor: Colors.white10,
           labelText: labelText,
           labelStyle: const TextStyle(
-              color: Colors.black, fontSize: 18, fontWeight: FontWeight.w600),
+              color: Colors.black, fontSize: 20, fontWeight: FontWeight.w800),
         ),
       ),
     );
