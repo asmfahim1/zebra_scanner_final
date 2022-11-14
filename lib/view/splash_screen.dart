@@ -36,45 +36,59 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ScaleTransition(
-            scale: animation,
-            child: Center(
-              child: Image.asset(
-                'images/stock_logo.png',
-                width: 200,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            /*(for controlling Colors opacity)*/
+            // colors: gradient,
+            colors: [
+              Colors.red.shade300,
+              Colors.green.shade300,
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ScaleTransition(
+              scale: animation,
+              child: Center(
+                child: Image.asset(
+                  'images/stock_logo.png',
+                  width: 200,
+                ),
               ),
             ),
-          ),
-          ScaleTransition(
-            scale: animation,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Uni",
-                  style: GoogleFonts.urbanist(
-                      fontSize: 50,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.black),
-                ),
-                Image.asset(
-                  'images/s.png',
-                  width: 50,
-                ),
-                Text(
-                  "tock",
-                  style: GoogleFonts.urbanist(
-                      fontSize: 50,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.black),
-                ),
-              ],
+            ScaleTransition(
+              scale: animation,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Uni",
+                    style: GoogleFonts.urbanist(
+                        fontSize: 50,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.black),
+                  ),
+                  Image.asset(
+                    'images/s.png',
+                    width: 50,
+                  ),
+                  Text(
+                    "tock",
+                    style: GoogleFonts.urbanist(
+                        fontSize: 50,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.black),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -1,6 +1,7 @@
-class ApiNameLink {
-  final String serverSetup =
-      'http://172.20.20.69/sina/unistock/zebra/server_config.php';
-  final String tagList =
-      'http://172.20.20.69/sina/unistock/zebra/tag_select.php';
-}
+/*class ApiNameLink {
+  String serverIp;
+  const ApiNameLink({required this.serverIp});
+
+  String serverSetup = 'http://${this.serverIp}/sina/unistock/zebra/server_config.php';
+  String tagList = 'http://${this.serverIp}/sina/unistock/zebra/tag_select.php';
+}*/

@@ -6,12 +6,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:flutter_datawedge/flutter_datawedge.dart';
 import 'package:zebra_scanner_final/controller/online_controller.dart';
+import 'package:zebra_scanner_final/controller/server_controller.dart';
 import 'package:zebra_scanner_final/widgets/appBar_widget.dart';
 import 'package:zebra_scanner_final/widgets/const_colors.dart';
 import 'package:zebra_scanner_final/widgets/reusable_textfield.dart';
 
 class OnlineMode extends StatefulWidget {
-  //apadoto storeId and outlet same e rakhtesi
+  //apatoto storeId and outlet same e rakhtesi
   String tagNum;
   String storeId;
   String userId;
@@ -32,27 +33,43 @@ class OnlineMode extends StatefulWidget {
 
 class _OnlineModeState extends State<OnlineMode> {
   OnlineController onlineController = Get.put(OnlineController());
+  ServerController serverController = Get.put(ServerController());
   ConstantColors colors = ConstantColors();
 
   @override
   void initState() {
-    onlineController.productList(widget.tagNum);
-    print('======${widget.tagNum}');
-    initScanner(widget.userId, widget.tagNum, widget.adminId, widget.outlet,
-        widget.storeId);
+    onlineController.productList(
+        widget.tagNum, serverController.ipAddress.value);
+    print(
+        'TagNum Online mode Screen:${widget.tagNum}======IpAddress Online screes: ${serverController.ipAddress.value}');
+    initScanner(
+        serverController.ipAddress.value,
+        widget.userId,
+        widget.tagNum,
+        widget.adminId,
+        widget.outlet,
+        widget.storeId,
+        serverController.deviceID.value);
     super.initState();
   }
 
   //controlling the scanner button
-  Future<void> initScanner(String userId, String tagNum, String adminId,
-      String outlet, String storeId) async {
+  Future<void> initScanner(String ipAddress, String userId, String tagNum,
+      String adminId, String outlet, String storeId, String deviceId) async {
     FlutterDataWedge.initScanner(
         profileName: 'FlutterDataWedge',
         onScan: (result) async {
           onlineController.lastCode.value = result.data;
-          await onlineController.addItem(onlineController.lastCode.value,
-              userId, tagNum, adminId, outlet, storeId);
-          await onlineController.productList(widget.tagNum);
+          await onlineController.addItem(
+              ipAddress,
+              onlineController.lastCode.value,
+              userId,
+              tagNum,
+              adminId,
+              outlet,
+              storeId,
+              deviceId);
+          await onlineController.productList(widget.tagNum, ipAddress);
         },
         onStatusUpdate: (result) {
           ScannerStatusType status = result.status;
@@ -535,18 +552,27 @@ class _OnlineModeState extends State<OnlineMode> {
                                                         //post to api
                                                         await onlineController
                                                             .updateQty(
-                                                          onlineController
-                                                              .products[index]
-                                                              .itemCode,
-                                                          widget.userId,
-                                                          widget.tagNum,
-                                                          widget.adminId,
-                                                          widget.outlet,
-                                                          widget.storeId,
-                                                        );
+                                                                serverController
+                                                                    .ipAddress
+                                                                    .value,
+                                                                onlineController
+                                                                    .products[
+                                                                        index]
+                                                                    .itemCode,
+                                                                widget.userId,
+                                                                widget.tagNum,
+                                                                widget.adminId,
+                                                                widget.outlet,
+                                                                widget.storeId,
+                                                                serverController
+                                                                    .deviceID
+                                                                    .value);
                                                         await onlineController
                                                             .productList(
-                                                                widget.tagNum);
+                                                                widget.tagNum,
+                                                                serverController
+                                                                    .ipAddress
+                                                                    .value);
                                                         Navigator.pop(context);
 
                                                         // var snackBar = SnackBar(
