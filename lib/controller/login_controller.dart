@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:zebra_scanner_final/controller/server_controller.dart';
 import 'package:http/http.dart' as http;
 import 'package:zebra_scanner_final/view/tag_selection.dart';
 import 'package:zebra_scanner_final/widgets/const_colors.dart';
@@ -13,6 +11,7 @@ class LoginController extends GetxController {
   TextEditingController pass = TextEditingController();
 
   var obscureText = true.obs;
+
   void toggle() {
     print('$obscureText');
     obscureText.value = !obscureText.value;
@@ -21,6 +20,7 @@ class LoginController extends GetxController {
 
   //login method
   RxBool isLoading = false.obs;
+
   Future<void> loginMethod(
       String deviceId, String ipAddress, BuildContext context) async {
     isLoading(true);

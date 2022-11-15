@@ -9,15 +9,15 @@ import 'package:zebra_scanner_final/controller/online_controller.dart';
 import 'package:zebra_scanner_final/controller/server_controller.dart';
 import 'package:zebra_scanner_final/widgets/appBar_widget.dart';
 import 'package:zebra_scanner_final/widgets/const_colors.dart';
-import 'package:zebra_scanner_final/widgets/reusable_textfield.dart';
 
 class OnlineMode extends StatefulWidget {
-  //apatoto storeId and outlet same e rakhtesi
+  //apatoto storeId and outlet same e rakhtesi .
   String tagNum;
   String storeId;
   String userId;
   String outlet;
   String adminId;
+
   OnlineMode({
     Key? key,
     required this.tagNum,
@@ -86,11 +86,11 @@ class _OnlineModeState extends State<OnlineMode> {
         child: ReusableAppBar(
           elevation: 0,
           color: Colors.white,
-          leading: IconButton(
-            onPressed: () {
+          leading: GestureDetector(
+            onTap: () {
               Get.back();
             },
-            icon: const Icon(
+            child: Icon(
               Icons.arrow_back,
               size: 30,
               color: Colors.black,
@@ -237,13 +237,6 @@ class _OnlineModeState extends State<OnlineMode> {
                                             fontWeight: FontWeight.w800,
                                           ),
                                         ),
-                                        /*Text(
-                                          "Last Added Quantity :  ${onlineController.products[index].}",
-                                          style: GoogleFonts.urbanist(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),*/
                                       ],
                                     ),
                                   ),
@@ -325,11 +318,15 @@ class _OnlineModeState extends State<OnlineMode> {
                                                             size: 20,
                                                           ),
                                                         )),
-                                                    SizedBox(
+                                                    const SizedBox(
                                                       width: 10,
                                                     ),
                                                     Container(
-                                                        width: 100,
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width /
+                                                            3.5,
                                                         child: TextField(
                                                           inputFormatters: [
                                                             FilteringTextInputFormatter
@@ -449,7 +446,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                               TextInputType
                                                                   .number,
                                                         )),
-                                                    SizedBox(
+                                                    const SizedBox(
                                                       width: 10,
                                                     ),
                                                     GestureDetector(
@@ -478,54 +475,11 @@ class _OnlineModeState extends State<OnlineMode> {
                                                 children: [
                                                   TextButton(
                                                     style: TextButton.styleFrom(
-                                                      backgroundColor:
-                                                          Colors.redAccent,
+                                                      backgroundColor: colors
+                                                          .comColor
+                                                          .withOpacity(0.7),
                                                     ),
-                                                    onPressed: () async {
-                                                      /*ScaffoldMessenger.of(context)
-                                                          .showSnackBar(
-                                                          const SnackBar(
-                                                            duration:
-                                                            Duration(seconds: 1),
-                                                            content: Text(
-                                                              "Product updated successfully",
-                                                              textAlign:
-                                                              TextAlign.center,
-                                                              style: TextStyle(
-                                                                //fontWeight: FontWeight.bold,
-                                                                fontSize: 18,
-                                                                color: Colors.white,
-                                                              ),
-                                                            ),
-                                                          ));
-                                                      //post to api
-                                                      await onlineController
-                                                          .updateQty(
-                                                          serverController
-                                                              .ipAddress.value,
-                                                          onlineController
-                                                              .products[index]
-                                                              .itemCode,
-                                                          widget.userId,
-                                                          widget.tagNum,
-                                                          widget.adminId,
-                                                          widget.outlet,
-                                                          widget.storeId,
-                                                          serverController
-                                                              .deviceID.value);
-                                                      await onlineController
-                                                          .productList(
-                                                          widget.tagNum,
-                                                          serverController
-                                                              .ipAddress.value);
-                                                      Navigator.pop(context);
-
-                                                      // var snackBar = SnackBar(
-                                                      //     content: Text('Hello World'));
-                                                      // ScaffoldMessenger.of(context)
-                                                      //     .showSnackBar(snackBar);
-                                                      //scanBarcodeNormal();*/
-                                                    },
+                                                    onPressed: () async {},
                                                     child: Text(
                                                       "Adjustment",
                                                       style:
@@ -538,8 +492,9 @@ class _OnlineModeState extends State<OnlineMode> {
                                                   ),
                                                   TextButton(
                                                     style: TextButton.styleFrom(
-                                                      backgroundColor:
-                                                          Colors.amberAccent,
+                                                      backgroundColor: colors
+                                                          .uniGreen
+                                                          .withOpacity(0.7),
                                                     ),
                                                     onPressed: () async {
                                                       ScaffoldMessenger.of(
@@ -592,7 +547,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                       //scanBarcodeNormal();
                                                     },
                                                     child: Text(
-                                                      "Update",
+                                                      "Manual entry",
                                                       style:
                                                           GoogleFonts.urbanist(
                                                         color: Colors.black,

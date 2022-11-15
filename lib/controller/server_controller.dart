@@ -116,6 +116,7 @@ class ServerController extends GetxController {
   //saving data for further use
   RxString deviceID = ''.obs;
   RxString ipAddress = ''.obs;
+
   void saveValue(String serverIP) {
     deviceID.value = deviceId;
     ipAddress.value = serverIP;

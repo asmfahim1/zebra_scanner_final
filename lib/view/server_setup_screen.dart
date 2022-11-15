@@ -56,7 +56,7 @@ class _ServerSetupScreenState extends State<ServerSetupScreen> {
                             color: colors.comColor)),
                     Image.asset(
                       'images/Upgraded S.png',
-                      width: 60,
+                      width: MediaQuery.of(context).size.width / 5.33,
                     ),
                     Text(
                       "tock",
@@ -105,8 +105,8 @@ class _ServerSetupScreenState extends State<ServerSetupScreen> {
                           serverController.serverSetup();
                         },
                         child: Container(
-                          height: 50,
-                          width: 150,
+                          height: MediaQuery.of(context).size.width / 7,
+                          width: MediaQuery.of(context).size.width / 2.13,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
                             color: colors.comColor,
