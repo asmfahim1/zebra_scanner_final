@@ -23,6 +23,7 @@ class OnlineController extends GetxController {
   RxBool haveProduct = false.obs;
   RxBool postProduct = false.obs;
   List<ProductListModel> products = [];
+
   Future<void> productList(String tagNum, String ipAddress) async {
     print(ipAddress);
     haveProduct(true);
@@ -116,6 +117,7 @@ class OnlineController extends GetxController {
 
   //make the active and di-active function
   RxBool isEnabled = true.obs;
+
   void enableButton(bool value) {
     FlutterDataWedge.enableScanner(value);
     isEnabled.value = value;
@@ -123,6 +125,7 @@ class OnlineController extends GetxController {
 
   //increment function
   RxInt quantity = 0.obs;
+
   //making textField iterable update the value of both textController and quantity
   void updateTQ(String value) {
     qtyCon.text = value;

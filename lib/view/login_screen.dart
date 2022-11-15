@@ -60,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 50),
@@ -74,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: colors.comColor)),
                     Image.asset(
                       'images/Upgraded S.png',
-                      width: 60,
+                      width: MediaQuery.of(context).size.width / 5.33,
                     ),
                     Text(
                       "tock",
@@ -169,8 +169,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               context);
                         },
                         child: Container(
-                          height: 50,
-                          width: 150,
+                          height: MediaQuery.of(context).size.width / 6,
+                          width: MediaQuery.of(context).size.width / 2.13,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
                             color: colors.comColor,

@@ -1,11 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:zebra_scanner_final/view/server_setup_screen.dart';
 import 'package:zebra_scanner_final/widgets/const_colors.dart';
-import 'login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -59,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen>
               child: Center(
                 child: Image.asset(
                   'images/stock_logo.png',
-                  width: 200,
+                  width: MediaQuery.of(context).size.width / 1.6,
                 ),
               ),
             ),
@@ -75,7 +72,7 @@ class _SplashScreenState extends State<SplashScreen>
                           color: colors.comColor)),
                   Image.asset(
                     'images/Upgraded S.png',
-                    width: 50,
+                    width: MediaQuery.of(context).size.width / 6.4,
                   ),
                   Text(
                     "tock",
