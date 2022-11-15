@@ -92,7 +92,7 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
                                   crossAxisCount: 2,
                                   crossAxisSpacing: 2.0,
                                   mainAxisSpacing: 2.0,
-                                  childAspectRatio: 1.2),
+                                  childAspectRatio: 1.22),
                           itemBuilder: (context, index) {
                             if (tagController.tagList.isEmpty) {
                               return const Center(
@@ -104,78 +104,86 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
                               );
                             } else {
                               return GestureDetector(
-                                onTap: () {
-                                  Get.to(() => OnlineMode(
-                                        tagNum: tagController
-                                            .tagList[index].xtagnum,
-                                        storeId:
-                                            tagController.tagList[index].xwh,
-                                        userId: tagController
-                                            .tagList[index].zauserid,
-                                        outlet:
-                                            tagController.tagList[index].xwh,
-                                        adminId:
-                                            tagController.tagList[index].zaip,
-                                      ));
-                                },
-                                child: Card(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(20.0)),
-                                  color: colors.comColor,
-                                  elevation: 2,
-                                  shadowColor: Colors.blueGrey,
-                                  child: Container(
-                                    height: 120,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      gradient: LinearGradient(
-                                        stops: tagController.stops,
-                                        /*(for controlling Colors opacity)*/
-                                        // colors: gradient,
-                                        colors: [
-                                          Colors.red.shade300,
-                                          Colors.green.shade300,
-                                        ],
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                      ),
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          tagController.tagList[index].xtagnum,
-                                          style: GoogleFonts.urbanist(
-                                            color: Colors.white,
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.w800,
-                                          ),
+                                  onTap: () {
+                                    Get.to(() => OnlineMode(
+                                          tagNum: tagController
+                                              .tagList[index].xtagnum,
+                                          storeId:
+                                              tagController.tagList[index].xwh,
+                                          userId: tagController
+                                              .tagList[index].zauserid,
+                                          outlet:
+                                              tagController.tagList[index].xwh,
+                                          adminId:
+                                              tagController.tagList[index].zaip,
+                                        ));
+                                  },
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Container(
+                                          height: 125,
+                                          width: 150,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                            gradient: LinearGradient(
+                                              stops: tagController.stops,
+                                              colors: [
+                                                colors.comColor,
+                                                colors.uniGreen,
+                                              ],
+                                              begin: Alignment.topLeft,
+                                              end: Alignment.bottomRight,
+                                            ),
+                                          )),
+                                      Container(
+                                        /*height: 118,
+                                        width: 142,*/
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                            color: Colors.white.withOpacity(0.2)
+                                            /*color: Colors.transparent
+                                              .withOpacity(0.2),*/
+                                            ),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              tagController
+                                                  .tagList[index].xtagnum,
+                                              style: GoogleFonts.urbanist(
+                                                color: Colors.white,
+                                                fontSize: 25,
+                                                fontWeight: FontWeight.w800,
+                                              ),
+                                            ),
+                                            Text(
+                                              tagController.tagList[index].xwh,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: GoogleFonts.urbanist(
+                                                color: Colors.white,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                            Text(
+                                              tagController.tagList[index].date,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: GoogleFonts.urbanist(
+                                                color: Colors.white,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        Text(
-                                          tagController.tagList[index].xwh,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: GoogleFonts.urbanist(
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                        Text(
-                                          tagController.tagList[index].date,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: GoogleFonts.urbanist(
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
+                                      )
+                                    ],
+                                  ));
                             }
                           });
                     }
@@ -189,133 +197,3 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
     );
   }
 }
-
-/*Row(
-children: [
-Expanded(
-child: Container(
-padding: EdgeInsets.only(
-left: 10, top: 5),
-child: Column(
-crossAxisAlignment:
-CrossAxisAlignment.start,
-mainAxisAlignment:
-MainAxisAlignment.spaceEvenly,
-children: [
-Text(
-"${tagController.tagList[index].xtagnum}",
-style: GoogleFonts.urbanist(
-color: Colors.black,
-fontWeight: FontWeight.w800,
-),
-),
-Text(
-"${tagController.tagList[index].zauserid}",
-overflow:
-TextOverflow.ellipsis,
-style: GoogleFonts.urbanist(
-color: Colors.black,
-fontWeight: FontWeight.w400,
-),
-),
-Text(
-"${tagController.tagList[index].xwh}",
-overflow:
-TextOverflow.ellipsis,
-style: GoogleFonts.urbanist(
-color: Colors.black,
-fontWeight: FontWeight.w400,
-),
-),
-// Text(
-//   "Tag Status :  ${tagController.tagList[index].xstatustag}",
-//   style: GoogleFonts.urbanist(
-//     color: Colors.black,
-//     fontWeight: FontWeight.w400,
-//   ),
-// )
-],
-),
-),
-),
-Container(
-width: 120,
-padding: const EdgeInsets.only(
-top: 10, right: 5, bottom: 5),
-child: Column(
-mainAxisAlignment:
-MainAxisAlignment.spaceBetween,
-children: [
-Column(
-crossAxisAlignment:
-CrossAxisAlignment.start,
-children: [
-Text(
-"Date : ${tagController.tagList[index].datecom}",
-style: GoogleFonts.urbanist(
-color: Colors.black,
-fontSize: 12,
-fontWeight:
-FontWeight.w600,
-),
-),
-*/ /*Text(
-                                              "Time: ${onlineController.products[index].xitem}",
-                                              style: GoogleFonts.urbanist(
-                                                color: Colors.black,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),*/ /*
-],
-),
-*/ /*GestureDetector(
-                                                onTap: () {
-                                                  Get.to(() => OnlineMode(
-                                                        userId: tagController
-                                                            .tagList[index]
-                                                            .zauserid,
-                                                        tagId: tagController
-                                                            .tagList[index]
-                                                            .xtagnum,
-                                                        storeId: tagController
-                                                            .tagList[index].xwh,
-                                                      ));
-                                                },
-                                                child: Container(
-                                                  height: 35,
-                                                  width: 100,
-                                                  decoration: BoxDecoration(
-                                                      color: Colors.amberAccent,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10.0)),
-                                                  child: Center(
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Text(
-                                                          "Go",
-                                                          style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontSize: 18,
-                                                            fontWeight:
-                                                                FontWeight.w800,
-                                                          ),
-                                                        ),
-                                                        Icon(
-                                                          Icons.arrow_forward,
-                                                          size: 20,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              )*/ /*
-],
-),
-)
-],
-),*/
