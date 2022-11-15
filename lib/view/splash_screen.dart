@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:zebra_scanner_final/view/server_setup_screen.dart';
+import 'package:zebra_scanner_final/widgets/const_colors.dart';
 import 'login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -17,6 +18,7 @@ class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController controller;
+  ConstantColors colors = ConstantColors();
 
   @override
   void initState() {
@@ -66,23 +68,21 @@ class _SplashScreenState extends State<SplashScreen>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    "Uni",
-                    style: GoogleFonts.urbanist(
-                        fontSize: 50,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.black),
-                  ),
+                  Text("Uni",
+                      style: TextStyle(
+                          fontSize: 50,
+                          fontWeight: FontWeight.w800,
+                          color: colors.comColor)),
                   Image.asset(
-                    'images/s.png',
+                    'images/Upgraded S.png',
                     width: 50,
                   ),
                   Text(
                     "tock",
-                    style: GoogleFonts.urbanist(
+                    style: TextStyle(
                         fontSize: 50,
                         fontWeight: FontWeight.w800,
-                        color: Colors.black),
+                        color: colors.uniGreen),
                   ),
                 ],
               ),

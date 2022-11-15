@@ -132,23 +132,17 @@ class _OnlineModeState extends State<OnlineMode> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const Text('Last code:'),
-                      Text(onlineController.lastCode.value,
-                          style: Theme.of(context).textTheme.headline5),
-                      const SizedBox(width: 10.0),
-                    ],
-                  ),
-                  /*SizedBox(height: 10.0),
-                  Row(
-                    children: [
-                      Text('Status:'),
-                      Text(onlineController.scannerStatus.value,
-                          style: Theme.of(context).textTheme.headline6),
-                    ],
-                  )*/
+                  Obx(
+                    () => Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const Text('Last code:'),
+                        Text(onlineController.lastCode.value,
+                            style: Theme.of(context).textTheme.headline5),
+                        const SizedBox(width: 10.0),
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),
@@ -171,15 +165,21 @@ class _OnlineModeState extends State<OnlineMode> {
                 );
               } else {
                 if (onlineController.products.isEmpty) {
-                  return const Center(
-                    child: Text("No Product present"),
-                  );
+                  return Center(
+                      child: Text(
+                    "No product found",
+                    style: GoogleFonts.urbanist(
+                      color: Colors.black,
+                      fontSize: 25,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ));
                 } else {
                   return ListView.builder(
                       itemCount: onlineController.products.length,
                       itemBuilder: (context, index) {
                         return Container(
-                          height: 115,
+                          height: MediaQuery.of(context).size.height / 4.22,
                           padding: const EdgeInsets.only(
                               bottom: 5, left: 5, right: 5),
                           decoration: BoxDecoration(
@@ -196,7 +196,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                 Expanded(
                                   child: Container(
                                     padding: const EdgeInsets.only(
-                                      left: 10,
+                                      left: 20,
                                     ),
                                     child: Column(
                                       crossAxisAlignment:
@@ -248,101 +248,58 @@ class _OnlineModeState extends State<OnlineMode> {
                                     ),
                                   ),
                                 ),
-                                Container(
-                                  width: 120,
-                                  padding: const EdgeInsets.only(
-                                      top: 10, right: 5, bottom: 5),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Date : ${onlineController.products[index].ztime}",
-                                            style: GoogleFonts.urbanist(
-                                              color: Colors.black,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w600,
+                                GestureDetector(
+                                  onTap: () async {
+                                    onlineController.updateTQ(
+                                        '${onlineController.products[index].scanQty}');
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title: Text(
+                                              onlineController
+                                                  .products[index].itemCode,
+                                              style: GoogleFonts.urbanist(
+                                                  fontSize: 30,
+                                                  fontWeight: FontWeight.w800,
+                                                  color: Colors.black54),
                                             ),
-                                          ),
-                                          /*Text(
-                                            "Time: ${onlineController.products[index].xitem}",
-                                            style: GoogleFonts.urbanist(
-                                              color: Colors.black,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),*/
-                                        ],
-                                      ),
-                                      GestureDetector(
-                                        onTap: () async {
-                                          onlineController.updateTQ(
-                                              '${onlineController.products[index].scanQty}');
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return AlertDialog(
-                                                  title: Text(
-                                                    onlineController
-                                                        .products[index]
-                                                        .itemCode,
-                                                    style: GoogleFonts.urbanist(
-                                                        fontSize: 30,
-                                                        fontWeight:
-                                                            FontWeight.w800,
-                                                        color: Colors.black54),
-                                                  ),
-                                                  content: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        '${onlineController.products[index].itemDesc}',
-                                                        style: GoogleFonts
-                                                            .urbanist(
-                                                                fontSize: 15,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w800,
-                                                                color: Colors
-                                                                    .black54),
-                                                      ),
-                                                      Text(
-                                                        "${onlineController.products[index].xcus}",
-                                                        style: GoogleFonts
-                                                            .urbanist(
-                                                                fontSize: 15,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w800,
-                                                                color: Colors
-                                                                    .black54),
-                                                      ),
-                                                      Text(
-                                                        "Total Quantity: ${onlineController.products[index].scanQty}",
-                                                        style: GoogleFonts
-                                                            .urbanist(
-                                                                fontSize: 15,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w800,
-                                                                color: Colors
-                                                                    .black54),
-                                                      ),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          /*Text(
+                                            content: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  '${onlineController.products[index].itemDesc}',
+                                                  style: GoogleFonts.urbanist(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w800,
+                                                      color: Colors.black54),
+                                                ),
+                                                Text(
+                                                  "${onlineController.products[index].xcus}",
+                                                  style: GoogleFonts.urbanist(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w800,
+                                                      color: Colors.black54),
+                                                ),
+                                                Text(
+                                                  "Total Quantity: ${onlineController.products[index].scanQty}",
+                                                  style: GoogleFonts.urbanist(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w800,
+                                                      color: Colors.black54),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    /*Text(
                                                             "Quantity : ",
                                                             style: GoogleFonts
                                                                 .urbanist(
@@ -354,68 +311,64 @@ class _OnlineModeState extends State<OnlineMode> {
                                                                     color: Colors
                                                                         .black54),
                                                           ),*/
-                                                          GestureDetector(
-                                                              onTap: () {
-                                                                onlineController
-                                                                    .decrementQuantity();
-                                                              },
-                                                              child:
-                                                                  CircleAvatar(
-                                                                backgroundColor:
-                                                                    colors
-                                                                        .comColor,
-                                                                radius: 15,
-                                                                child:
-                                                                    const Icon(
-                                                                  Icons.remove,
-                                                                  size: 20,
-                                                                ),
-                                                              )),
-                                                          SizedBox(
-                                                            width: 10,
+                                                    GestureDetector(
+                                                        onTap: () {
+                                                          onlineController
+                                                              .decrementQuantity();
+                                                        },
+                                                        child: CircleAvatar(
+                                                          backgroundColor:
+                                                              colors.comColor,
+                                                          radius: 15,
+                                                          child: const Icon(
+                                                            Icons.remove,
+                                                            size: 20,
                                                           ),
-                                                          Container(
-                                                              width: 100,
-                                                              child: TextField(
-                                                                inputFormatters: [
-                                                                  FilteringTextInputFormatter
-                                                                      .deny(RegExp(
-                                                                          r'^0')),
-                                                                  FilteringTextInputFormatter
-                                                                      .deny(RegExp(
-                                                                          r'-')),
-                                                                  FilteringTextInputFormatter
-                                                                      .deny(RegExp(
-                                                                          r'\.')),
-                                                                  FilteringTextInputFormatter
-                                                                      .deny(RegExp(
-                                                                          r',')),
-                                                                  FilteringTextInputFormatter
-                                                                      .deny(RegExp(
-                                                                          r'\+')),
-                                                                  FilteringTextInputFormatter
-                                                                      .deny(RegExp(
-                                                                          r'\*')),
-                                                                  FilteringTextInputFormatter
-                                                                      .deny(RegExp(
-                                                                          r'/')),
-                                                                  FilteringTextInputFormatter
-                                                                      .deny(RegExp(
-                                                                          r'=')),
-                                                                  FilteringTextInputFormatter
-                                                                      .deny(RegExp(
-                                                                          r'%')),
-                                                                  FilteringTextInputFormatter
-                                                                      .deny(RegExp(
-                                                                          r' ')),
-                                                                ],
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                controller:
-                                                                    onlineController
-                                                                        .qtyCon,
-                                                                /*onChanged:
+                                                        )),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Container(
+                                                        width: 100,
+                                                        child: TextField(
+                                                          inputFormatters: [
+                                                            FilteringTextInputFormatter
+                                                                .deny(RegExp(
+                                                                    r'^0')),
+                                                            FilteringTextInputFormatter
+                                                                .deny(RegExp(
+                                                                    r'-')),
+                                                            FilteringTextInputFormatter
+                                                                .deny(RegExp(
+                                                                    r'\.')),
+                                                            FilteringTextInputFormatter
+                                                                .deny(RegExp(
+                                                                    r',')),
+                                                            FilteringTextInputFormatter
+                                                                .deny(RegExp(
+                                                                    r'\+')),
+                                                            FilteringTextInputFormatter
+                                                                .deny(RegExp(
+                                                                    r'\*')),
+                                                            FilteringTextInputFormatter
+                                                                .deny(RegExp(
+                                                                    r'/')),
+                                                            FilteringTextInputFormatter
+                                                                .deny(RegExp(
+                                                                    r'=')),
+                                                            FilteringTextInputFormatter
+                                                                .deny(RegExp(
+                                                                    r'%')),
+                                                            FilteringTextInputFormatter
+                                                                .deny(RegExp(
+                                                                    r' ')),
+                                                          ],
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          controller:
+                                                              onlineController
+                                                                  .qtyCon,
+                                                          /*onChanged:
                                                                     (value) {
                                                                   if (value
                                                                       .isEmpty) {
@@ -434,190 +387,247 @@ class _OnlineModeState extends State<OnlineMode> {
                                                                         '====${onlineController.quantity.value}======${onlineController.qtyCon.text}');
                                                                   }
                                                                 },*/
-                                                                //by using on submitted function, it will immediately after pressing the value done
-                                                                onSubmitted:
-                                                                    (value) {
-                                                                  if (value
-                                                                      .isEmpty) {
-                                                                    onlineController
-                                                                        .qtyCon
-                                                                        .text = '0';
-                                                                    print(
-                                                                        '====${onlineController.quantity.value}======${onlineController.qtyCon.text}');
-                                                                  } else {
-                                                                    onlineController
-                                                                            .quantity
-                                                                            .value =
-                                                                        int.parse(
-                                                                            value);
-                                                                    print(
-                                                                        '====${onlineController.quantity.value}======${onlineController.qtyCon.text}');
-                                                                  }
-                                                                },
-                                                                /*onEditingComplete:(){
+                                                          //by using on submitted function, it will immediately after pressing the value done
+                                                          onSubmitted: (value) {
+                                                            if (value.isEmpty) {
+                                                              onlineController
+                                                                  .qtyCon
+                                                                  .text = '0';
+                                                              print(
+                                                                  '====${onlineController.quantity.value}======${onlineController.qtyCon.text}');
+                                                            } else {
+                                                              onlineController
+                                                                      .quantity
+                                                                      .value =
+                                                                  int.parse(
+                                                                      value);
+                                                              print(
+                                                                  '====${onlineController.quantity.value}======${onlineController.qtyCon.text}');
+                                                            }
+                                                          },
+                                                          /*onEditingComplete:(){
                                                                   if(onlineController.qtyCon.text.isEmpty){
                                                                     onlineController.qtyCon.text = '0';
                                                                   }else{
                                                                     onlineController.qtyCon.text = '0';
                                                                   }
                                                                 },*/
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                  focusedBorder:
-                                                                      OutlineInputBorder(
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width:
-                                                                          1.5,
-                                                                      color: colors
-                                                                          .comColor,
-                                                                    ),
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            5.5),
-                                                                  ),
-                                                                  filled: true,
-                                                                  hintText:
-                                                                      '${onlineController.products[index].scanQty}',
-                                                                  hintStyle: const TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontSize:
-                                                                          50,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600),
-                                                                  fillColor:
-                                                                      Colors.blueGrey[
-                                                                          50],
-                                                                ),
-                                                                style:
-                                                                    const TextStyle(
-                                                                        fontSize:
-                                                                            50),
-                                                                keyboardType:
-                                                                    TextInputType
-                                                                        .number,
-                                                              )),
-                                                          SizedBox(
-                                                            width: 10,
-                                                          ),
-                                                          GestureDetector(
-                                                              onTap: () {
-                                                                onlineController
-                                                                    .incrementQuantity();
-                                                              },
-                                                              child:
-                                                                  CircleAvatar(
-                                                                backgroundColor:
-                                                                    colors
-                                                                        .comColor,
-                                                                radius: 15,
-                                                                child:
-                                                                    const Icon(
-                                                                  Icons.add,
-                                                                  size: 20,
-                                                                ),
-                                                              )),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  actions: [
-                                                    TextButton(
-                                                      style:
-                                                          TextButton.styleFrom(
-                                                        backgroundColor:
-                                                            Colors.amberAccent,
-                                                      ),
-                                                      onPressed: () async {
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(
-                                                                const SnackBar(
-                                                          duration: Duration(
-                                                              seconds: 1),
-                                                          content: Text(
-                                                            "Product updated successfully",
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                              //fontWeight: FontWeight.bold,
-                                                              fontSize: 18,
-                                                              color:
-                                                                  Colors.white,
+                                                          decoration:
+                                                              InputDecoration(
+                                                            focusedBorder:
+                                                                OutlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                width: 1.5,
+                                                                color: colors
+                                                                    .comColor,
+                                                              ),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5.5),
                                                             ),
+                                                            filled: true,
+                                                            hintText:
+                                                                '${onlineController.products[index].scanQty}',
+                                                            hintStyle:
+                                                                const TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        50,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600),
+                                                            fillColor: Colors
+                                                                .blueGrey[50],
                                                           ),
-                                                        ));
-                                                        //post to api
-                                                        await onlineController
-                                                            .updateQty(
-                                                                serverController
-                                                                    .ipAddress
-                                                                    .value,
-                                                                onlineController
-                                                                    .products[
-                                                                        index]
-                                                                    .itemCode,
-                                                                widget.userId,
-                                                                widget.tagNum,
-                                                                widget.adminId,
-                                                                widget.outlet,
-                                                                widget.storeId,
-                                                                serverController
-                                                                    .deviceID
-                                                                    .value);
-                                                        await onlineController
-                                                            .productList(
-                                                                widget.tagNum,
-                                                                serverController
-                                                                    .ipAddress
-                                                                    .value);
-                                                        Navigator.pop(context);
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 50),
+                                                          keyboardType:
+                                                              TextInputType
+                                                                  .number,
+                                                        )),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    GestureDetector(
+                                                        onTap: () {
+                                                          onlineController
+                                                              .incrementQuantity();
+                                                        },
+                                                        child: CircleAvatar(
+                                                          backgroundColor:
+                                                              colors.comColor,
+                                                          radius: 15,
+                                                          child: const Icon(
+                                                            Icons.add,
+                                                            size: 20,
+                                                          ),
+                                                        )),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                            actions: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  TextButton(
+                                                    style: TextButton.styleFrom(
+                                                      backgroundColor:
+                                                          Colors.redAccent,
+                                                    ),
+                                                    onPressed: () async {
+                                                      /*ScaffoldMessenger.of(context)
+                                                          .showSnackBar(
+                                                          const SnackBar(
+                                                            duration:
+                                                            Duration(seconds: 1),
+                                                            content: Text(
+                                                              "Product updated successfully",
+                                                              textAlign:
+                                                              TextAlign.center,
+                                                              style: TextStyle(
+                                                                //fontWeight: FontWeight.bold,
+                                                                fontSize: 18,
+                                                                color: Colors.white,
+                                                              ),
+                                                            ),
+                                                          ));
+                                                      //post to api
+                                                      await onlineController
+                                                          .updateQty(
+                                                          serverController
+                                                              .ipAddress.value,
+                                                          onlineController
+                                                              .products[index]
+                                                              .itemCode,
+                                                          widget.userId,
+                                                          widget.tagNum,
+                                                          widget.adminId,
+                                                          widget.outlet,
+                                                          widget.storeId,
+                                                          serverController
+                                                              .deviceID.value);
+                                                      await onlineController
+                                                          .productList(
+                                                          widget.tagNum,
+                                                          serverController
+                                                              .ipAddress.value);
+                                                      Navigator.pop(context);
 
-                                                        // var snackBar = SnackBar(
-                                                        //     content: Text('Hello World'));
-                                                        // ScaffoldMessenger.of(context)
-                                                        //     .showSnackBar(snackBar);
-                                                        //scanBarcodeNormal();
-                                                      },
-                                                      child: Text(
-                                                        "Update",
-                                                        style: GoogleFonts
-                                                            .urbanist(
-                                                          color: Colors.black,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                        ),
+                                                      // var snackBar = SnackBar(
+                                                      //     content: Text('Hello World'));
+                                                      // ScaffoldMessenger.of(context)
+                                                      //     .showSnackBar(snackBar);
+                                                      //scanBarcodeNormal();*/
+                                                    },
+                                                    child: Text(
+                                                      "Adjustment",
+                                                      style:
+                                                          GoogleFonts.urbanist(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w600,
                                                       ),
                                                     ),
-                                                  ],
-                                                  scrollable: true,
-                                                );
-                                              });
-                                        },
-                                        child: Container(
-                                          height: 35,
-                                          width: 100,
-                                          decoration: BoxDecoration(
-                                              color: Colors.amberAccent,
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0)),
-                                          child: Center(
-                                            child: Text(
-                                              "Edit",
-                                              style: GoogleFonts.urbanist(
-                                                color: Colors.black,
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w600,
+                                                  ),
+                                                  TextButton(
+                                                    style: TextButton.styleFrom(
+                                                      backgroundColor:
+                                                          Colors.amberAccent,
+                                                    ),
+                                                    onPressed: () async {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                              const SnackBar(
+                                                        duration: Duration(
+                                                            seconds: 1),
+                                                        content: Text(
+                                                          "Product updated successfully",
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                            //fontWeight: FontWeight.bold,
+                                                            fontSize: 18,
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                      ));
+                                                      //post to api
+                                                      await onlineController
+                                                          .updateQty(
+                                                              serverController
+                                                                  .ipAddress
+                                                                  .value,
+                                                              onlineController
+                                                                  .products[
+                                                                      index]
+                                                                  .itemCode,
+                                                              widget.userId,
+                                                              widget.tagNum,
+                                                              widget.adminId,
+                                                              widget.outlet,
+                                                              widget.storeId,
+                                                              serverController
+                                                                  .deviceID
+                                                                  .value);
+                                                      await onlineController
+                                                          .productList(
+                                                              widget.tagNum,
+                                                              serverController
+                                                                  .ipAddress
+                                                                  .value);
+                                                      Navigator.pop(context);
+
+                                                      // var snackBar = SnackBar(
+                                                      //     content: Text('Hello World'));
+                                                      // ScaffoldMessenger.of(context)
+                                                      //     .showSnackBar(snackBar);
+                                                      //scanBarcodeNormal();
+                                                    },
+                                                    child: Text(
+                                                      "Update",
+                                                      style:
+                                                          GoogleFonts.urbanist(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                            ),
-                                          ),
+                                            ],
+                                            scrollable: true,
+                                          );
+                                        });
+                                  },
+                                  child: Container(
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      color: colors.comColor.withOpacity(0.6),
+                                      borderRadius: const BorderRadius.only(
+                                          topRight: Radius.circular(20.0),
+                                          bottomRight: Radius.circular(20.0)),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "Edit",
+                                        style: GoogleFonts.urbanist(
+                                          color: Colors.black,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600,
                                         ),
-                                      )
-                                    ],
+                                      ),
+                                    ),
                                   ),
-                                )
+                                ),
                               ],
                             ),
                           ),

@@ -25,6 +25,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     print('===========${serverController.ipAddress.value}');
     print('===========${serverController.deviceID.value}');
+    print('Screen height: ${MediaQuery.of(context).size.height}');
+    print('Screen width: ${MediaQuery.of(context).size.width}');
     return Scaffold(
       /* appBar: PreferredSize(
         preferredSize: Size.fromHeight(50),
@@ -65,19 +67,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      "Uni",
-                      style: TextStyle(
-                          fontSize: 60,
-                          fontWeight: FontWeight.w800,
-                          color: colors.comColor),
+                    Text("Uni",
+                        style: TextStyle(
+                            fontSize: 60,
+                            fontWeight: FontWeight.w800,
+                            color: colors.comColor)),
+                    Image.asset(
+                      'images/Upgraded S.png',
+                      width: 60,
                     ),
-                    /*Image.asset(
-            'images/s.png',
-            width: 30,
-          ),*/
                     Text(
-                      "Stock",
+                      "tock",
                       style: TextStyle(
                           fontSize: 60,
                           fontWeight: FontWeight.w800,

@@ -26,19 +26,17 @@ class ReusableAppBar extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              "Uni",
-              style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w800,
-                  color: colors.comColor),
-            ),
-            /*Image.asset(
-              'images/s.png',
+            Text("Uni",
+                style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w800,
+                    color: colors.comColor)),
+            Image.asset(
+              'images/Upgraded S.png',
               width: 30,
-            ),*/
+            ),
             Text(
-              "Stock",
+              "tock",
               style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.w800,
