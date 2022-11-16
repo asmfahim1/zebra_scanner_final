@@ -479,7 +479,43 @@ class _OnlineModeState extends State<OnlineMode> {
                                                           .comColor
                                                           .withOpacity(0.7),
                                                     ),
-                                                    onPressed: () async {},
+                                                    onPressed: () async {
+                                                      //post to api
+                                                      await onlineController
+                                                          .adjustmentQty(
+                                                              context,
+                                                              onlineController
+                                                                  .products[
+                                                                      index]
+                                                                  .scanQty,
+                                                              serverController
+                                                                  .ipAddress
+                                                                  .value,
+                                                              onlineController
+                                                                  .products[
+                                                                      index]
+                                                                  .itemCode,
+                                                              widget.userId,
+                                                              widget.tagNum,
+                                                              widget.adminId,
+                                                              widget.outlet,
+                                                              widget.storeId,
+                                                              serverController
+                                                                  .deviceID
+                                                                  .value);
+                                                      await onlineController
+                                                          .productList(
+                                                              widget.tagNum,
+                                                              serverController
+                                                                  .ipAddress
+                                                                  .value);
+
+                                                      // var snackBar = SnackBar(
+                                                      //     content: Text('Hello World'));
+                                                      // ScaffoldMessenger.of(context)
+                                                      //     .showSnackBar(snackBar);
+                                                      //scanBarcodeNormal();
+                                                    },
                                                     child: Text(
                                                       "Adjustment",
                                                       style:
@@ -547,7 +583,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                       //scanBarcodeNormal();
                                                     },
                                                     child: Text(
-                                                      "Manual entry",
+                                                      "Manual",
                                                       style:
                                                           GoogleFonts.urbanist(
                                                         color: Colors.black,
