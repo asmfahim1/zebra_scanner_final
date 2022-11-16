@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:zebra_scanner_final/controller/server_controller.dart';
 import 'package:flutter_datawedge/flutter_datawedge.dart';
 import '../model/productList_model.dart';
 import '../widgets/const_colors.dart';
@@ -73,7 +72,7 @@ class OnlineController extends GetxController {
     postProduct(false);
   }
 
-  //update quantity
+  //manual entry quantity
   Future<void> updateQty(
       String ipAddress,
       String itemCode,
@@ -92,7 +91,8 @@ class OnlineController extends GetxController {
             "item": itemCode,
             "user_id": "010340",
             "qty": qtyCon.text.toString(),
-            "device": deviceID
+            "device": deviceID,
+            "tag_no": tagNum
           }));
       print("==========${response.body}");
       print("==========$ipAddress");
@@ -105,11 +105,84 @@ class OnlineController extends GetxController {
             "item": itemCode,
             "user_id": "010340",
             "qty": qtyCon.text.toString(),
-            "device": deviceID
+            "device": deviceID,
+            "tag_no": tagNum
           }));
       print("==========${response.body}");
       print("==========$ipAddress");
       print("==========$deviceID");
+    }
+    qtyCon.clear();
+    quantity.value = 0;
+  }
+
+  //adjustment quantity
+  Future<void> adjustmentQty(
+      context,
+      int totalQty,
+      String ipAddress,
+      String itemCode,
+      String userId,
+      String tagNum,
+      String adminId,
+      String outlet,
+      String storeId,
+      String deviceID) async {
+    if (int.parse(qtyCon.text) > totalQty) {
+      Get.snackbar(
+          'Warning!', "Quantity must be less than or equal total quantity",
+          borderWidth: 1.5,
+          borderColor: Colors.black54,
+          colorText: Colors.white,
+          backgroundColor: colors.comColor.withOpacity(0.4),
+          duration: const Duration(seconds: 1),
+          snackPosition: SnackPosition.BOTTOM);
+    } else {
+      if (qtyCon.text.isEmpty) {
+        qtyCon.text = '0';
+        print('=========${qtyCon.text}');
+        var response = await http.post(
+            Uri.parse("http://$ipAddress/sina/unistock/zebra/adjustment.php"),
+            body: jsonEncode(<String, dynamic>{
+              "item": itemCode,
+              "user_id": "010340",
+              "qty": qtyCon.text.toString(),
+              "device": deviceID,
+              "tag_no": tagNum
+            }));
+        Get.snackbar('Warning!!', "Product isn't adjusted successfully",
+            borderWidth: 1.5,
+            borderColor: Colors.black54,
+            colorText: Colors.white,
+            backgroundColor: Colors.white.withOpacity(0.4),
+            duration: const Duration(seconds: 1),
+            snackPosition: SnackPosition.BOTTOM);
+        print("==========${response.body}");
+        print("==========$ipAddress");
+        print("==========$deviceID");
+      } else {
+        print('=========${qtyCon.text}');
+        var response = await http.post(
+            Uri.parse("http://$ipAddress/sina/unistock/zebra/adjustment.php"),
+            body: jsonEncode(<String, dynamic>{
+              "item": itemCode,
+              "user_id": "010340",
+              "qty": qtyCon.text.toString(),
+              "device": deviceID,
+              "tag_no": tagNum
+            }));
+        Get.snackbar('Success!', "Product adjust successfully",
+            borderWidth: 1.5,
+            borderColor: Colors.black54,
+            colorText: Colors.black,
+            backgroundColor: Colors.white.withOpacity(0.8),
+            duration: const Duration(seconds: 1),
+            snackPosition: SnackPosition.BOTTOM);
+        Navigator.pop(context);
+        print("==========${response.body}");
+        print("==========$ipAddress");
+        print("==========$deviceID");
+      }
     }
     qtyCon.clear();
     quantity.value = 0;

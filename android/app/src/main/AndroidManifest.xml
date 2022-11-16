@@ -2,7 +2,7 @@
     package="com.example.zebra_scanner_final">
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="zebra_scanner_final"
+        android:label="Uni-Stock"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
