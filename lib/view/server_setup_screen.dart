@@ -88,7 +88,7 @@ class _ServerSetupScreenState extends State<ServerSetupScreen> {
                     ),
                     ReusableTextFormField(
                       server: serverController.server,
-                      hintText: "192.168.10.114",
+                      hintText: "172.20.20.96",
                       labelText: "Enter Server IP",
                       icon: const Icon(
                         Icons.cast_connected,

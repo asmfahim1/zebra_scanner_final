@@ -8,16 +8,8 @@ import 'dart:io';
 import '../model/taglist_model.dart';
 
 class TagController extends GetxController {
-  RxBool isLoading = false.obs;
-  List<TagListModel> tagList = [];
-  ConstantColors colors = ConstantColors();
 
-/*  @override
-  void onInit() {
-    // TODO: implement onInit
-    listOfTags();
-    super.onInit();
-  }*/
+  ConstantColors colors = ConstantColors();
 
   //for exit the app
   Future<bool?> showWarningContext(BuildContext context) async => showDialog(
@@ -90,10 +82,12 @@ class TagController extends GetxController {
       );
 
   //list of open tags
+  RxBool isLoading = false.obs;
+  List<TagListModel> tagList = [];
   Future<void> listOfTags(String serverIp) async {
     isLoading(true);
     var response = await http
-        .get(Uri.parse('http://$serverIp/sina/unistock/zebra/tag_select.php'));
+        .get(Uri.parse('http://$serverIp/unistock/zebra/tag_select.php'));
     if (response.statusCode == 200) {
       isLoading(false);
       tagList = tagListModelFromJson(response.body);

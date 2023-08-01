@@ -38,8 +38,6 @@ class _SplashScreenState extends State<SplashScreen>
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            /*(for controlling Colors opacity)*/
-            // colors: gradient,
             colors: [
               Colors.red.shade300,
               Colors.green.shade300,

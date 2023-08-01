@@ -12,22 +12,22 @@ class OnlineController extends GetxController {
   TextEditingController qtyCon = TextEditingController();
   ConstantColors colors = ConstantColors();
 
-  @override
+/*  @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-  }
+  }*/
 
   //API for ProductList
   RxBool haveProduct = false.obs;
   RxBool postProduct = false.obs;
-  List<ProductListModel> products = [];
+  List<MasterItemsModel> products = [];
 
   Future<void> productList(String tagNum, String ipAddress) async {
     print(ipAddress);
     haveProduct(true);
     var response = await http.get(Uri.parse(
-        "http://$ipAddress/sina/unistock/zebra/productlist_tag_device.php?tag_no=$tagNum"));
+        "http://$ipAddress/unistock/zebra/productlist_tag_device.php?tag_no=$tagNum"));
     if (response.statusCode == 200) {
       print(response.body);
       print("++++++++++++++++$tagNum");
@@ -49,27 +49,27 @@ class OnlineController extends GetxController {
       String itemCode,
       String userId,
       String tagNum,
-      String adminId,
       String outlet,
       String storeId,
       String deviceID) async {
     postProduct(true);
     var response = await http.post(
-        Uri.parse("http://$ipAddress/sina/unistock/zebra/add_item.php"),
+        Uri.parse("http://$ipAddress/unistock/zebra/add_item.php"),
         body: jsonEncode(<String, dynamic>{
           "item": itemCode,
           "user_id": "010340",
           "qty": 1,
           "tag_no": tagNum,
-          "admin_id": adminId,
           "outlet": outlet,
           "store": storeId,
           "device": deviceID
         }));
-    print("==========${response.body}");
-    print("==========$ipAddress");
-    print("==========$deviceID");
-    postProduct(false);
+    if(response.statusCode == 200){
+      postProduct(false);
+    }else{
+      print('Error posting value: ${response.statusCode}');
+    }
+
   }
 
   //manual entry quantity
@@ -78,7 +78,6 @@ class OnlineController extends GetxController {
       String itemCode,
       String userId,
       String tagNum,
-      String adminId,
       String outlet,
       String storeId,
       String deviceID) async {
@@ -86,7 +85,7 @@ class OnlineController extends GetxController {
       qtyCon.text = quantity.value.toString();
       print('=========${qtyCon.text}');
       var response = await http.post(
-          Uri.parse("http://$ipAddress/sina/unistock/zebra/update.php"),
+          Uri.parse("http://$ipAddress/unistock/zebra/update.php"),
           body: jsonEncode(<String, dynamic>{
             "item": itemCode,
             "user_id": "010340",
@@ -100,7 +99,7 @@ class OnlineController extends GetxController {
     } else {
       print('=========${qtyCon.text}');
       var response = await http.post(
-          Uri.parse("http://$ipAddress/sina/unistock/zebra/update.php"),
+          Uri.parse("http://$ipAddress/unistock/zebra/update.php"),
           body: jsonEncode(<String, dynamic>{
             "item": itemCode,
             "user_id": "010340",
@@ -124,7 +123,6 @@ class OnlineController extends GetxController {
       String itemCode,
       String userId,
       String tagNum,
-      String adminId,
       String outlet,
       String storeId,
       String deviceID) async {
@@ -142,7 +140,7 @@ class OnlineController extends GetxController {
         qtyCon.text = '0';
         print('=========${qtyCon.text}');
         var response = await http.post(
-            Uri.parse("http://$ipAddress/sina/unistock/zebra/adjustment.php"),
+            Uri.parse("http://$ipAddress/unistock/zebra/adjustment.php"),
             body: jsonEncode(<String, dynamic>{
               "item": itemCode,
               "user_id": "010340",
@@ -163,7 +161,7 @@ class OnlineController extends GetxController {
       } else {
         print('=========${qtyCon.text}');
         var response = await http.post(
-            Uri.parse("http://$ipAddress/sina/unistock/zebra/adjustment.php"),
+            Uri.parse("http://$ipAddress/unistock/zebra/adjustment.php"),
             body: jsonEncode(<String, dynamic>{
               "item": itemCode,
               "user_id": "010340",
@@ -177,11 +175,9 @@ class OnlineController extends GetxController {
             colorText: Colors.black,
             backgroundColor: Colors.white.withOpacity(0.8),
             duration: const Duration(seconds: 1),
-            snackPosition: SnackPosition.BOTTOM);
+            snackPosition: SnackPosition.TOP,
+        );
         Navigator.pop(context);
-        print("==========${response.body}");
-        print("==========$ipAddress");
-        print("==========$deviceID");
       }
     }
     qtyCon.clear();

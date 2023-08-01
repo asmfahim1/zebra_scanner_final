@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zebra_scanner_final/controller/login_controller.dart';
-import 'package:zebra_scanner_final/remote_services.dart';
-import 'package:zebra_scanner_final/view/tag_selection.dart';
-import 'package:zebra_scanner_final/widgets/appBar_widget.dart';
 import 'package:zebra_scanner_final/widgets/const_colors.dart';
 import 'package:zebra_scanner_final/widgets/reusable_passfield.dart';
 import 'package:zebra_scanner_final/widgets/reusable_textfield.dart';
@@ -133,36 +130,39 @@ class _LoginScreenState extends State<LoginScreen> {
                               )),
                         ),
                       ),
-                      Row(
-                        children: [
-                          Theme(
-                            data: Theme.of(context)
-                                .copyWith(unselectedWidgetColor: Colors.black),
-                            child: Checkbox(
-                              value: true,
-                              activeColor: colors.comColor,
-                              checkColor: Colors.black,
-                              onChanged: (value) {},
+                      Obx(() {
+                        return Row(
+                          children: [
+                            Theme(
+                              data: Theme.of(context).copyWith(
+                                  unselectedWidgetColor: Colors.black),
+                              child: Checkbox(
+                                value: loginController.isChecked.value,
+                                activeColor: Colors.deepOrange,
+                                checkColor: Colors.white,
+                                onChanged: (value) {
+                                  loginController.isChecked.value =
+                                  !loginController.isChecked.value;
+                                },
+                              ),
                             ),
-                          ),
-                          const Text(
-                            "Remember me",
-                            style: TextStyle(
-                              color: Colors.black54,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
+                            const Text(
+                              "Remember me",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        );
+                      }),
                       const SizedBox(
                         height: 05,
                       ),
                       GestureDetector(
                         onTap: () async {
                           // Get.to(() => TagSelectScreen());
-                          print(
-                              'device ID: ${serverController.deviceID.value} && IPAddress: ${serverController.ipAddress.value}');
                           loginController.loginMethod(
                               serverController.deviceID.value,
                               serverController.ipAddress.value,

@@ -4,15 +4,15 @@
 
 import 'dart:convert';
 
-List<ProductListModel> productListModelFromJson(String str) =>
-    List<ProductListModel>.from(
-        json.decode(str).map((x) => ProductListModel.fromJson(x)));
+List<MasterItemsModel> productListModelFromJson(String str) =>
+    List<MasterItemsModel>.from(
+        json.decode(str).map((x) => MasterItemsModel.fromJson(x)));
 
-String productListModelToJson(List<ProductListModel> data) =>
+String productListModelToJson(List<MasterItemsModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class ProductListModel {
-  ProductListModel({
+class MasterItemsModel {
+  MasterItemsModel({
     required this.id,
     required this.zid,
     required this.ztime,
@@ -60,8 +60,8 @@ class ProductListModel {
   String zuuserid;
   String zauserid;
 
-  factory ProductListModel.fromJson(Map<String, dynamic> json) =>
-      ProductListModel(
+  factory MasterItemsModel.fromJson(Map<String, dynamic> json) =>
+      MasterItemsModel(
         id: json["id"],
         zid: json["zid"],
         ztime: json["ztime"],
@@ -75,7 +75,7 @@ class ProductListModel {
         autoQty: json["auto_qty"],
         manualQty: json["manual_qty"],
         xcus: json["xcus"],
-        xorg: json["xorg"],
+        xorg: json["xorg"] ?? '',
         device: json["device"],
         empid: json["empid"],
         countingsetupId: json["countingsetup_id"],

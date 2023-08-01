@@ -16,7 +16,6 @@ class OnlineMode extends StatefulWidget {
   String storeId;
   String userId;
   String outlet;
-  String adminId;
 
   OnlineMode({
     Key? key,
@@ -24,7 +23,6 @@ class OnlineMode extends StatefulWidget {
     required this.storeId,
     required this.userId,
     required this.outlet,
-    required this.adminId,
   }) : super(key: key);
 
   @override
@@ -46,7 +44,6 @@ class _OnlineModeState extends State<OnlineMode> {
         serverController.ipAddress.value,
         widget.userId,
         widget.tagNum,
-        widget.adminId,
         widget.outlet,
         widget.storeId,
         serverController.deviceID.value);
@@ -54,8 +51,7 @@ class _OnlineModeState extends State<OnlineMode> {
   }
 
   //controlling the scanner button
-  Future<void> initScanner(String ipAddress, String userId, String tagNum,
-      String adminId, String outlet, String storeId, String deviceId) async {
+  Future<void> initScanner(String ipAddress, String userId, String tagNum, String outlet, String storeId, String deviceId) async {
     FlutterDataWedge.initScanner(
         profileName: 'FlutterDataWedge',
         onScan: (result) async {
@@ -65,7 +61,6 @@ class _OnlineModeState extends State<OnlineMode> {
               onlineController.lastCode.value,
               userId,
               tagNum,
-              adminId,
               outlet,
               storeId,
               deviceId);
@@ -90,7 +85,7 @@ class _OnlineModeState extends State<OnlineMode> {
             onTap: () {
               Get.back();
             },
-            child: Icon(
+            child: const Icon(
               Icons.arrow_back,
               size: 30,
               color: Colors.black,
@@ -136,9 +131,9 @@ class _OnlineModeState extends State<OnlineMode> {
                     () => Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        const Text('Last code:'),
+                        const Text('Last code: '),
                         Text(onlineController.lastCode.value,
-                            style: Theme.of(context).textTheme.headline5),
+                            style: TextStyle(fontSize: 14)),
                         const SizedBox(width: 10.0),
                       ],
                     ),
@@ -206,7 +201,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                       children: [
                                         Text(
                                           onlineController
-                                              .products[index].itemCode,
+                                              .products[index].itemCode ?? '',
                                           style: GoogleFonts.urbanist(
                                             color: Colors.black,
                                             fontSize: 20,
@@ -285,29 +280,16 @@ class _OnlineModeState extends State<OnlineMode> {
                                                           FontWeight.w800,
                                                       color: Colors.black54),
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   height: 10,
                                                 ),
                                                 Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.start,
                                                   children: [
-                                                    /*Text(
-                                                            "Quantity : ",
-                                                            style: GoogleFonts
-                                                                .urbanist(
-                                                                    fontSize:
-                                                                        15,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w800,
-                                                                    color: Colors
-                                                                        .black54),
-                                                          ),*/
                                                     GestureDetector(
                                                         onTap: () {
-                                                          onlineController
-                                                              .decrementQuantity();
+                                                          onlineController.decrementQuantity();
                                                         },
                                                         child: CircleAvatar(
                                                           backgroundColor:
@@ -337,9 +319,6 @@ class _OnlineModeState extends State<OnlineMode> {
                                                                     r'-')),
                                                             FilteringTextInputFormatter
                                                                 .deny(RegExp(
-                                                                    r'\.')),
-                                                            FilteringTextInputFormatter
-                                                                .deny(RegExp(
                                                                     r',')),
                                                             FilteringTextInputFormatter
                                                                 .deny(RegExp(
@@ -360,11 +339,8 @@ class _OnlineModeState extends State<OnlineMode> {
                                                                 .deny(RegExp(
                                                                     r' ')),
                                                           ],
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          controller:
-                                                              onlineController
-                                                                  .qtyCon,
+                                                          textAlign: TextAlign.center,
+                                                          controller: onlineController.qtyCon,
                                                           /*onChanged:
                                                                     (value) {
                                                                   if (value
@@ -387,57 +363,23 @@ class _OnlineModeState extends State<OnlineMode> {
                                                           //by using on submitted function, it will immediately after pressing the value done
                                                           onSubmitted: (value) {
                                                             if (value.isEmpty) {
-                                                              onlineController
-                                                                  .qtyCon
-                                                                  .text = '0';
-                                                              print(
-                                                                  '====${onlineController.quantity.value}======${onlineController.qtyCon.text}');
+                                                              onlineController.qtyCon.text = '0';
+                                                              print('====${onlineController.quantity.value}======${onlineController.qtyCon.text}');
                                                             } else {
-                                                              onlineController
-                                                                      .quantity
-                                                                      .value =
-                                                                  int.parse(
-                                                                      value);
-                                                              print(
-                                                                  '====${onlineController.quantity.value}======${onlineController.qtyCon.text}');
+                                                              onlineController.quantity.value = int.parse(value);
+                                                              print('====${onlineController.quantity.value}======${onlineController.qtyCon.text}');
                                                             }
                                                           },
-                                                          /*onEditingComplete:(){
-                                                                  if(onlineController.qtyCon.text.isEmpty){
-                                                                    onlineController.qtyCon.text = '0';
-                                                                  }else{
-                                                                    onlineController.qtyCon.text = '0';
-                                                                  }
-                                                                },*/
-                                                          decoration:
-                                                              InputDecoration(
-                                                            focusedBorder:
-                                                                OutlineInputBorder(
-                                                              borderSide:
-                                                                  BorderSide(
-                                                                width: 1.5,
-                                                                color: colors
-                                                                    .comColor,
-                                                              ),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5.5),
+                                                          decoration: InputDecoration(
+                                                            focusedBorder: OutlineInputBorder(
+                                                              borderSide: BorderSide(width: 1.5, color: colors.comColor,),
+                                                              borderRadius: BorderRadius.circular(5.5),
                                                             ),
                                                             filled: true,
                                                             hintText:
                                                                 '${onlineController.products[index].scanQty}',
-                                                            hintStyle:
-                                                                const TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        50,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600),
-                                                            fillColor: Colors
-                                                                .blueGrey[50],
+                                                            hintStyle: const TextStyle(color: Colors.white, fontSize: 50,fontWeight: FontWeight.w600),
+                                                            fillColor: Colors.blueGrey[50],
                                                           ),
                                                           style:
                                                               const TextStyle(
@@ -497,7 +439,6 @@ class _OnlineModeState extends State<OnlineMode> {
                                                                   .itemCode,
                                                               widget.userId,
                                                               widget.tagNum,
-                                                              widget.adminId,
                                                               widget.outlet,
                                                               widget.storeId,
                                                               serverController
@@ -562,7 +503,6 @@ class _OnlineModeState extends State<OnlineMode> {
                                                                   .itemCode,
                                                               widget.userId,
                                                               widget.tagNum,
-                                                              widget.adminId,
                                                               widget.outlet,
                                                               widget.storeId,
                                                               serverController
@@ -627,7 +567,8 @@ class _OnlineModeState extends State<OnlineMode> {
                 }
               }
             }),
-          )),
+          ),
+          ),
         ],
       ),
     );
