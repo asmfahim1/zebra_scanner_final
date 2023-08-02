@@ -10,6 +10,7 @@ class DBHelper {
 
   factory DBHelper() => dbHelper;
   static const masterTable = 'masterTable';
+  static const scannerTable = 'scannerTable';
   static const listItems = 'listItems';
   static final _version = 1;
   static Database? _db;
@@ -39,6 +40,17 @@ class DBHelper {
           xbodycode VARCHAR(50),
           xtheircode VARCHAR(50),
           xpaymenttype VARCHAR(50)
+          )""");
+      await db.execute("""
+        CREATE TABLE $scannerTable (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          itemcode VARCHAR(150), 
+          itemdesc VARCHAR(150), 
+          scanqty VARCHAR(150),
+          adjustqty VARCHAR(20),
+          autoqty VARCHAR(50),
+          manualqty VARCHAR(50),
+          xcus VARCHAR(50)
           )""");
       await db.execute("""
         CREATE TABLE listItems(

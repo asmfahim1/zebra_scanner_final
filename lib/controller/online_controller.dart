@@ -30,15 +30,11 @@ class OnlineController extends GetxController {
         "http://$ipAddress/unistock/zebra/productlist_tag_device.php?tag_no=$tagNum"));
     if (response.statusCode == 200) {
       print(response.body);
-      print("++++++++++++++++$tagNum");
-      print("++++++++++++++++$ipAddress");
       haveProduct(false);
       products = productListModelFromJson(response.body);
     } else {
       haveProduct(false);
       print(response.body);
-      print("++++++++++++++++$tagNum");
-      print("++++++++++++++++$ipAddress");
       products = [];
     }
   }

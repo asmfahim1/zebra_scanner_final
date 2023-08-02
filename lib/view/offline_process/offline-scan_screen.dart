@@ -1,49 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_switch/flutter_switch.dart';
-import 'package:http/http.dart' as http;
-import 'package:google_fonts/google_fonts.dart';
-import 'package:get/get.dart';
 import 'package:flutter_datawedge/flutter_datawedge.dart';
-import 'package:zebra_scanner_final/controller/online_controller.dart';
-import 'package:zebra_scanner_final/controller/server_controller.dart';
-import 'package:zebra_scanner_final/widgets/appBar_widget.dart';
-import 'package:zebra_scanner_final/widgets/const_colors.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:zebra_scanner_final/controller/offline_controller.dart';
 
-class OnlineMode extends StatefulWidget {
-  //apatoto storeId and outlet same e rakhtesi .
-  String tagNum;
-  String storeId;
-  String userId;
-  String outlet;
+import '../../controller/server_controller.dart';
+import '../../widgets/appBar_widget.dart';
+import '../../widgets/const_colors.dart';
 
-  OnlineMode({
-    Key? key,
-    required this.tagNum,
-    required this.storeId,
-    required this.userId,
-    required this.outlet,
-  }) : super(key: key);
+class OfflineScanScreen extends StatefulWidget {
+  const OfflineScanScreen({Key? key}) : super(key: key);
 
   @override
-  State<OnlineMode> createState() => _OnlineModeState();
+  State<OfflineScanScreen> createState() => _OfflineScanScreenState();
 }
 
-class _OnlineModeState extends State<OnlineMode> {
-  OnlineController onlineController = Get.put(OnlineController());
+class _OfflineScanScreenState extends State<OfflineScanScreen> {
+  OfflineController offline = Get.find<OfflineController>();
   ServerController serverController = Get.put(ServerController());
-  ConstantColors colors = ConstantColors();
 
   @override
   void initState() {
-    onlineController.productList(
-        widget.tagNum, serverController.ipAddress.value);
+    // offline.productList(
+    //     'widget.tagNum', serverController.ipAddress.value);
     initScanner(
         serverController.ipAddress.value,
-        widget.userId,
-        widget.tagNum,
-        widget.outlet,
-        widget.storeId,
+        'widget.userId',
+        'widget.tagNum',
+        'widget.outlet',
+        'widget.storeId',
         serverController.deviceID.value);
     super.initState();
   }
@@ -53,21 +38,20 @@ class _OnlineModeState extends State<OnlineMode> {
     FlutterDataWedge.initScanner(
         profileName: 'FlutterDataWedge',
         onScan: (result) async {
-          onlineController.lastCode.value = result.data;
-          await onlineController.addItem(
+          offline.lastCode.value = result.data;
+          await offline.addItem(
               ipAddress,
-              onlineController.lastCode.value,
+              offline.lastCode.value,
               userId,
               tagNum,
               outlet,
               storeId,
               deviceId);
-          await onlineController.productList(widget.tagNum, ipAddress);
+          // await offline.productList('widget.tagNum', ipAddress);
         },
         onStatusUpdate: (result) {
           ScannerStatusType status = result.status;
-          onlineController.scannerStatus.value =
-              status.toString().split('.')[1];
+          offline.scannerStatus.value = status.toString().split('.')[1];
         });
   }
 
@@ -89,28 +73,6 @@ class _OnlineModeState extends State<OnlineMode> {
               color: Colors.black,
             ),
           ),
-          action: [
-            Padding(
-              padding: const EdgeInsets.only(right: 5),
-              child: Obx(
-                () => FlutterSwitch(
-                  height: 30,
-                  width: 65,
-                  value: onlineController.isEnabled.value,
-                  activeColor: ConstantColors.uniGreen,
-                  inactiveColor: ConstantColors.comColor,
-                  activeText: 'ON',
-                  activeTextColor: Colors.white,
-                  inactiveText: 'OFF',
-                  inactiveTextColor: Colors.white,
-                  showOnOff: true,
-                  onToggle: (value) {
-                    onlineController.enableButton(value);
-                  },
-                ),
-              ),
-            ),
-          ],
         ),
       ),
       body: Column(
@@ -126,12 +88,12 @@ class _OnlineModeState extends State<OnlineMode> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Obx(
-                    () => Row(
+                        () => Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         const Text('Last code: '),
-                        Text(onlineController.lastCode.value,
-                            style: TextStyle(fontSize: 14)),
+                        Text(offline.lastCode.value,
+                            style: const TextStyle(fontSize: 14)),
                         const SizedBox(width: 10.0),
                       ],
                     ),
@@ -150,26 +112,26 @@ class _OnlineModeState extends State<OnlineMode> {
           ),
           Expanded(child: Container(
             child: Obx(() {
-              if (onlineController.haveProduct.value) {
-                return Center(
+              if (offline.haveProduct.value) {
+                return const Center(
                   child: CircularProgressIndicator(
                     color: ConstantColors.comColor,
                   ),
                 );
               } else {
-                if (onlineController.products.isEmpty) {
+                if (offline.products.isEmpty) {
                   return Center(
                       child: Text(
-                    "No product found",
-                    style: GoogleFonts.urbanist(
-                      color: Colors.black,
-                      fontSize: 25,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ));
+                        "No product found",
+                        style: GoogleFonts.urbanist(
+                          color: Colors.black,
+                          fontSize: 25,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ));
                 } else {
                   return ListView.builder(
-                      itemCount: onlineController.products.length,
+                      itemCount: 5,
                       itemBuilder: (context, index) {
                         return Container(
                           height: MediaQuery.of(context).size.height / 4.22,
@@ -193,30 +155,25 @@ class _OnlineModeState extends State<OnlineMode> {
                                     ),
                                     child: Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                                      MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        Text(
-                                          onlineController
-                                              .products[index].itemCode ?? '',
+                                        Text('item code',
                                           style: GoogleFonts.urbanist(
                                             color: Colors.black,
                                             fontSize: 20,
                                             fontWeight: FontWeight.w800,
                                           ),
                                         ),
-                                        Text(
-                                          onlineController
-                                              .products[index].itemDesc,
+                                        Text('item desc',
                                           overflow: TextOverflow.ellipsis,
                                           style: GoogleFonts.urbanist(
                                             color: Colors.black,
                                             fontWeight: FontWeight.w400,
                                           ),
                                         ),
-                                        Text(
-                                          onlineController.products[index].xcus,
+                                        Text('xcus',
                                           overflow: TextOverflow.ellipsis,
                                           style: GoogleFonts.urbanist(
                                             color: Colors.black,
@@ -224,7 +181,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                           ),
                                         ),
                                         Text(
-                                          "Total Quantity :  ${onlineController.products[index].scanQty}",
+                                          "Total Quantity :  ",
                                           style: GoogleFonts.urbanist(
                                             color: Colors.black,
                                             fontWeight: FontWeight.w800,
@@ -236,7 +193,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                 ),
                                 GestureDetector(
                                   onTap: () async {
-                                    onlineController.updateTQ(
+                                    /*offline.updateTQ(
                                         '${onlineController.products[index].scanQty}');
                                     showDialog(
                                         context: context,
@@ -252,14 +209,14 @@ class _OnlineModeState extends State<OnlineMode> {
                                             ),
                                             content: Column(
                                               crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                               children: [
                                                 Text(
                                                   '${onlineController.products[index].itemDesc}',
                                                   style: GoogleFonts.urbanist(
                                                       fontSize: 15,
                                                       fontWeight:
-                                                          FontWeight.w800,
+                                                      FontWeight.w800,
                                                       color: Colors.black54),
                                                 ),
                                                 Text(
@@ -267,7 +224,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                   style: GoogleFonts.urbanist(
                                                       fontSize: 15,
                                                       fontWeight:
-                                                          FontWeight.w800,
+                                                      FontWeight.w800,
                                                       color: Colors.black54),
                                                 ),
                                                 Text(
@@ -275,7 +232,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                   style: GoogleFonts.urbanist(
                                                       fontSize: 15,
                                                       fontWeight:
-                                                          FontWeight.w800,
+                                                      FontWeight.w800,
                                                       color: Colors.black54),
                                                 ),
                                                 const SizedBox(
@@ -283,7 +240,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                 ),
                                                 Row(
                                                   mainAxisAlignment:
-                                                      MainAxisAlignment.start,
+                                                  MainAxisAlignment.start,
                                                   children: [
                                                     GestureDetector(
                                                         onTap: () {
@@ -291,7 +248,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                         },
                                                         child: CircleAvatar(
                                                           backgroundColor:
-                                                              ConstantColors.comColor,
+                                                          ConstantColors.comColor,
                                                           radius: 15,
                                                           child: const Icon(
                                                             Icons.remove,
@@ -303,39 +260,39 @@ class _OnlineModeState extends State<OnlineMode> {
                                                     ),
                                                     Container(
                                                         width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width /
+                                                            context)
+                                                            .size
+                                                            .width /
                                                             3.5,
                                                         child: TextField(
                                                           inputFormatters: [
                                                             FilteringTextInputFormatter
                                                                 .deny(RegExp(
-                                                                    r'^0')),
+                                                                r'^0')),
                                                             FilteringTextInputFormatter
                                                                 .deny(RegExp(
-                                                                    r'-')),
+                                                                r'-')),
                                                             FilteringTextInputFormatter
                                                                 .deny(RegExp(
-                                                                    r',')),
+                                                                r',')),
                                                             FilteringTextInputFormatter
                                                                 .deny(RegExp(
-                                                                    r'\+')),
+                                                                r'\+')),
                                                             FilteringTextInputFormatter
                                                                 .deny(RegExp(
-                                                                    r'\*')),
+                                                                r'\*')),
                                                             FilteringTextInputFormatter
                                                                 .deny(RegExp(
-                                                                    r'/')),
+                                                                r'/')),
                                                             FilteringTextInputFormatter
                                                                 .deny(RegExp(
-                                                                    r'=')),
+                                                                r'=')),
                                                             FilteringTextInputFormatter
                                                                 .deny(RegExp(
-                                                                    r'%')),
+                                                                r'%')),
                                                             FilteringTextInputFormatter
                                                                 .deny(RegExp(
-                                                                    r' ')),
+                                                                r' ')),
                                                           ],
                                                           textAlign: TextAlign.center,
                                                           controller: onlineController.qtyCon,
@@ -356,16 +313,16 @@ class _OnlineModeState extends State<OnlineMode> {
                                                             ),
                                                             filled: true,
                                                             hintText:
-                                                                '${onlineController.products[index].scanQty}',
+                                                            '${onlineController.products[index].scanQty}',
                                                             hintStyle: const TextStyle(color: Colors.white, fontSize: 50,fontWeight: FontWeight.w600),
                                                             fillColor: Colors.blueGrey[50],
                                                           ),
                                                           style:
-                                                              const TextStyle(
-                                                                  fontSize: 50),
+                                                          const TextStyle(
+                                                              fontSize: 50),
                                                           keyboardType:
-                                                              TextInputType
-                                                                  .number,
+                                                          TextInputType
+                                                              .number,
                                                         )),
                                                     const SizedBox(
                                                       width: 10,
@@ -377,7 +334,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                         },
                                                         child: CircleAvatar(
                                                           backgroundColor:
-                                                              ConstantColors.comColor,
+                                                          ConstantColors.comColor,
                                                           radius: 15,
                                                           child: const Icon(
                                                             Icons.add,
@@ -391,8 +348,8 @@ class _OnlineModeState extends State<OnlineMode> {
                                             actions: [
                                               Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
+                                                MainAxisAlignment
+                                                    .spaceBetween,
                                                 children: [
                                                   TextButton(
                                                     style: TextButton.styleFrom(
@@ -404,31 +361,31 @@ class _OnlineModeState extends State<OnlineMode> {
                                                       //post to api
                                                       await onlineController
                                                           .adjustmentQty(
-                                                              context,
-                                                              onlineController
-                                                                  .products[
-                                                                      index]
-                                                                  .scanQty,
-                                                              serverController
-                                                                  .ipAddress
-                                                                  .value,
-                                                              onlineController
-                                                                  .products[
-                                                                      index]
-                                                                  .itemCode,
-                                                              widget.userId,
-                                                              widget.tagNum,
-                                                              widget.outlet,
-                                                              widget.storeId,
-                                                              serverController
-                                                                  .deviceID
-                                                                  .value);
+                                                          context,
+                                                          onlineController
+                                                              .products[
+                                                          index]
+                                                              .scanQty,
+                                                          serverController
+                                                              .ipAddress
+                                                              .value,
+                                                          onlineController
+                                                              .products[
+                                                          index]
+                                                              .itemCode,
+                                                          widget.userId,
+                                                          widget.tagNum,
+                                                          widget.outlet,
+                                                          widget.storeId,
+                                                          serverController
+                                                              .deviceID
+                                                              .value);
                                                       await onlineController
                                                           .productList(
-                                                              widget.tagNum,
-                                                              serverController
-                                                                  .ipAddress
-                                                                  .value);
+                                                          widget.tagNum,
+                                                          serverController
+                                                              .ipAddress
+                                                              .value);
 
                                                       // var snackBar = SnackBar(
                                                       //     content: Text('Hello World'));
@@ -439,10 +396,10 @@ class _OnlineModeState extends State<OnlineMode> {
                                                     child: Text(
                                                       "Adjustment",
                                                       style:
-                                                          GoogleFonts.urbanist(
+                                                      GoogleFonts.urbanist(
                                                         color: Colors.black,
                                                         fontWeight:
-                                                            FontWeight.w600,
+                                                        FontWeight.w600,
                                                       ),
                                                     ),
                                                   ),
@@ -454,45 +411,45 @@ class _OnlineModeState extends State<OnlineMode> {
                                                     ),
                                                     onPressed: () async {
                                                       ScaffoldMessenger.of(
-                                                              context)
+                                                          context)
                                                           .showSnackBar(
-                                                              const SnackBar(
-                                                        duration: Duration(
-                                                            seconds: 1),
-                                                        content: Text(
-                                                          "Product updated successfully",
-                                                          textAlign:
+                                                          const SnackBar(
+                                                            duration: Duration(
+                                                                seconds: 1),
+                                                            content: Text(
+                                                              "Product updated successfully",
+                                                              textAlign:
                                                               TextAlign.center,
-                                                          style: TextStyle(
-                                                            //fontWeight: FontWeight.bold,
-                                                            fontSize: 18,
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                      ));
+                                                              style: TextStyle(
+                                                                //fontWeight: FontWeight.bold,
+                                                                fontSize: 18,
+                                                                color: Colors.white,
+                                                              ),
+                                                            ),
+                                                          ));
                                                       //post to api
                                                       await onlineController
                                                           .updateQty(
-                                                              serverController
-                                                                  .ipAddress
-                                                                  .value,
-                                                              onlineController
-                                                                  .products[
-                                                                      index]
-                                                                  .itemCode,
-                                                              widget.userId,
-                                                              widget.tagNum,
-                                                              widget.outlet,
-                                                              widget.storeId,
-                                                              serverController
-                                                                  .deviceID
-                                                                  .value);
+                                                          serverController
+                                                              .ipAddress
+                                                              .value,
+                                                          onlineController
+                                                              .products[
+                                                          index]
+                                                              .itemCode,
+                                                          widget.userId,
+                                                          widget.tagNum,
+                                                          widget.outlet,
+                                                          widget.storeId,
+                                                          serverController
+                                                              .deviceID
+                                                              .value);
                                                       await onlineController
                                                           .productList(
-                                                              widget.tagNum,
-                                                              serverController
-                                                                  .ipAddress
-                                                                  .value);
+                                                          widget.tagNum,
+                                                          serverController
+                                                              .ipAddress
+                                                              .value);
                                                       Navigator.pop(context);
 
                                                       // var snackBar = SnackBar(
@@ -504,10 +461,10 @@ class _OnlineModeState extends State<OnlineMode> {
                                                     child: Text(
                                                       "Manual",
                                                       style:
-                                                          GoogleFonts.urbanist(
+                                                      GoogleFonts.urbanist(
                                                         color: Colors.black,
                                                         fontWeight:
-                                                            FontWeight.w600,
+                                                        FontWeight.w600,
                                                       ),
                                                     ),
                                                   ),
@@ -516,7 +473,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                             ],
                                             scrollable: true,
                                           );
-                                        });
+                                        });*/
                                   },
                                   child: Container(
                                     width: 100,

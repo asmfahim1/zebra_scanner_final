@@ -1,7 +1,4 @@
-
-
 import 'package:zebra_scanner_final/model/productList_model.dart';
-
 import 'database_helper.dart';
 
 class MasterItems{
@@ -46,4 +43,6 @@ class MasterItems{
       print('Something went wrong when deleting Item: $e');
     }
   }
+
+
 }
