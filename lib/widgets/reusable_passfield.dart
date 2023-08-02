@@ -33,14 +33,14 @@ class ReusableTextPassField extends StatelessWidget {
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
               width: 1.5,
-              color: colors.uniGreen,
+              color: ConstantColors.uniGreen,
             ),
             borderRadius: BorderRadius.circular(40.0),
           ),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(
               width: 1.5,
-              color: colors.comColor,
+              color: ConstantColors.comColor,
             ),
             borderRadius: BorderRadius.circular(40.0),
           ),

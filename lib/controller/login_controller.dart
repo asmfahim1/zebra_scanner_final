@@ -6,7 +6,7 @@ import 'package:zebra_scanner_final/model/productList_model.dart';
 import 'package:zebra_scanner_final/widgets/const_colors.dart';
 import '../constants/app_constants.dart';
 import '../db_helper/master_item.dart';
-import '../view/mode_selector.dart';
+import '../view/mode_selector_screen.dart';
 
 class LoginController extends GetxController {
   final GlobalKey<FormState> loginKey = GlobalKey();
@@ -38,7 +38,7 @@ class LoginController extends GetxController {
           borderWidth: 1.5,
           borderColor: Colors.black54,
           colorText: Colors.white,
-          backgroundColor: colors.comColor.withOpacity(0.4),
+          backgroundColor: ConstantColors.comColor.withOpacity(0.4),
           duration: const Duration(seconds: 1),
           snackPosition: SnackPosition.TOP,
       );
@@ -48,7 +48,7 @@ class LoginController extends GetxController {
           borderWidth: 1.5,
           borderColor: Colors.black54,
           colorText: Colors.white,
-          backgroundColor: colors.comColor.withOpacity(0.4),
+          backgroundColor: ConstantColors.comColor.withOpacity(0.4),
           duration: const Duration(seconds: 1),
           snackPosition: SnackPosition.TOP,
       );

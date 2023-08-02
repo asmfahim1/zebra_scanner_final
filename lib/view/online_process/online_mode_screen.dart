@@ -99,8 +99,8 @@ class _OnlineModeState extends State<OnlineMode> {
                   height: 30,
                   width: 65,
                   value: onlineController.isEnabled.value,
-                  activeColor: colors.uniGreen,
-                  inactiveColor: colors.comColor,
+                  activeColor: ConstantColors.uniGreen,
+                  inactiveColor: ConstantColors.comColor,
                   activeText: 'ON',
                   activeTextColor: Colors.white,
                   inactiveText: 'OFF',
@@ -155,7 +155,7 @@ class _OnlineModeState extends State<OnlineMode> {
               if (onlineController.haveProduct.value) {
                 return Center(
                   child: CircularProgressIndicator(
-                    color: colors.comColor,
+                    color: ConstantColors.comColor,
                   ),
                 );
               } else {
@@ -293,7 +293,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                         },
                                                         child: CircleAvatar(
                                                           backgroundColor:
-                                                              colors.comColor,
+                                                              ConstantColors.comColor,
                                                           radius: 15,
                                                           child: const Icon(
                                                             Icons.remove,
@@ -341,25 +341,6 @@ class _OnlineModeState extends State<OnlineMode> {
                                                           ],
                                                           textAlign: TextAlign.center,
                                                           controller: onlineController.qtyCon,
-                                                          /*onChanged:
-                                                                    (value) {
-                                                                  if (value
-                                                                      .isEmpty) {
-                                                                    onlineController
-                                                                        .qtyCon
-                                                                        .text = '0';
-                                                                    print(
-                                                                        '====${onlineController.quantity.value}======${onlineController.qtyCon.text}');
-                                                                  } else {
-                                                                    onlineController
-                                                                            .quantity
-                                                                            .value =
-                                                                        int.parse(
-                                                                            value);
-                                                                    print(
-                                                                        '====${onlineController.quantity.value}======${onlineController.qtyCon.text}');
-                                                                  }
-                                                                },*/
                                                           //by using on submitted function, it will immediately after pressing the value done
                                                           onSubmitted: (value) {
                                                             if (value.isEmpty) {
@@ -372,7 +353,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                           },
                                                           decoration: InputDecoration(
                                                             focusedBorder: OutlineInputBorder(
-                                                              borderSide: BorderSide(width: 1.5, color: colors.comColor,),
+                                                              borderSide: BorderSide(width: 1.5, color: ConstantColors.comColor,),
                                                               borderRadius: BorderRadius.circular(5.5),
                                                             ),
                                                             filled: true,
@@ -398,7 +379,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                         },
                                                         child: CircleAvatar(
                                                           backgroundColor:
-                                                              colors.comColor,
+                                                              ConstantColors.comColor,
                                                           radius: 15,
                                                           child: const Icon(
                                                             Icons.add,
@@ -417,7 +398,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                 children: [
                                                   TextButton(
                                                     style: TextButton.styleFrom(
-                                                      backgroundColor: colors
+                                                      backgroundColor: ConstantColors
                                                           .comColor
                                                           .withOpacity(0.7),
                                                     ),
@@ -469,7 +450,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                   ),
                                                   TextButton(
                                                     style: TextButton.styleFrom(
-                                                      backgroundColor: colors
+                                                      backgroundColor: ConstantColors
                                                           .uniGreen
                                                           .withOpacity(0.7),
                                                     ),
@@ -542,7 +523,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                   child: Container(
                                     width: 100,
                                     decoration: BoxDecoration(
-                                      color: colors.comColor.withOpacity(0.6),
+                                      color: ConstantColors.comColor.withOpacity(0.6),
                                       borderRadius: const BorderRadius.only(
                                           topRight: Radius.circular(20.0),
                                           bottomRight: Radius.circular(20.0)),

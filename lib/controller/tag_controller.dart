@@ -40,7 +40,7 @@ class TagController extends GetxController {
           actions: [
             TextButton(
               style: TextButton.styleFrom(
-                backgroundColor: colors.uniGreen.withOpacity(0.5),
+                backgroundColor: ConstantColors.uniGreen.withOpacity(0.5),
               ),
               onPressed: () {
                 Get.back();
@@ -59,7 +59,7 @@ class TagController extends GetxController {
             ),
             TextButton(
               style: TextButton.styleFrom(
-                backgroundColor: colors.comColor.withOpacity(0.5),
+                backgroundColor: ConstantColors.comColor.withOpacity(0.5),
               ),
               onPressed: () {
                 if (Platform.isAndroid) {

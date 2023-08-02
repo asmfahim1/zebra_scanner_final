@@ -53,7 +53,7 @@ class _ServerSetupScreenState extends State<ServerSetupScreen> {
                         style: TextStyle(
                             fontSize: 60,
                             fontWeight: FontWeight.w800,
-                            color: colors.comColor)),
+                            color: ConstantColors.comColor)),
                     Image.asset(
                       'images/Upgraded S.png',
                       width: MediaQuery.of(context).size.width / 5.33,
@@ -63,7 +63,7 @@ class _ServerSetupScreenState extends State<ServerSetupScreen> {
                       style: TextStyle(
                           fontSize: 60,
                           fontWeight: FontWeight.w800,
-                          color: colors.uniGreen),
+                          color: ConstantColors.uniGreen),
                     ),
                   ],
                 ),
@@ -109,7 +109,7 @@ class _ServerSetupScreenState extends State<ServerSetupScreen> {
                           width: MediaQuery.of(context).size.width / 2.13,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
-                            color: colors.comColor,
+                            color: ConstantColors.comColor,
                             /*gradient: LinearGradient(
                               begin: Alignment.topRight,
                               end: Alignment.bottomLeft,

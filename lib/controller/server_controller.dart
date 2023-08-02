@@ -50,7 +50,7 @@ class ServerController extends GetxController {
         borderWidth: 1.5,
         borderColor: Colors.black54,
         colorText: Colors.white,
-        backgroundColor: colors.comColor.withOpacity(0.4),
+        backgroundColor: ConstantColors.comColor.withOpacity(0.4),
         duration: const Duration(seconds: 1),
       );
     } else {
@@ -78,7 +78,7 @@ class ServerController extends GetxController {
           borderWidth: 1.5,
           borderColor: Colors.black54,
           colorText: Colors.white,
-          backgroundColor: colors.comColor.withOpacity(0.4),
+          backgroundColor: ConstantColors.comColor.withOpacity(0.4),
           duration: const Duration(seconds: 1),
         );
       }

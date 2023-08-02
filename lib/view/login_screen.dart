@@ -68,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(
                             fontSize: 60,
                             fontWeight: FontWeight.w800,
-                            color: colors.comColor)),
+                            color: ConstantColors.comColor)),
                     Image.asset(
                       'images/Upgraded S.png',
                       width: MediaQuery.of(context).size.width / 5.33,
@@ -78,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(
                           fontSize: 60,
                           fontWeight: FontWeight.w800,
-                          color: colors.uniGreen),
+                          color: ConstantColors.uniGreen),
                     ),
                   ],
                 ),
@@ -98,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           icon: Icon(
                             Icons.person,
                             size: 25,
-                            color: colors.uniGreen,
+                            color: ConstantColors.uniGreen,
                           )),
                       const SizedBox(
                         height: 10,
@@ -111,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           prefIcon: Icon(
                             Icons.vpn_key_outlined,
                             size: 25,
-                            color: colors.uniGreen,
+                            color: ConstantColors.uniGreen,
                           ),
                           obscureText: loginController.obscureText.value,
                           sufIcon: GestureDetector(
@@ -125,8 +125,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                     : Icons.remove_red_eye_outlined,
                                 size: 25,
                                 color: loginController.obscureText.value
-                                    ? colors.uniGreen
-                                    : colors.comColor,
+                                    ? ConstantColors.uniGreen
+                                    : ConstantColors.comColor,
                               )),
                         ),
                       ),
@@ -173,7 +173,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           width: MediaQuery.of(context).size.width / 2.13,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
-                            color: colors.comColor,
+                            color: ConstantColors.comColor,
                             /*gradient: LinearGradient(
                               begin: Alignment.topRight,
                               end: Alignment.bottomLeft,

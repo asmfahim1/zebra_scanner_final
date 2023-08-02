@@ -67,7 +67,7 @@ class _SplashScreenState extends State<SplashScreen>
                       style: TextStyle(
                           fontSize: 50,
                           fontWeight: FontWeight.w800,
-                          color: colors.comColor)),
+                          color: ConstantColors.comColor)),
                   Image.asset(
                     'images/Upgraded S.png',
                     width: MediaQuery.of(context).size.width / 6.4,
@@ -77,7 +77,7 @@ class _SplashScreenState extends State<SplashScreen>
                     style: TextStyle(
                         fontSize: 50,
                         fontWeight: FontWeight.w800,
-                        color: colors.uniGreen),
+                        color: ConstantColors.uniGreen),
                   ),
                 ],
               ),

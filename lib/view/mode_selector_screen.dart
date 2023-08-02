@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:zebra_scanner_final/controller/login_controller.dart';
-import 'package:zebra_scanner_final/view/tag_selection.dart';
+import 'package:zebra_scanner_final/view/online_process/tag_selection.dart';
 import 'package:get/get.dart';
-import 'offline.dart';
+import 'offline_process/tag-selection_screen.dart';
 
 class ModeSelect extends StatefulWidget {
   const ModeSelect({Key? key}) : super(key: key);
@@ -56,7 +56,7 @@ class _ModeSelectState extends State<ModeSelect> {
                           style: ElevatedButton.styleFrom(primary: Colors.redAccent),
                           onPressed: () {
                             Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => const OfflineMode()));
+                                MaterialPageRoute(builder: (context) => const OfflineTagScreen()));
                           },
                           child: const Text("Offline_Mode")),
                     ],

@@ -30,7 +30,7 @@ class ReusableAppBar extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.w800,
-                    color: colors.comColor)),
+                    color: ConstantColors.comColor)),
             Image.asset(
               'images/Upgraded S.png',
               width: 30,
@@ -40,7 +40,7 @@ class ReusableAppBar extends StatelessWidget {
               style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.w800,
-                  color: colors.uniGreen),
+                  color: ConstantColors.uniGreen),
             ),
           ],
         ),
