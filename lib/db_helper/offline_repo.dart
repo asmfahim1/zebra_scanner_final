@@ -5,10 +5,17 @@ class OfflineRepo{
   DBHelper dbHelper = DBHelper();
 
   //insert into scanned products
-  Future insertToScannerTable() async{
-
+  Future<int> insertToScannerTable(Map<String, dynamic> data ) async{
+    var dbClient = await conn.db;
+    int result = 0;
+    try{
+      result = await dbClient!.insert(DBHelper.scannerTable, data);
+      print("Inserted Successfully in scannerTable table: -------------$result");
+    }catch(e){
+      print('There are some issues inserting scannerTable: $e');
+    }
+    return result;
   }
-
 
 
   //get scanned products

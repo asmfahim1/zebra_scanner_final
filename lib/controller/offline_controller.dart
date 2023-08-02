@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -109,7 +108,7 @@ class OfflineController extends GetxController {
   List listCartHeader = [];
   RxBool productLoaded = false.obs;
 
-  Future getCartHeaderList() async {
+  Future getScannerTable() async {
     try {
       productLoaded(true);
       listCartHeader = await OfflineRepo().getScannedProducts();
@@ -128,24 +127,21 @@ class OfflineController extends GetxController {
       String outlet,
       String storeId,
       String deviceID) async {
-    postProduct(true);
-    var response = await http.post(
-        Uri.parse("http://$ipAddress/unistock/zebra/add_item.php"),
-        body: jsonEncode(<String, dynamic>{
-          "item": itemCode,
-          "user_id": "010340",
-          "qty": 1,
-          "tag_no": tagNum,
-          "outlet": outlet,
-          "store": storeId,
-          "device": deviceID
-        }));
-    if(response.statusCode == 200){
-      postProduct(false);
-    }else{
-      print('Error posting value: ${response.statusCode}');
+    try{
+      postProduct(true);
+      Map<String, dynamic> scannedProduct = {
+        'itemcode': itemCode,
+        'itemdesc': 'description',
+        'scanqty': 1,
+        'adjustqty': 0,
+        'autoqty': 0,
+        'manualqty': 0,
+        'xcus': 'sup-001'
+      };
+      OfflineRepo().insertToScannerTable(scannedProduct);
+    }catch(e){
+      print('error occurred inserting into scan table $e');
     }
-
   }
 
   //manual entry quantity

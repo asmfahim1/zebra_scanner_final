@@ -50,7 +50,8 @@ class DBHelper {
           adjustqty VARCHAR(20),
           autoqty VARCHAR(50),
           manualqty VARCHAR(50),
-          xcus VARCHAR(50)
+          xcus VARCHAR(50),
+          createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
           )""");
       await db.execute("""
         CREATE TABLE listItems(

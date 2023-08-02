@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zebra_scanner_final/controller/offline_controller.dart';
+import 'package:zebra_scanner_final/view/offline_process/offline-scan_screen.dart';
 import 'package:zebra_scanner_final/widgets/const_colors.dart';
 
 import '../../controller/server_controller.dart';
@@ -93,7 +94,9 @@ class _SupSelScreenState extends State<SupSelScreen> {
                                 ),
                                 child: TextButton(
                                   style: TextButton.styleFrom(backgroundColor: Colors.white,),
-                                  onPressed: (){},
+                                  onPressed: (){
+                                    Get.to(()=> OfflineScanScreen());
+                                  },
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
