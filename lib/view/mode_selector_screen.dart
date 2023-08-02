@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:zebra_scanner_final/controller/login_controller.dart';
 import 'package:zebra_scanner_final/view/online_process/tag_selection.dart';
 import 'package:get/get.dart';
-import 'offline_process/tag-selection_screen.dart';
+import 'package:zebra_scanner_final/widgets/reusable_tile.dart';
+import '../widgets/appBar_widget.dart';
+import 'offline_process/scan_type_screen.dart';
 
 class ModeSelect extends StatefulWidget {
   const ModeSelect({Key? key}) : super(key: key);
@@ -18,12 +20,29 @@ class _ModeSelectState extends State<ModeSelect> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    login.fetchMasterItemsList();
+    //login.fetchMasterItemsList();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(50),
+        child: ReusableAppBar(
+          elevation: 0,
+          color: Colors.white,
+          leading: GestureDetector(
+            onTap: () {
+              Get.back();
+            },
+            child: const Icon(
+              Icons.arrow_back,
+              size: 30,
+              color: Colors.black,
+            ),
+          ),
+        ),
+      ),
       body: Obx((){
         return login.isFetched.value
             ? Center(
@@ -41,28 +60,34 @@ class _ModeSelectState extends State<ModeSelect> {
                 ),
               )
             : Center(
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(primary: Colors.green),
-                          onPressed: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => const TagSelectScreen()));
-                          },
-                          child: const Text("Online_Mode")),
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(primary: Colors.redAccent),
-                          onPressed: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => const OfflineTagScreen()));
-                          },
-                          child: const Text("Offline_Mode")),
-                    ],
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    /*ElevatedButton(
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => const TagSelectScreen()));
+                        },
+                        child: const Text("Online_Mode")),
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => const ScanTypeScreen()));
+                        },
+                        child: const Text("Offline_Mode")),*/
+                    TileBtn(imageName: 'images/wireless-symbol.png', buttonName: 'Online Mode', onPressed: (){
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => const TagSelectScreen()));
+                    }),
+                    TileBtn(imageName: 'images/no-internet.png', buttonName: 'Offline Mode', onPressed: (){
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => const ScanTypeScreen()));
+                    }),
+                  ],
                 ),
-        );
+              );
       }),
     );
   }

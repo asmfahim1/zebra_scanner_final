@@ -105,13 +105,13 @@ class OfflineController extends GetxController {
   List<MasterItemsModel> products = [];
 
   //for getting cart_List from cart table
-  List listCartHeader = [];
+  List scannedProductList = [];
   RxBool productLoaded = false.obs;
 
   Future getScannerTable() async {
     try {
       productLoaded(true);
-      listCartHeader = await OfflineRepo().getScannedProducts();
+      scannedProductList = await OfflineRepo().getScannedProducts();
       productLoaded(false);
     } catch (error) {
       print('There are some issue getting cart header list: $error');

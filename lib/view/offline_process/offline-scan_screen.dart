@@ -45,7 +45,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
               outlet,
               storeId,
               deviceId);
-          // await offline.productList('widget.tagNum', ipAddress);
+          await offline.getScannerTable();
         },
         onStatusUpdate: (result) {
           ScannerStatusType status = result.status;
@@ -71,13 +71,38 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
               color: Colors.black,
             ),
           ),
+          action: [
+            GestureDetector(
+                onTap: () {},
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: const Icon(
+                    Icons.upload_rounded,
+                    size: 30,
+                    color: ConstantColors.uniGreen1,
+                  ),
+                ))
+          ],
         ),
       ),
       body: Container(
         padding: EdgeInsets.all(5.0),
         child: Obx((){
           return offline.productLoaded.value
-              ? CircularProgressIndicator()
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.all(10.0),
+                        child: const CircularProgressIndicator(
+                          color: ConstantColors.comColor,
+                        ),
+                      ),
+                      const Text('Loading...'),
+                    ],
+                  ),
+                )
               : Column(
                   children: [
                     Center(
@@ -119,7 +144,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                             ),
                           );
                         } else {
-                          if (offline.products.isEmpty) {
+                          if (offline.scannedProductList.isEmpty) {
                             return Center(
                                 child: Text(
                                   "No product found",
@@ -131,8 +156,9 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                 ));
                           } else {
                             return ListView.builder(
-                                itemCount: 5,
+                                itemCount: offline.scannedProductList.length,
                                 itemBuilder: (context, index) {
+                                  var scanned = offline.scannedProductList[index];
                                   return Container(
                                     height: MediaQuery.of(context).size.height / 4.22,
                                     padding: const EdgeInsets.only(
@@ -151,7 +177,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                           Expanded(
                                             child: Container(
                                               padding: const EdgeInsets.only(
-                                                left: 20,
+                                                left: 10,
                                               ),
                                               child: Column(
                                                 crossAxisAlignment:
@@ -159,7 +185,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                 mainAxisAlignment:
                                                 MainAxisAlignment.spaceEvenly,
                                                 children: [
-                                                  Text('item code',
+                                                  Text('${scanned["itemcode"]}',
                                                     style: GoogleFonts.urbanist(
                                                       color: Colors.black,
                                                       fontSize: 20,
