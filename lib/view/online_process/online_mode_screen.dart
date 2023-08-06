@@ -38,7 +38,7 @@ class _OnlineModeState extends State<OnlineMode> {
   @override
   void initState() {
     onlineController.productList(
-        widget.tagNum, serverController.ipAddress.value);
+        widget.tagNum, serverController.ipAddress.value, widget.userId, widget.storeId);
     initScanner(
         serverController.ipAddress.value,
         widget.userId,
@@ -63,7 +63,7 @@ class _OnlineModeState extends State<OnlineMode> {
               storeId,
               deviceId,
           );
-          await onlineController.productList(widget.tagNum, ipAddress);
+          await onlineController.productList(widget.tagNum, ipAddress, userId, storeId);
         },
         onStatusUpdate: (result) {
           ScannerStatusType status = result.status;
@@ -200,7 +200,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                       children: [
                                         Text(
                                           onlineController
-                                              .products[index].itemCode ?? '',
+                                              .products[index].itemCode,
                                           style: GoogleFonts.urbanist(
                                             color: Colors.black,
                                             fontSize: 20,
@@ -403,30 +403,18 @@ class _OnlineModeState extends State<OnlineMode> {
                                                     ),
                                                     onPressed: () async {
                                                       //post to api
-                                                      await onlineController
-                                                          .adjustmentQty(
+                                                      await onlineController.adjustmentQty(
                                                               context,
                                                               onlineController.products[index].scanQty,
-                                                              serverController
-                                                                  .ipAddress
-                                                                  .value,
-                                                              onlineController
-                                                                  .products[
-                                                                      index]
-                                                                  .itemCode,
+                                                              serverController.ipAddress.value,
+                                                              onlineController.products[index].itemCode,
                                                               widget.userId,
                                                               widget.tagNum,
                                                               widget.outlet,
                                                               widget.storeId,
-                                                              serverController
-                                                                  .deviceID
-                                                                  .value);
+                                                              serverController.deviceID.value);
                                                       await onlineController
-                                                          .productList(
-                                                              widget.tagNum,
-                                                              serverController
-                                                                  .ipAddress
-                                                                  .value);
+                                                          .productList(widget.tagNum, serverController.ipAddress.value, widget.userId, widget.storeId);
 
                                                       // var snackBar = SnackBar(
                                                       //     content: Text('Hello World'));
@@ -486,11 +474,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                                   .deviceID
                                                                   .value);
                                                       await onlineController
-                                                          .productList(
-                                                              widget.tagNum,
-                                                              serverController
-                                                                  .ipAddress
-                                                                  .value);
+                                                          .productList(widget.tagNum, serverController.ipAddress.value, widget.userId, widget.storeId);
                                                       Navigator.pop(context);
 
                                                       // var snackBar = SnackBar(

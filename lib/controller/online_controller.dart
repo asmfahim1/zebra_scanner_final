@@ -22,9 +22,16 @@ class OnlineController extends GetxController {
   RxBool haveProduct = false.obs;
   RxBool postProduct = false.obs;
   List<MasterItemsModel> products = [];
+  RxString tagNumber = ''.obs;
+  RxString ipAdd = ''.obs;
+  RxString user = ''.obs;
+  RxString storeID = ''.obs;
 
-  Future<void> productList(String tagNum, String ipAddress) async {
-    print('IP address is : $ipAddress and Tag Number is : $tagNum');
+  Future<void> productList(String tagNum, String ipAddress, String userId, String store) async {
+    tagNumber.value = tagNum;
+    ipAdd.value = ipAddress;
+    user.value = userId;
+    storeID.value = store;
     haveProduct(true);
     var response = await http.get(Uri.parse(
         "http://$ipAddress/unistock/zebra/productlist_tag_device.php?tag_no=$tagNum"));
@@ -37,6 +44,13 @@ class OnlineController extends GetxController {
       print(response.body);
       products = [];
     }
+  }
+
+  void clearValue() {
+    tagNumber.close();
+    ipAdd.close();
+    user.close();
+    storeID.close();
   }
 
   //addItem(automatically)
@@ -63,7 +77,6 @@ class OnlineController extends GetxController {
     }else{
       print('Error posting value: ${response.statusCode}');
     }
-
   }
 
   //manual entry quantity

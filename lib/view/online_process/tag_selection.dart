@@ -36,6 +36,16 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
         child: ReusableAppBar(
           elevation: 0,
           color: Colors.white,
+          leading: GestureDetector(
+            onTap: () {
+              Get.back();
+            },
+            child: const Icon(
+              Icons.arrow_back,
+              size: 30,
+              color: Colors.black,
+            ),
+          ),
           action: [
             GestureDetector(
               onTap: () {
