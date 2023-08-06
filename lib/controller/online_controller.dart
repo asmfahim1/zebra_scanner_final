@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_datawedge/flutter_datawedge.dart';
 import '../model/productList_model.dart';
-import '../widgets/const_colors.dart';
+import '../constants/const_colors.dart';
 
 class OnlineController extends GetxController {
   RxString scannerStatus = "Scanner status".obs;
@@ -24,14 +24,14 @@ class OnlineController extends GetxController {
   List<MasterItemsModel> products = [];
 
   Future<void> productList(String tagNum, String ipAddress) async {
-    print(ipAddress);
+    print('IP address is : $ipAddress and Tag Number is : $tagNum');
     haveProduct(true);
     var response = await http.get(Uri.parse(
         "http://$ipAddress/unistock/zebra/productlist_tag_device.php?tag_no=$tagNum"));
     if (response.statusCode == 200) {
       print(response.body);
       haveProduct(false);
-      products = productListModelFromJson(response.body);
+      products = masterItemsModelFromJson(response.body);
     } else {
       haveProduct(false);
       print(response.body);
@@ -45,7 +45,6 @@ class OnlineController extends GetxController {
       String itemCode,
       String userId,
       String tagNum,
-      String outlet,
       String storeId,
       String deviceID) async {
     postProduct(true);
@@ -54,9 +53,8 @@ class OnlineController extends GetxController {
         body: jsonEncode(<String, dynamic>{
           "item": itemCode,
           "user_id": "010340",
-          "qty": 1,
+          "qty": 1.0,
           "tag_no": tagNum,
-          "outlet": outlet,
           "store": storeId,
           "device": deviceID
         }));
@@ -114,7 +112,7 @@ class OnlineController extends GetxController {
   //adjustment quantity
   Future<void> adjustmentQty(
       context,
-      int totalQty,
+      double totalQty,
       String ipAddress,
       String itemCode,
       String userId,
@@ -189,12 +187,12 @@ class OnlineController extends GetxController {
   }
 
   //increment function
-  RxInt quantity = 0.obs;
+  RxDouble quantity = 0.0.obs;
 
   //making textField iterable update the value of both textController and quantity
   void updateTQ(String value) {
     qtyCon.text = value;
-    quantity.value = int.parse(value);
+    quantity.value = double.parse(value);
     print('update first quantity with the total amount : ${quantity.value}');
     print('update first textController with the total amount : ${qtyCon.text}');
   }
@@ -202,7 +200,6 @@ class OnlineController extends GetxController {
   void incrementQuantity() {
     quantity.value = quantity.value + 1;
     qtyCon.text = quantity.value.toString();
-    print('--------${qtyCon.text}==========${quantity.value}');
   }
 
   void decrementQuantity() {
@@ -211,7 +208,6 @@ class OnlineController extends GetxController {
     } else {
       quantity.value = quantity.value - 1;
       qtyCon.text = quantity.value.toString();
-      print('--------${qtyCon.text}==========${quantity.value}');
     }
   }
 }

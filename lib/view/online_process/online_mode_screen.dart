@@ -7,8 +7,9 @@ import 'package:get/get.dart';
 import 'package:flutter_datawedge/flutter_datawedge.dart';
 import 'package:zebra_scanner_final/controller/online_controller.dart';
 import 'package:zebra_scanner_final/controller/server_controller.dart';
+import 'package:zebra_scanner_final/view/manual_entry/manual_entry_screen.dart';
 import 'package:zebra_scanner_final/widgets/appBar_widget.dart';
-import 'package:zebra_scanner_final/widgets/const_colors.dart';
+import 'package:zebra_scanner_final/constants/const_colors.dart';
 
 class OnlineMode extends StatefulWidget {
   //apatoto storeId and outlet same e rakhtesi .
@@ -42,14 +43,14 @@ class _OnlineModeState extends State<OnlineMode> {
         serverController.ipAddress.value,
         widget.userId,
         widget.tagNum,
-        widget.outlet,
         widget.storeId,
-        serverController.deviceID.value);
+        serverController.deviceID.value,
+    );
     super.initState();
   }
 
   //controlling the scanner button
-  Future<void> initScanner(String ipAddress, String userId, String tagNum, String outlet, String storeId, String deviceId) async {
+  Future<void> initScanner(String ipAddress, String userId, String tagNum, String storeId, String deviceId) async {
     FlutterDataWedge.initScanner(
         profileName: 'FlutterDataWedge',
         onScan: (result) async {
@@ -59,9 +60,9 @@ class _OnlineModeState extends State<OnlineMode> {
               onlineController.lastCode.value,
               userId,
               tagNum,
-              outlet,
               storeId,
-              deviceId);
+              deviceId,
+          );
           await onlineController.productList(widget.tagNum, ipAddress);
         },
         onStatusUpdate: (result) {
@@ -131,7 +132,7 @@ class _OnlineModeState extends State<OnlineMode> {
                       children: [
                         const Text('Last code: '),
                         Text(onlineController.lastCode.value,
-                            style: TextStyle(fontSize: 14)),
+                            style: const TextStyle(fontSize: 14)),
                         const SizedBox(width: 10.0),
                       ],
                     ),
@@ -151,7 +152,7 @@ class _OnlineModeState extends State<OnlineMode> {
           Expanded(child: Container(
             child: Obx(() {
               if (onlineController.haveProduct.value) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(
                     color: ConstantColors.comColor,
                   ),
@@ -289,11 +290,11 @@ class _OnlineModeState extends State<OnlineMode> {
                                                         onTap: () {
                                                           onlineController.decrementQuantity();
                                                         },
-                                                        child: CircleAvatar(
+                                                        child: const CircleAvatar(
                                                           backgroundColor:
                                                               ConstantColors.comColor,
                                                           radius: 15,
-                                                          child: const Icon(
+                                                          child: Icon(
                                                             Icons.remove,
                                                             size: 20,
                                                           ),
@@ -345,13 +346,13 @@ class _OnlineModeState extends State<OnlineMode> {
                                                               onlineController.qtyCon.text = '0';
                                                               print('====${onlineController.quantity.value}======${onlineController.qtyCon.text}');
                                                             } else {
-                                                              onlineController.quantity.value = int.parse(value);
+                                                              onlineController.quantity.value = double.parse(value);
                                                               print('====${onlineController.quantity.value}======${onlineController.qtyCon.text}');
                                                             }
                                                           },
                                                           decoration: InputDecoration(
                                                             focusedBorder: OutlineInputBorder(
-                                                              borderSide: BorderSide(width: 1.5, color: ConstantColors.comColor,),
+                                                              borderSide: const BorderSide(width: 1.5, color: ConstantColors.comColor,),
                                                               borderRadius: BorderRadius.circular(5.5),
                                                             ),
                                                             filled: true,
@@ -375,11 +376,11 @@ class _OnlineModeState extends State<OnlineMode> {
                                                           onlineController
                                                               .incrementQuantity();
                                                         },
-                                                        child: CircleAvatar(
+                                                        child: const CircleAvatar(
                                                           backgroundColor:
                                                               ConstantColors.comColor,
                                                           radius: 15,
-                                                          child: const Icon(
+                                                          child: Icon(
                                                             Icons.add,
                                                             size: 20,
                                                           ),
@@ -405,10 +406,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                       await onlineController
                                                           .adjustmentQty(
                                                               context,
-                                                              onlineController
-                                                                  .products[
-                                                                      index]
-                                                                  .scanQty,
+                                                              onlineController.products[index].scanQty,
                                                               serverController
                                                                   .ipAddress
                                                                   .value,
@@ -549,6 +547,46 @@ class _OnlineModeState extends State<OnlineMode> {
           ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Get.to(()=> ManualEntry(mode: 'Online',));
+        },
+        label: Row(
+          children: [
+            const Text("Manual add", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 5),
+                  child: Container(
+                    width: 30,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: Colors.transparent),
+                    child: const Icon(
+                      Icons.add_circle_outline_sharp,
+                      color: Colors.white,
+                      size: 25,
+                    ),
+                  ),
+                ),
+                // Obx(() => Positioned(
+                //     right: 10,
+                //     top: -1,
+                //     child: BigText(
+                //       text: '${cartController.totalClick}',
+                //       color: Colors.white,
+                //     ),
+                //   ),
+                // ),
+              ],
+            )
+          ],
+        ),
+        backgroundColor: ConstantColors.uniGreen,
       ),
     );
   }

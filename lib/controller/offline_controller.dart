@@ -6,7 +6,7 @@ import 'package:zebra_scanner_final/db_helper/offline_repo.dart';
 import '../model/productList_model.dart';
 import '../model/supplier_model.dart';
 import '../model/taglist_model.dart';
-import '../widgets/const_colors.dart';
+import '../constants/const_colors.dart';
 
 class OfflineController extends GetxController {
   //list of open tags
@@ -124,7 +124,6 @@ class OfflineController extends GetxController {
       String itemCode,
       String userId,
       String tagNum,
-      String outlet,
       String storeId,
       String deviceID) async {
     try{
@@ -132,10 +131,10 @@ class OfflineController extends GetxController {
       Map<String, dynamic> scannedProduct = {
         'itemcode': itemCode,
         'itemdesc': 'description',
-        'scanqty': 1,
-        'adjustqty': 0,
-        'autoqty': 0,
-        'manualqty': 0,
+        'scanqty': 1.0,
+        'adjustqty': 0.0,
+        'autoqty': 0.0,
+        'manualqty': 0.0,
         'xcus': 'sup-001'
       };
       OfflineRepo().insertToScannerTable(scannedProduct);

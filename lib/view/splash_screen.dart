@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zebra_scanner_final/view/server_setup_screen.dart';
-import 'package:zebra_scanner_final/widgets/const_colors.dart';
+import 'package:zebra_scanner_final/constants/const_colors.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);

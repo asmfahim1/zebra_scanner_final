@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zebra_scanner_final/controller/server_controller.dart';
-import 'package:zebra_scanner_final/widgets/const_colors.dart';
+import 'package:zebra_scanner_final/constants/const_colors.dart';
 import '../widgets/reusable_textfield.dart';
 
 class ServerSetupScreen extends StatefulWidget {

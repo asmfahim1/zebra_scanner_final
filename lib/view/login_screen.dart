@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zebra_scanner_final/controller/login_controller.dart';
-import 'package:zebra_scanner_final/widgets/const_colors.dart';
+import 'package:zebra_scanner_final/constants/const_colors.dart';
 import 'package:zebra_scanner_final/widgets/reusable_passfield.dart';
 import 'package:zebra_scanner_final/widgets/reusable_textfield.dart';
 import '../controller/server_controller.dart';

@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:zebra_scanner_final/view/offline_process/supplier_select_screen.dart';
 import '../../controller/server_controller.dart';
 import '../../widgets/appBar_widget.dart';
-import '../../widgets/const_colors.dart';
+import '../../constants/const_colors.dart';
 
 class OfflineTagScreen extends StatefulWidget {
   const OfflineTagScreen({Key? key}) : super(key: key);

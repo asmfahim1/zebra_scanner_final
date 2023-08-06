@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zebra_scanner_final/controller/offline_controller.dart';
 import 'package:zebra_scanner_final/view/offline_process/offline-scan_screen.dart';
-import 'package:zebra_scanner_final/widgets/const_colors.dart';
+import 'package:zebra_scanner_final/constants/const_colors.dart';
 
 import '../../controller/server_controller.dart';
 import '../../widgets/appBar_widget.dart';

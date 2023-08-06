@@ -5,7 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:zebra_scanner_final/controller/offline_controller.dart';
 import '../../controller/server_controller.dart';
 import '../../widgets/appBar_widget.dart';
-import '../../widgets/const_colors.dart';
+import '../../constants/const_colors.dart';
+import '../manual_entry/manual_entry_screen.dart';
 
 class OfflineScanScreen extends StatefulWidget {
   const OfflineScanScreen({Key? key}) : super(key: key);
@@ -15,7 +16,7 @@ class OfflineScanScreen extends StatefulWidget {
 }
 
 class _OfflineScanScreenState extends State<OfflineScanScreen> {
-  OfflineController offline = Get.find<OfflineController>();
+  OfflineController offline = Get.put(OfflineController());
   ServerController serverController = Get.put(ServerController());
 
   @override
@@ -25,14 +26,13 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
         serverController.ipAddress.value,
         'widget.userId',
         'widget.tagNum',
-        'widget.outlet',
         'widget.storeId',
         serverController.deviceID.value);
     super.initState();
   }
 
   //controlling the scanner button
-  Future<void> initScanner(String ipAddress, String userId, String tagNum, String outlet, String storeId, String deviceId) async {
+  Future<void> initScanner(String ipAddress, String userId, String tagNum, String storeId, String deviceId) async {
     FlutterDataWedge.initScanner(
         profileName: 'FlutterDataWedge',
         onScan: (result) async {
@@ -42,7 +42,6 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
               offline.lastCode.value,
               userId,
               tagNum,
-              outlet,
               storeId,
               deviceId);
           await offline.getScannerTable();
@@ -534,6 +533,46 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                   ],
                 );
         }),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Get.to(()=> ManualEntry(mode: 'offline',));
+        },
+        label: Row(
+          children: [
+            const Text("Manual add", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 5),
+                  child: Container(
+                    width: 30,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: Colors.transparent),
+                    child: const Icon(
+                      Icons.add_circle_outline_sharp,
+                      color: Colors.white,
+                      size: 25,
+                    ),
+                  ),
+                ),
+                // Obx(() => Positioned(
+                //     right: 10,
+                //     top: -1,
+                //     child: BigText(
+                //       text: '${cartController.totalClick}',
+                //       color: Colors.white,
+                //     ),
+                //   ),
+                // ),
+              ],
+            )
+          ],
+        ),
+        backgroundColor: ConstantColors.uniGreen,
       ),
     );
   }

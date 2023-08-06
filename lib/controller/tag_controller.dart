@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'dart:io' show Platform, exit;
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:zebra_scanner_final/widgets/const_colors.dart';
+import 'package:zebra_scanner_final/constants/const_colors.dart';
 import 'dart:io';
 import '../model/taglist_model.dart';
 

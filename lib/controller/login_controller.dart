@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:zebra_scanner_final/model/productList_model.dart';
-import 'package:zebra_scanner_final/widgets/const_colors.dart';
+import 'package:zebra_scanner_final/constants/const_colors.dart';
 import '../constants/app_constants.dart';
 import '../db_helper/master_item.dart';
 import '../view/mode_selector_screen.dart';

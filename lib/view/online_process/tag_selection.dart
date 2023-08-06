@@ -4,7 +4,7 @@ import 'package:zebra_scanner_final/controller/tag_controller.dart';
 import 'package:zebra_scanner_final/view/online_process/online_mode_screen.dart';
 import 'package:zebra_scanner_final/widgets/appBar_widget.dart';
 import 'package:get/get.dart';
-import 'package:zebra_scanner_final/widgets/const_colors.dart';
+import 'package:zebra_scanner_final/constants/const_colors.dart';
 
 import '../../controller/server_controller.dart';
 
