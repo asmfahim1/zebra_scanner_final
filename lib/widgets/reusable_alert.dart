@@ -20,7 +20,7 @@ class ReusableAlerDialogue extends StatelessWidget {
         ),
       ),
       content: SizedBox(
-        height: 180,
+        height: 120,
         child: Column(
           children: [
             Image.asset(

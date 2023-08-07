@@ -32,37 +32,28 @@ class LoginController extends GetxController {
 
   Future<void> loginMethod(
       String deviceId, String ipAddress, BuildContext context) async {
-    try{
-      isLoading(true);
-      var response = await http.get(Uri.parse(
-          'http://$ipAddress/unistock/zebra/login.php?user=${user.text}&password=${pass.text}'));
-      if (response.statusCode == 200) {
-        isLoading(false);
-        loginModel = loginModelFromJson(response.body);
-        if(user.text == loginModel.zemail && pass.text == loginModel.xpassword){
-          userId.value = loginModel.xposition.toString();
-          print("xPosition : $userId");
-          Get.to(() => const ModeSelect());
-          Get.snackbar('Success!', "Successfully logged in",
-            borderWidth: 1.5,
-            borderColor: Colors.black54,
-            colorText: Colors.white,
-            backgroundColor: ConstantColors.comColor.withOpacity(0.4),
-            duration: const Duration(seconds: 1),
-            snackPosition: SnackPosition.TOP,
-          );
-        }else{
-          showDialog<String>(
-            context: context,
-            builder: (BuildContext context) => ReusableAlerDialogue(
-              headTitle: "Warning!",
-              message: "Invalid userid or password",
-              btnText: "Back",
-            ),
-          );
-        }
-      } else if (response.statusCode == 404) {
-        isLoading(false);
+    isLoading(true);
+    print("${user.text} =============${pass.text} ++====${deviceId}________${ipAddress}");
+    var response = await http.get(Uri.parse(
+        'http://$ipAddress/unistock/zebra/login.php?zemail=${user.text}&xpassword=${pass.text}'));
+    print('status code: ${response.statusCode}');
+
+    if (response.statusCode == 200) {
+      isLoading(false);
+      loginModel = loginModelFromJson(response.body);
+      if(user.text == loginModel.zemail && pass.text == loginModel.xpassword){
+        userId.value = loginModel.xposition.toString();
+        print("xPosition : $userId");
+        Get.to(() => const ModeSelect());
+        Get.snackbar('Success!', "Successfully logged in",
+          borderWidth: 1.5,
+          borderColor: Colors.black54,
+          colorText: Colors.white,
+          backgroundColor: ConstantColors.comColor.withOpacity(0.4),
+          duration: const Duration(seconds: 1),
+          snackPosition: SnackPosition.TOP,
+        );
+      }else{
         showDialog<String>(
           context: context,
           builder: (BuildContext context) => ReusableAlerDialogue(
@@ -72,9 +63,16 @@ class LoginController extends GetxController {
           ),
         );
       }
-    }catch(e){
+    } else if (response.statusCode == 404) {
       isLoading(false);
-      print('Error is : $e');
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => ReusableAlerDialogue(
+          headTitle: "Warning!",
+          message: "Invalid userid or password",
+          btnText: "Back",
+        ),
+      );
     }
   }
 

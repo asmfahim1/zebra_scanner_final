@@ -39,7 +39,7 @@ class _ManualEntryState extends State<ManualEntry> {
           leading: GestureDetector(
             onTap: () async{
               Get.back();
-              await online.productList(online.tagNumber.value, server.ipAddress.value, online.user.value, online.storeID.value);
+              await online.productList(online.tagNumber.value, server.ipAddress.value, online.storeID.value);
             },
             child: const Icon(
               Icons.arrow_back,
@@ -169,11 +169,12 @@ class _ManualEntryState extends State<ManualEntry> {
                       clipBehavior: Clip.hardEdge,
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: ConstantColors.uniGreen,
+                            primary: ConstantColors.uniGreen,
                           ),
                           onPressed: () {
                             // make some logic to post data into server or local database
                             if(manual.productCode.text.length == 5 || manual.productCode.text.length == 7){
+                              print('< 5/12 entered');
                               if(widget.mode == 'Online'){
                                 //online logic
                                 manual.addItemManually(
@@ -187,6 +188,7 @@ class _ManualEntryState extends State<ManualEntry> {
                                 //offline login
                               }
                             }else{
+                              print('else =========================entered');
                               showDialog<String>(
                                 context: context,
                                 builder: (BuildContext context) => ReusableAlerDialogue(
