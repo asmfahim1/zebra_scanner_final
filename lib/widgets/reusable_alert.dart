@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:zebra_scanner_final/constants/const_colors.dart';
 
 class ReusableAlerDialogue extends StatelessWidget {
   String? headTitle;
@@ -11,12 +12,14 @@ class ReusableAlerDialogue extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(
-        headTitle!,
-        style: GoogleFonts.urbanist(
-          color: Colors.red,
-          fontSize: 30,
-          fontWeight: FontWeight.w600,
+      title: Center(
+        child: Text(
+          headTitle!,
+          style: GoogleFonts.urbanist(
+            color: Colors.red,
+            fontSize: 25,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
       content: SizedBox(
@@ -25,7 +28,7 @@ class ReusableAlerDialogue extends StatelessWidget {
           children: [
             Image.asset(
               "images/waeng1.png",
-              height: MediaQuery.of(context).size.height / 8.5,
+              height: MediaQuery.of(context).size.height / 10,
             ),
             const SizedBox(
               height: 10,
@@ -34,7 +37,7 @@ class ReusableAlerDialogue extends StatelessWidget {
               message!,
               style: GoogleFonts.urbanist(
                 color: Colors.black,
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -43,8 +46,11 @@ class ReusableAlerDialogue extends StatelessWidget {
       ),
       actions: <Widget>[
         TextButton(
+          style: TextButton.styleFrom(
+            backgroundColor: ConstantColors.uniGreen
+          ),
           onPressed: () => Navigator.pop(context, 'OK'),
-          child: Text(btnText!),
+          child: Text(btnText!, style: const TextStyle(color: Colors.white),),
         ),
       ],
     );

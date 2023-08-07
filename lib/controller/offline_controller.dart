@@ -2,13 +2,19 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:zebra_scanner_final/controller/login_controller.dart';
+import 'package:zebra_scanner_final/controller/server_controller.dart';
 import 'package:zebra_scanner_final/db_helper/offline_repo.dart';
+import '../db_helper/master_item.dart';
 import '../model/productList_model.dart';
 import '../model/supplier_model.dart';
 import '../model/taglist_model.dart';
 import '../constants/const_colors.dart';
+import '../view/offline_process/offline-scan_screen.dart';
 
 class OfflineController extends GetxController {
+  LoginController loginController = Get.find<LoginController>();
+  ServerController server = Get.find<ServerController>();
   //list of open tags
   RxBool isLoading = false.obs;
   RxList offlineTags = <TagListModel>[].obs;
@@ -154,33 +160,10 @@ class OfflineController extends GetxController {
       String deviceID) async {
     if (qtyCon.text.isEmpty) {
       qtyCon.text = quantity.value.toString();
-      print('=========${qtyCon.text}');
-      var response = await http.post(
-          Uri.parse("http://$ipAddress/unistock/zebra/update.php"),
-          body: jsonEncode(<String, dynamic>{
-            "item": itemCode,
-            "user_id": "010340",
-            "qty": qtyCon.text.toString(),
-            "device": deviceID,
-            "tag_no": tagNum
-          }));
-      print("==========${response.body}");
-      print("==========$ipAddress");
-      print("==========$deviceID");
+      //update the database value
     } else {
       print('=========${qtyCon.text}');
-      var response = await http.post(
-          Uri.parse("http://$ipAddress/unistock/zebra/update.php"),
-          body: jsonEncode(<String, dynamic>{
-            "item": itemCode,
-            "user_id": "010340",
-            "qty": qtyCon.text.toString(),
-            "device": deviceID,
-            "tag_no": tagNum
-          }));
-      print("==========${response.body}");
-      print("==========$ipAddress");
-      print("==========$deviceID");
+      //update the database value
     }
     qtyCon.clear();
     quantity.value = 0;
@@ -210,44 +193,10 @@ class OfflineController extends GetxController {
       if (qtyCon.text.isEmpty) {
         qtyCon.text = '0';
         print('=========${qtyCon.text}');
-        var response = await http.post(
-            Uri.parse("http://$ipAddress/unistock/zebra/adjustment.php"),
-            body: jsonEncode(<String, dynamic>{
-              "item": itemCode,
-              "user_id": "010340",
-              "qty": qtyCon.text.toString(),
-              "device": deviceID,
-              "tag_no": tagNum
-            }));
-        Get.snackbar('Warning!!', "Product isn't adjusted successfully",
-            borderWidth: 1.5,
-            borderColor: Colors.black54,
-            colorText: Colors.white,
-            backgroundColor: Colors.white.withOpacity(0.4),
-            duration: const Duration(seconds: 1),
-            snackPosition: SnackPosition.BOTTOM);
-        print("==========${response.body}");
-        print("==========$ipAddress");
-        print("==========$deviceID");
+        //update the database in the adjustment field
       } else {
         print('=========${qtyCon.text}');
-        var response = await http.post(
-            Uri.parse("http://$ipAddress/unistock/zebra/adjustment.php"),
-            body: jsonEncode(<String, dynamic>{
-              "item": itemCode,
-              "user_id": "010340",
-              "qty": qtyCon.text.toString(),
-              "device": deviceID,
-              "tag_no": tagNum
-            }));
-        Get.snackbar('Success!', "Product adjust successfully",
-          borderWidth: 1.5,
-          borderColor: Colors.black54,
-          colorText: Colors.black,
-          backgroundColor: Colors.white.withOpacity(0.8),
-          duration: const Duration(seconds: 1),
-          snackPosition: SnackPosition.TOP,
-        );
+        //update the database in the adjustment field
         Navigator.pop(context);
       }
     }
@@ -279,6 +228,58 @@ class OfflineController extends GetxController {
       quantity.value = quantity.value - 1;
       qtyCon.text = quantity.value.toString();
       print('--------${qtyCon.text}==========${quantity.value}');
+    }
+  }
+
+
+  //load master data
+  RxString oTagNum = ''.obs;
+  RxString storeId = ''.obs;
+  RxString xCus = ''.obs;
+
+  // save carrying need values reactively and manage routes
+  void saveData(String tag, String store, String cus) async{
+    try{
+      isSupLoaded(true);
+      oTagNum.value = tag;
+      storeId.value = store;
+      xCus.value = cus;
+      print('=====$oTagNum===========$storeId=======$xCus');
+      await fetchMasterItemsList();
+      Get.to(()=> OfflineScanScreen());
+      isSupLoaded(false);
+    }catch(e){
+      print('error occurred : $e');
+    }
+  }
+
+  RxBool isFetched = false.obs;
+  List<MasterItemsModel>? masterModel;
+
+  Future<Object> fetchMasterItemsList() async {
+    try {
+      isFetched(true);
+      var responseMaster = await http.get(Uri.parse('http://${server.ipAddress.value}/unistock/masterItem.php?xcus=${xCus.value}'));
+      if (responseMaster.statusCode == 200) {
+        (json.decode(responseMaster.body) as List).map((territoryList) {
+          MasterItems().insertToMasterTable(MasterItemsModel.fromJson(territoryList));
+        }).toList();
+        isFetched(false);
+        Get.snackbar('Success', 'Data Fetched successfully',
+            backgroundColor: Colors.white,
+            duration: const Duration(seconds: 1));
+        return 'Territory list fetched Successfully';
+      } else {
+        Get.snackbar('Error', 'Something went wrong',
+            backgroundColor: Colors.red, duration: const Duration(seconds: 1));
+        print('Error occurred: ${responseMaster.statusCode}');
+        isFetched(false);
+        return 'Error in fetching data';
+      }
+    } catch (error) {
+      print('There is a issue occured when territory fetching: $error');
+      isFetched(false);
+      return 'Error in the method';
     }
   }
 

@@ -44,17 +44,17 @@ class TileBtn extends StatelessWidget {
               children: [
                 Image(
                   image: AssetImage(imageName),
-                  height: MediaQuery.of(context).size.height / 8,
-                  width: MediaQuery.of(context).size.width / 8,
+                  height: MediaQuery.of(context).size.height / 8.5,
+                  width: MediaQuery.of(context).size.width / 6,
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 Text(
                   buttonName,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.bakbakOne(
-                    fontSize: MediaQuery.of(context).size.height / 44,
+                    fontSize: MediaQuery.of(context).size.height / 48,
                     color: ConstantColors.uniGreen,
                   ),
                 )

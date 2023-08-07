@@ -40,48 +40,56 @@ class ServerController extends GetxController {
 
   //need to refine
   Future<void> serverSetup() async {
-    isLoading1(true);
-    if (server.text.isEmpty) {
-      isLoading1(false);
-      server.text = '172.20.20.96';
-      Get.snackbar(
-        'Error!',
-        "Field is empty",
-        borderWidth: 1.5,
-        borderColor: Colors.black54,
-        colorText: Colors.white,
-        backgroundColor: ConstantColors.comColor.withOpacity(0.4),
-        duration: const Duration(seconds: 1),
-      );
-    } else {
-      if (server.text == '172.20.20.96' ||
-          server.text == '192.168.28.179' ||
-          server.text == '138.22.20.36') {
-        print("Successfully Connected");
+    try{
+      isLoading1(true);
+      if (server.text.isEmpty) {
         isLoading1(false);
-        var response = await http.post(
-            Uri.parse('http://${server.text}/unistock/zebra/server_config.php'),
-            body: <String, dynamic>{
-              "device": deviceId,
-              "ip_add": server.text,
-            });
-        if(response.statusCode == 200){
-          saveValue(server.text.toString());
-          Get.to(() => const LoginScreen());
-        }
-
-      } else {
-        isLoading1(false);
+        server.text = '172.20.20.96';
         Get.snackbar(
-          'Warning!',
-          "Invalid IP address",
+          'Error!',
+          "Field is empty",
           borderWidth: 1.5,
           borderColor: Colors.black54,
           colorText: Colors.white,
           backgroundColor: ConstantColors.comColor.withOpacity(0.4),
           duration: const Duration(seconds: 1),
         );
+      } else {
+        if (server.text == '172.20.20.96' ||
+            server.text == '192.168.28.179' ||
+            server.text == '138.22.20.36') {
+          print("Successfully Connected");
+          isLoading1(false);
+          var response = await http.post(
+              Uri.parse('http://${server.text}/unistock/zebra/server_config.php'),
+              body: <String, dynamic>{
+                "device": deviceId,
+                "ip_add": server.text,
+              });
+          if(response.statusCode == 200){
+            isLoading1(false);
+            saveValue(server.text.toString());
+            Get.to(() => const LoginScreen());
+          }else{
+            isLoading1(false);
+            print('Something went wrong: ${response.statusCode}');
+          }
+        } else {
+          isLoading1(false);
+          Get.snackbar(
+            'Warning!',
+            "Invalid IP address",
+            borderWidth: 1.5,
+            borderColor: Colors.black54,
+            colorText: Colors.white,
+            backgroundColor: ConstantColors.comColor.withOpacity(0.4),
+            duration: const Duration(seconds: 1),
+          );
+        }
       }
+    }catch(e){
+      isLoading1(false);
+      print('Server error: $e');
     }
   }
 
@@ -92,8 +100,5 @@ class ServerController extends GetxController {
   void saveValue(String serverIP) {
     deviceID.value = deviceId;
     ipAddress.value = serverIP;
-    update();
-    print('-----------------$deviceID');
-    print('=================$ipAddress');
   }
 }

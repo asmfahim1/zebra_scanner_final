@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'dart:io' show Platform, exit;
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -10,77 +8,6 @@ import '../model/taglist_model.dart';
 class TagController extends GetxController {
 
   ConstantColors colors = ConstantColors();
-
-  //for exit the app
-  Future<bool?> showWarningContext(BuildContext context) async => showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text(
-            'Exit',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: const <Widget>[
-                Text(
-                  'Do you want to exit the app?',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: ConstantColors.uniGreen.withOpacity(0.5),
-              ),
-              onPressed: () {
-                Get.back();
-              },
-              child: const Text(
-                "No",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: ConstantColors.comColor.withOpacity(0.5),
-              ),
-              onPressed: () {
-                if (Platform.isAndroid) {
-                  SystemNavigator.pop();
-                } else if (Platform.isIOS) {
-                  exit(0);
-                }
-              },
-              child: const Text(
-                "Yes",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-
   //list of open tags
   RxBool isLoading = false.obs;
   List<TagListModel> tagList = [];

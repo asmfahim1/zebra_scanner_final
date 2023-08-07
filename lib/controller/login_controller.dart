@@ -1,11 +1,9 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'dart:io';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:zebra_scanner_final/model/productList_model.dart';
 import 'package:zebra_scanner_final/constants/const_colors.dart';
-import '../constants/app_constants.dart';
-import '../db_helper/master_item.dart';
 import '../model/login_model.dart';
 import '../view/mode_selector_screen.dart';
 import '../widgets/reusable_alert.dart';
@@ -15,7 +13,6 @@ class LoginController extends GetxController {
   ConstantColors colors = ConstantColors();
   TextEditingController user = TextEditingController();
   TextEditingController pass = TextEditingController();
-
   var obscureText = true.obs;
 
   void toggle() {
@@ -33,17 +30,13 @@ class LoginController extends GetxController {
   Future<void> loginMethod(
       String deviceId, String ipAddress, BuildContext context) async {
     isLoading(true);
-    print("${user.text} =============${pass.text} ++====${deviceId}________${ipAddress}");
     var response = await http.get(Uri.parse(
         'http://$ipAddress/unistock/zebra/login.php?zemail=${user.text}&xpassword=${pass.text}'));
-    print('status code: ${response.statusCode}');
-
     if (response.statusCode == 200) {
-      isLoading(false);
       loginModel = loginModelFromJson(response.body);
       if(user.text == loginModel.zemail && pass.text == loginModel.xpassword){
+        isLoading(false);
         userId.value = loginModel.xposition.toString();
-        print("xPosition : $userId");
         Get.to(() => const ModeSelect());
         Get.snackbar('Success!', "Successfully logged in",
           borderWidth: 1.5,
@@ -54,11 +47,12 @@ class LoginController extends GetxController {
           snackPosition: SnackPosition.TOP,
         );
       }else{
+        isLoading(false);
         showDialog<String>(
           context: context,
           builder: (BuildContext context) => ReusableAlerDialogue(
             headTitle: "Warning!",
-            message: "Invalid userid or password",
+            message: "Invalid user name or password",
             btnText: "Back",
           ),
         );
@@ -76,39 +70,75 @@ class LoginController extends GetxController {
     }
   }
 
-  //load master data
-  RxBool isFetched = false.obs;
-  List<MasterItemsModel>? masterModel;
-
-  Future<Object> fetchMasterItemsList() async {
-    try {
-      isFetched(true);
-      var responseMaster = await http.get(Uri.parse('http://${AppConstants.baseurl}/unistock/masterItem.php?xcus=SUP-070000'));
-      if (responseMaster.statusCode == 200) {
-        //masterModel = productListModelFromJson(responseMaster.body);
-        //await dropTerritoryTable();
-        print("Master item List = ${responseMaster.body}");
-        (json.decode(responseMaster.body) as List).map((territoryList) {
-          MasterItems().insertToMasterTable(MasterItemsModel.fromJson(territoryList));
-        }).toList();
-        isFetched(false);
-        Get.snackbar('Success', 'Data Fetched successfully',
-            backgroundColor: Colors.white,
-            duration: const Duration(seconds: 1));
-        return 'Territory list fetched Successfully';
-      } else {
-        Get.snackbar('Error', 'Something went wrong',
-            backgroundColor: Colors.red, duration: const Duration(seconds: 1));
-        print('Error occurred: ${responseMaster.statusCode}');
-        isFetched(false);
-        return 'Error in fetching data';
-      }
-    } catch (error) {
-      print('There is a issue occured when territory fetching: $error');
-      isFetched(false);
-      return 'Error in the method';
-    }
-  }
+  //for exit the app
+  Future<bool?> showWarningContext(BuildContext context) async => showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text(
+        'Exit',
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 20,
+          fontWeight: FontWeight.w800,
+        ),
+      ),
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: const <Widget>[
+            Text(
+              'Do you want to exit the app?',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 15,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          style: TextButton.styleFrom(
+            backgroundColor: ConstantColors.uniGreen.withOpacity(0.5),
+          ),
+          onPressed: () {
+            Get.back();
+          },
+          child: const Text(
+            "No",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        TextButton(
+          style: TextButton.styleFrom(
+            backgroundColor: ConstantColors.comColor.withOpacity(0.5),
+          ),
+          onPressed: () {
+            if (Platform.isAndroid) {
+              SystemNavigator.pop();
+            } else if (Platform.isIOS) {
+              exit(0);
+            }
+          },
+          child: const Text(
+            "Yes",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 /*showDialog(

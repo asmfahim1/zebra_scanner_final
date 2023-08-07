@@ -158,17 +158,17 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Obx((){
                               return loginController.isLoading.value
                                   ? const SizedBox(
-                                height: 25,
-                                width: 25,
-                                child: CircularProgressIndicator(color: Colors.white,),
-                              )
+                                      height: 25,
+                                      width: 25,
+                                      child: CircularProgressIndicator(color: Colors.white,),
+                                    )
                                   : const Text(
-                                'LOGIN',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                                    'LOGIN',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                               );
                             }),
                           ),

@@ -49,7 +49,7 @@ class _ServerSetupScreenState extends State<ServerSetupScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Uni",
+                    const Text("Uni",
                         style: TextStyle(
                             fontSize: 60,
                             fontWeight: FontWeight.w800,
@@ -58,7 +58,7 @@ class _ServerSetupScreenState extends State<ServerSetupScreen> {
                       'images/Upgraded S.png',
                       width: MediaQuery.of(context).size.width / 5.33,
                     ),
-                    Text(
+                    const Text(
                       "tock",
                       style: TextStyle(
                           fontSize: 60,
@@ -110,14 +110,6 @@ class _ServerSetupScreenState extends State<ServerSetupScreen> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
                             color: ConstantColors.comColor,
-                            /*gradient: LinearGradient(
-                              begin: Alignment.topRight,
-                              end: Alignment.bottomLeft,
-                              colors: [
-                                colors.comColor.withOpacity(50),
-                                colors.comColor.withOpacity(600),
-                              ],
-                            ),*/
                           ),
                           child: Center(
                             child: serverController.isLoading1.value

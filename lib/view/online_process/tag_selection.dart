@@ -46,18 +46,6 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
               color: Colors.black,
             ),
           ),
-          action: [
-            GestureDetector(
-              onTap: () {
-                Get.back();
-              },
-              child: const Icon(
-                Icons.logout_sharp,
-                color: ConstantColors.uniGreen,
-                size: 30,
-              ),
-            ),
-          ],
         ),
       ),
       body: Column(

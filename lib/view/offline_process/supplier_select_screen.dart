@@ -8,7 +8,9 @@ import '../../controller/server_controller.dart';
 import '../../widgets/appBar_widget.dart';
 
 class SupSelScreen extends StatefulWidget {
-  const SupSelScreen({Key? key}) : super(key: key);
+  String tag;
+  String store;
+  SupSelScreen({required this.tag, required this.store, Key? key}) : super(key: key);
 
   @override
   State<SupSelScreen> createState() => _SupSelScreenState();
@@ -34,6 +36,16 @@ class _SupSelScreenState extends State<SupSelScreen> {
         child: ReusableAppBar(
           elevation: 0,
           color: Colors.white,
+          leading: GestureDetector(
+            onTap: () {
+              Get.back();
+            },
+            child: const Icon(
+              Icons.arrow_back,
+              size: 30,
+              color: Colors.black,
+            ),
+          ),
         ),
       ),
       body: Container(
@@ -95,7 +107,7 @@ class _SupSelScreenState extends State<SupSelScreen> {
                                 child: TextButton(
                                   style: TextButton.styleFrom(backgroundColor: Colors.white,),
                                   onPressed: (){
-                                    Get.to(()=> OfflineScanScreen());
+                                    offline.saveData(widget.tag, widget.store, supplier.xcus);
                                   },
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,

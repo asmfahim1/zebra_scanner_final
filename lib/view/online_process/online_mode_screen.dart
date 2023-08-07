@@ -57,8 +57,6 @@ class _OnlineModeState extends State<OnlineMode> {
         onScan: (result) async {
           onlineController.lastCode.value = result.data;
           int codeLength = onlineController.lastCode.string.length;
-          print('code length: $codeLength');
-
           if (codeLength == 5 || codeLength == 12) {
             showDialog<String>(
               context: context,

@@ -31,22 +31,20 @@ class _OfflineTagScreenState extends State<OfflineTagScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(50),
+        preferredSize: const Size.fromHeight(50),
         child: ReusableAppBar(
           elevation: 0,
           color: Colors.white,
-          action: [
-            GestureDetector(
-              onTap: () {
-                Get.back();
-              },
-              child: Icon(
-                Icons.logout_sharp,
-                color: ConstantColors.uniGreen,
-                size: 30,
-              ),
+          leading: GestureDetector(
+            onTap: () {
+              Get.back();
+            },
+            child: const Icon(
+              Icons.arrow_back,
+              size: 30,
+              color: Colors.black,
             ),
-          ],
+          ),
         ),
       ),
       body: Column(
@@ -61,7 +59,6 @@ class _OfflineTagScreenState extends State<OfflineTagScreen> {
           ),
           Expanded(
             child: Container(
-              //wrap ListView with Obc() for state-management. So that the product will show at the time when the screen is built.
               margin: const EdgeInsets.only(left: 05, right: 05),
               padding: const EdgeInsets.symmetric(vertical: 5),
               child: Obx(() {
@@ -72,7 +69,7 @@ class _OfflineTagScreenState extends State<OfflineTagScreen> {
                       children: [
                         Container(
                           margin: const EdgeInsets.all(10.0),
-                          child: CircularProgressIndicator(
+                          child: const CircularProgressIndicator(
                             color: ConstantColors.comColor,
                           ),
                         ),
@@ -98,7 +95,7 @@ class _OfflineTagScreenState extends State<OfflineTagScreen> {
                           var openTags = offline.offlineTags[index];
                           return GestureDetector(
                               onTap: () {
-                                Get.to(()=> SupSelScreen());
+                                Get.to(()=> SupSelScreen(tag: openTags.xtagnum, store: openTags.xwh,));
                               },
                               child: Stack(
                                 alignment: Alignment.center,
@@ -117,7 +114,7 @@ class _OfflineTagScreenState extends State<OfflineTagScreen> {
                                         BorderRadius.circular(20.0),
                                         gradient: LinearGradient(
                                           stops: offline.stops,
-                                          colors: [
+                                          colors: const [
                                             ConstantColors.comColor,
                                             ConstantColors.uniGreen,
                                           ],
