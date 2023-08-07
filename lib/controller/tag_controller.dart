@@ -91,13 +91,9 @@ class TagController extends GetxController {
     if (response.statusCode == 200) {
       isLoading(false);
       tagList = tagListModelFromJson(response.body);
-      print(response.body);
-      print('Server IP of open tag list: $serverIp');
     } else {
       isLoading(false);
       tagList = [];
-      print(response.body);
-      print('Server IP of open tag list: $serverIp');
     }
     isLoading(false);
   }
