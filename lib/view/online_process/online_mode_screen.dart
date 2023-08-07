@@ -11,6 +11,8 @@ import 'package:zebra_scanner_final/view/manual_entry/manual_entry_screen.dart';
 import 'package:zebra_scanner_final/widgets/appBar_widget.dart';
 import 'package:zebra_scanner_final/constants/const_colors.dart';
 
+import '../../widgets/reusable_alert.dart';
+
 class OnlineMode extends StatefulWidget {
   //apatoto storeId and outlet same e rakhtesi .
   String tagNum;
@@ -55,15 +57,37 @@ class _OnlineModeState extends State<OnlineMode> {
         profileName: 'FlutterDataWedge',
         onScan: (result) async {
           onlineController.lastCode.value = result.data;
-          await onlineController.addItem(
+          int codeLength = onlineController.lastCode.string.length;
+          print('code length: $codeLength');
+          if(codeLength == 5 || codeLength == 7){
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => ReusableAlerDialogue(
+                headTitle: "Warning!",
+                message: "Please insert manually",
+                btnText: "OK",
+              ),
+            );
+          }else if(codeLength <= 5){
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => ReusableAlerDialogue(
+                headTitle: "Warning!",
+                message: "Invalid code",
+                btnText: "OK",
+              ),
+            );
+          }else{
+            await onlineController.addItem(
               ipAddress,
               onlineController.lastCode.value,
               userId,
               tagNum,
               storeId,
               deviceId,
-          );
-          await onlineController.productList(widget.tagNum, ipAddress, userId, storeId);
+            );
+            await onlineController.productList(widget.tagNum, ipAddress, userId, storeId);
+          }
         },
         onStatusUpdate: (result) {
           ScannerStatusType status = result.status;

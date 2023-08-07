@@ -9,6 +9,8 @@ import 'package:zebra_scanner_final/widgets/appBar_widget.dart';
 import 'package:get/get.dart';
 import 'package:zebra_scanner_final/widgets/extension_class.dart';
 
+import '../../widgets/reusable_alert.dart';
+
 class ManualEntry extends StatefulWidget {
   String? mode;
   ManualEntry({
@@ -171,17 +173,28 @@ class _ManualEntryState extends State<ManualEntry> {
                           ),
                           onPressed: () {
                             // make some logic to post data into server or local database
-                            if(widget.mode == 'Online'){
-                              //online logic
-                              manual.addItemManually(
-                                server.ipAddress.value,
-                                server.deviceId,
-                                online.user.value,
-                                online.tagNumber.value,
-                                online.storeID.value
-                              );
+                            if(manual.productCode.text.length == 5 || manual.productCode.text.length == 7){
+                              if(widget.mode == 'Online'){
+                                //online logic
+                                manual.addItemManually(
+                                    server.ipAddress.value,
+                                    server.deviceId,
+                                    online.user.value,
+                                    online.tagNumber.value,
+                                    online.storeID.value
+                                );
+                              }else{
+                                //offline login
+                              }
                             }else{
-                              //offline login
+                              showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => ReusableAlerDialogue(
+                                  headTitle: "Warning!",
+                                  message: "Invalid code",
+                                  btnText: "OK",
+                                ),
+                              );
                             }
                           },
                           child: Text('Submit', style: TextStyle(fontSize: 15),)
