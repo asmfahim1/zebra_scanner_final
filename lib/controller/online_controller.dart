@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_datawedge/flutter_datawedge.dart';
+import 'package:zebra_scanner_final/controller/login_controller.dart';
 import '../model/productList_model.dart';
 import '../constants/const_colors.dart';
+import '../widgets/reusable_alert.dart';
 
 class OnlineController extends GetxController {
+  LoginController login = Get.find<LoginController>();
   RxString scannerStatus = "Scanner status".obs;
   RxString lastCode = ''.obs;
   TextEditingController qtyCon = TextEditingController();
@@ -27,22 +30,26 @@ class OnlineController extends GetxController {
   RxString user = ''.obs;
   RxString storeID = ''.obs;
 
-  Future<void> productList(String tagNum, String ipAddress, String userId, String store) async {
-    tagNumber.value = tagNum;
-    ipAdd.value = ipAddress;
-    user.value = userId;
-    storeID.value = store;
-    haveProduct(true);
-    var response = await http.get(Uri.parse(
-        "http://$ipAddress/unistock/zebra/productlist_tag_device.php?tag_no=$tagNum"));
-    if (response.statusCode == 200) {
-      print(response.body);
+  Future<void> productList(String tagNum, String ipAddress, String store) async {
+    try{
+      tagNumber.value = tagNum;
+      ipAdd.value = ipAddress;
+      storeID.value = store;
+      haveProduct(true);
+      var response = await http.get(Uri.parse(
+          "http://$ipAddress/unistock/zebra/productlist_tag_device.php?tag_no=$tagNum&userID=${login.userId.value}"));
+      if (response.statusCode == 200) {
+        //print(response.body);
+        haveProduct(false);
+        products = masterItemsModelFromJson(response.body);
+      } else {
+        haveProduct(false);
+        // print(response.body);
+        products = [];
+      }
+    }catch(e){
       haveProduct(false);
-      products = masterItemsModelFromJson(response.body);
-    } else {
-      haveProduct(false);
-      print(response.body);
-      products = [];
+      print('Error occured: $e');
     }
   }
 
@@ -57,7 +64,6 @@ class OnlineController extends GetxController {
   Future<void> addItem(
       String ipAddress,
       String itemCode,
-      String userId,
       String tagNum,
       String storeId,
       String deviceID) async {
@@ -66,16 +72,21 @@ class OnlineController extends GetxController {
         Uri.parse("http://$ipAddress/unistock/zebra/add_item.php"),
         body: jsonEncode(<String, dynamic>{
           "item": itemCode,
-          "user_id": "010340",
+          "user_id": login.userId.value,
           "qty": 1.0,
           "tag_no": tagNum,
           "store": storeId,
           "device": deviceID
         }));
     if(response.statusCode == 200){
+      print('response : ${response.statusCode}');
       postProduct(false);
-    }else{
-      print('Error posting value: ${response.statusCode}');
+    } else{
+      print('response : ${response.statusCode}');
+      postProduct(false);
+      Get.snackbar('Error', 'Invalid item code',
+          backgroundColor: Colors.red, duration: const Duration(seconds: 1));
+      print('Error occurred: ${response.statusCode}');
     }
   }
 
@@ -83,38 +94,37 @@ class OnlineController extends GetxController {
   Future<void> updateQty(
       String ipAddress,
       String itemCode,
-      String userId,
       String tagNum,
       String outlet,
       String storeId,
       String deviceID) async {
     if (qtyCon.text.isEmpty) {
       qtyCon.text = quantity.value.toString();
-      print('=========${qtyCon.text}');
+     // print('=========${qtyCon.text}');
       var response = await http.post(
           Uri.parse("http://$ipAddress/unistock/zebra/update.php"),
           body: jsonEncode(<String, dynamic>{
             "item": itemCode,
-            "user_id": "010340",
+            "user_id": login.userId.value,
             "qty": qtyCon.text.toString(),
             "device": deviceID,
             "tag_no": tagNum
           }));
-      print("==========${response.body}");
-      print("==========$ipAddress");
-      print("==========$deviceID");
+      //print("==========${response.body}");
+      //print("==========$ipAddress");
+      //print("==========$deviceID");
     } else {
-      print('=========${qtyCon.text}');
+      //print('=========${qtyCon.text}');
       var response = await http.post(
           Uri.parse("http://$ipAddress/unistock/zebra/update.php"),
           body: jsonEncode(<String, dynamic>{
             "item": itemCode,
-            "user_id": "010340",
+            "user_id": login.userId.value,
             "qty": qtyCon.text.toString(),
             "device": deviceID,
             "tag_no": tagNum
           }));
-      print("==========${response.body}");
+      //print("==========${response.body}");
       print("==========$ipAddress");
       print("==========$deviceID");
     }
@@ -128,7 +138,6 @@ class OnlineController extends GetxController {
       double totalQty,
       String ipAddress,
       String itemCode,
-      String userId,
       String tagNum,
       String outlet,
       String storeId,
@@ -150,7 +159,7 @@ class OnlineController extends GetxController {
             Uri.parse("http://$ipAddress/unistock/zebra/adjustment.php"),
             body: jsonEncode(<String, dynamic>{
               "item": itemCode,
-              "user_id": "010340",
+              "user_id": login.userId.value,
               "qty": qtyCon.text.toString(),
               "device": deviceID,
               "tag_no": tagNum
@@ -162,7 +171,7 @@ class OnlineController extends GetxController {
             backgroundColor: Colors.white.withOpacity(0.4),
             duration: const Duration(seconds: 1),
             snackPosition: SnackPosition.BOTTOM);
-        print("==========${response.body}");
+        //print("==========${response.body}");
         print("==========$ipAddress");
         print("==========$deviceID");
       } else {
@@ -171,7 +180,7 @@ class OnlineController extends GetxController {
             Uri.parse("http://$ipAddress/unistock/zebra/adjustment.php"),
             body: jsonEncode(<String, dynamic>{
               "item": itemCode,
-              "user_id": "010340",
+              "user_id": login.userId.value,
               "qty": qtyCon.text.toString(),
               "device": deviceID,
               "tag_no": tagNum

@@ -6,7 +6,9 @@ import 'package:zebra_scanner_final/model/productList_model.dart';
 import 'package:zebra_scanner_final/constants/const_colors.dart';
 import '../constants/app_constants.dart';
 import '../db_helper/master_item.dart';
+import '../model/login_model.dart';
 import '../view/mode_selector_screen.dart';
+import '../widgets/reusable_alert.dart';
 
 class LoginController extends GetxController {
   final GlobalKey<FormState> loginKey = GlobalKey();
@@ -25,32 +27,51 @@ class LoginController extends GetxController {
   RxBool isChecked = false.obs;
   //login method
   RxBool isLoading = false.obs;
+  late LoginModel loginModel;
+  RxString userId = ''.obs;
 
   Future<void> loginMethod(
       String deviceId, String ipAddress, BuildContext context) async {
     isLoading(true);
+    print("${user.text} =============${pass.text} ++====${deviceId}________${ipAddress}");
     var response = await http.get(Uri.parse(
-        'http://$ipAddress/unistock/zebra/login.php?user=${user.text}&password=${pass.text}'));
+        'http://$ipAddress/unistock/zebra/login.php?zemail=${user.text}&xpassword=${pass.text}'));
+    print('status code: ${response.statusCode}');
+
     if (response.statusCode == 200) {
       isLoading(false);
-      Get.to(() => const ModeSelect());
-      Get.snackbar('Success!', "Successfully logged in",
+      loginModel = loginModelFromJson(response.body);
+      if(user.text == loginModel.zemail && pass.text == loginModel.xpassword){
+        userId.value = loginModel.xposition.toString();
+        print("xPosition : $userId");
+        Get.to(() => const ModeSelect());
+        Get.snackbar('Success!', "Successfully logged in",
           borderWidth: 1.5,
           borderColor: Colors.black54,
           colorText: Colors.white,
           backgroundColor: ConstantColors.comColor.withOpacity(0.4),
           duration: const Duration(seconds: 1),
           snackPosition: SnackPosition.TOP,
-      );
+        );
+      }else{
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => ReusableAlerDialogue(
+            headTitle: "Warning!",
+            message: "Invalid userid or password",
+            btnText: "Back",
+          ),
+        );
+      }
     } else if (response.statusCode == 404) {
       isLoading(false);
-      Get.snackbar('Warning!', "Invalid IP Address",
-          borderWidth: 1.5,
-          borderColor: Colors.black54,
-          colorText: Colors.white,
-          backgroundColor: ConstantColors.comColor.withOpacity(0.4),
-          duration: const Duration(seconds: 1),
-          snackPosition: SnackPosition.TOP,
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => ReusableAlerDialogue(
+          headTitle: "Warning!",
+          message: "Invalid userid or password",
+          btnText: "Back",
+        ),
       );
     }
   }

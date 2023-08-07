@@ -40,10 +40,9 @@ class _OnlineModeState extends State<OnlineMode> {
   @override
   void initState() {
     onlineController.productList(
-        widget.tagNum, serverController.ipAddress.value, widget.userId, widget.storeId);
+        widget.tagNum, serverController.ipAddress.value, widget.storeId);
     initScanner(
         serverController.ipAddress.value,
-        widget.userId,
         widget.tagNum,
         widget.storeId,
         serverController.deviceID.value,
@@ -52,14 +51,15 @@ class _OnlineModeState extends State<OnlineMode> {
   }
 
   //controlling the scanner button
-  Future<void> initScanner(String ipAddress, String userId, String tagNum, String storeId, String deviceId) async {
+  Future<void> initScanner(String ipAddress, String tagNum, String storeId, String deviceId) async {
     FlutterDataWedge.initScanner(
         profileName: 'FlutterDataWedge',
         onScan: (result) async {
           onlineController.lastCode.value = result.data;
           int codeLength = onlineController.lastCode.string.length;
           print('code length: $codeLength');
-          if(codeLength == 5 || codeLength == 7){
+
+          if (codeLength == 5 || codeLength == 12) {
             showDialog<String>(
               context: context,
               builder: (BuildContext context) => ReusableAlerDialogue(
@@ -68,7 +68,7 @@ class _OnlineModeState extends State<OnlineMode> {
                 btnText: "OK",
               ),
             );
-          }else if(codeLength <= 5){
+          } else if (codeLength < 5) {
             showDialog<String>(
               context: context,
               builder: (BuildContext context) => ReusableAlerDialogue(
@@ -77,18 +77,18 @@ class _OnlineModeState extends State<OnlineMode> {
                 btnText: "OK",
               ),
             );
-          }else{
+          } else {
             await onlineController.addItem(
               ipAddress,
               onlineController.lastCode.value,
-              userId,
               tagNum,
               storeId,
               deviceId,
             );
-            await onlineController.productList(widget.tagNum, ipAddress, userId, storeId);
+            await onlineController.productList(widget.tagNum, ipAddress, storeId);
           }
-        },
+        }
+        ,
         onStatusUpdate: (result) {
           ScannerStatusType status = result.status;
           onlineController.scannerStatus.value =
@@ -432,13 +432,12 @@ class _OnlineModeState extends State<OnlineMode> {
                                                               onlineController.products[index].scanQty,
                                                               serverController.ipAddress.value,
                                                               onlineController.products[index].itemCode,
-                                                              widget.userId,
                                                               widget.tagNum,
                                                               widget.outlet,
                                                               widget.storeId,
                                                               serverController.deviceID.value);
                                                       await onlineController
-                                                          .productList(widget.tagNum, serverController.ipAddress.value, widget.userId, widget.storeId);
+                                                          .productList(widget.tagNum, serverController.ipAddress.value, widget.storeId);
 
                                                       // var snackBar = SnackBar(
                                                       //     content: Text('Hello World'));
@@ -490,7 +489,6 @@ class _OnlineModeState extends State<OnlineMode> {
                                                                   .products[
                                                                       index]
                                                                   .itemCode,
-                                                              widget.userId,
                                                               widget.tagNum,
                                                               widget.outlet,
                                                               widget.storeId,
@@ -498,7 +496,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                                   .deviceID
                                                                   .value);
                                                       await onlineController
-                                                          .productList(widget.tagNum, serverController.ipAddress.value, widget.userId, widget.storeId);
+                                                          .productList(widget.tagNum, serverController.ipAddress.value, widget.storeId);
                                                       Navigator.pop(context);
 
                                                       // var snackBar = SnackBar(

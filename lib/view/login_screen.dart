@@ -20,26 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('===========${serverController.ipAddress.value}');
-    print('===========${serverController.deviceID.value}');
-    print('Screen height: ${MediaQuery.of(context).size.height}');
-    print('Screen width: ${MediaQuery.of(context).size.width}');
     return Scaffold(
-      /* appBar: PreferredSize(
-        preferredSize: Size.fromHeight(50),
-        child: ReusableAppBar(
-          elevation: 0,
-          leading: IconButton(
-            onPressed: () {
-              Get.back();
-            },
-            icon: Icon(Icons.arrow_back),
-            color: Colors.black,
-            iconSize: 30,
-          ),
-          color: Colors.transparent,
-        ),
-      ),*/
       body: SingleChildScrollView(
         child: Container(
           height: MediaQuery.of(context).size.height,
@@ -64,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Uni",
+                    const Text("Uni",
                         style: TextStyle(
                             fontSize: 60,
                             fontWeight: FontWeight.w800,
@@ -73,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       'images/Upgraded S.png',
                       width: MediaQuery.of(context).size.width / 5.33,
                     ),
-                    Text(
+                    const Text(
                       "tock",
                       style: TextStyle(
                           fontSize: 60,
@@ -95,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           hintText: "Enter User Name",
                           labelText: "User name",
                           server: loginController.user,
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.person,
                             size: 25,
                             color: ConstantColors.uniGreen,
@@ -104,11 +85,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 10,
                       ),
                       Obx(
-                        () => ReusableTextPassField(
+                            () => ReusableTextPassField(
                           hintText: "Enter Password",
                           labelText: "Password",
                           server: loginController.pass,
-                          prefIcon: Icon(
+                          prefIcon: const Icon(
                             Icons.vpn_key_outlined,
                             size: 25,
                             color: ConstantColors.uniGreen,
@@ -116,7 +97,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           obscureText: loginController.obscureText.value,
                           sufIcon: GestureDetector(
                               onTap: () {
-                                print('ontap pressed');
                                 loginController.toggle();
                               },
                               child: Icon(
@@ -162,7 +142,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          // Get.to(() => TagSelectScreen());
                           loginController.loginMethod(
                               serverController.deviceID.value,
                               serverController.ipAddress.value,
@@ -174,24 +153,24 @@ class _LoginScreenState extends State<LoginScreen> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
                             color: ConstantColors.comColor,
-                            /*gradient: LinearGradient(
-                              begin: Alignment.topRight,
-                              end: Alignment.bottomLeft,
-                              colors: [
-                                colors.comColor.withOpacity(50),
-                                colors.comColor.withOpacity(600),
-                              ],
-                            ),*/
                           ),
-                          child: const Center(
-                            child: Text(
-                              'LOGIN',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                          child: Center(
+                            child: Obx((){
+                              return loginController.isLoading.value
+                                  ? const SizedBox(
+                                height: 25,
+                                width: 25,
+                                child: CircularProgressIndicator(color: Colors.white,),
+                              )
+                                  : const Text(
+                                'LOGIN',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              );
+                            }),
                           ),
                         ),
                       ),
