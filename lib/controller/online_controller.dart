@@ -98,34 +98,36 @@ class OnlineController extends GetxController {
       String outlet,
       String storeId,
       String deviceID) async {
-    if (qtyCon.text.isEmpty) {
-      qtyCon.text = quantity.value.toString();
-      var response = await http.post(
-          Uri.parse("http://$ipAddress/unistock/zebra/update.php"),
-          body: jsonEncode(<String, dynamic>{
-            "item": itemCode,
-            "user_id": login.userId.value,
-            "qty": qtyCon.text.toString(),
-            "device": deviceID,
-            "tag_no": tagNum
-          }));
-      //print("==========${response.body}");
-      //print("==========$ipAddress");
-      //print("==========$deviceID");
-    } else {
-      //print('=========${qtyCon.text}');
-      var response = await http.post(
-          Uri.parse("http://$ipAddress/unistock/zebra/update.php"),
-          body: jsonEncode(<String, dynamic>{
-            "item": itemCode,
-            "user_id": login.userId.value,
-            "qty": qtyCon.text.toString(),
-            "device": deviceID,
-            "tag_no": tagNum
-          }));
+    try{
+      if (qtyCon.text.isEmpty) {
+        qtyCon.text = quantity.value.toString();
+        var response = await http.post(
+            Uri.parse("http://$ipAddress/unistock/zebra/update.php"),
+            body: jsonEncode(<String, dynamic>{
+              "item": itemCode,
+              "user_id": login.userId.value,
+              "qty": qtyCon.text.toString(),
+              "device": deviceID,
+              "tag_no": tagNum
+            }));
+        print('manual response: ${response.statusCode}');
+      } else {
+        var response = await http.post(
+            Uri.parse("http://$ipAddress/unistock/zebra/update.php"),
+            body: jsonEncode(<String, dynamic>{
+              "item": itemCode,
+              "user_id": login.userId.value,
+              "qty": qtyCon.text.toString(),
+              "device": deviceID,
+              "tag_no": tagNum
+            }));
+        print('manual response: ${response.statusCode}');
+      }
+      qtyCon.clear();
+      quantity.value = 0;
+    }catch(e){
+      print('Somthing went wrong manual: $e');
     }
-    qtyCon.clear();
-    quantity.value = 0;
   }
 
   //adjustment quantity
@@ -138,62 +140,69 @@ class OnlineController extends GetxController {
       String outlet,
       String storeId,
       String deviceID) async {
-    if (int.parse(qtyCon.text) > totalQty) {
-      Get.snackbar(
-          'Warning!', "Quantity must be less than or equal total quantity",
-          borderWidth: 1.5,
-          borderColor: Colors.black54,
-          colorText: Colors.white,
-          backgroundColor: ConstantColors.comColor.withOpacity(0.4),
-          duration: const Duration(seconds: 1),
-          snackPosition: SnackPosition.BOTTOM);
-    } else {
-      if (qtyCon.text.isEmpty) {
-        qtyCon.text = '0';
-        print('=========${qtyCon.text}');
-        var response = await http.post(
-            Uri.parse("http://$ipAddress/unistock/zebra/adjustment.php"),
-            body: jsonEncode(<String, dynamic>{
-              "item": itemCode,
-              "user_id": login.userId.value,
-              "qty": qtyCon.text.toString(),
-              "device": deviceID,
-              "tag_no": tagNum
-            }));
-        Get.snackbar('Warning!!', "Product isn't adjusted successfully",
+    try{
+      print('item: $itemCode');
+      print('user: ${login.userId.value}');
+      print('qty: ${qtyCon.text.toString()}');
+      print('deviceId: $deviceID');
+      print('tagnum: $tagNum');
+      if (double.parse(qtyCon.text) > totalQty) {
+        Get.snackbar(
+            'Warning!', "Quantity must be less than or equal total quantity",
             borderWidth: 1.5,
             borderColor: Colors.black54,
             colorText: Colors.white,
-            backgroundColor: Colors.white.withOpacity(0.4),
+            backgroundColor: ConstantColors.comColor.withOpacity(0.4),
             duration: const Duration(seconds: 1),
             snackPosition: SnackPosition.BOTTOM);
-        //print("==========${response.body}");
-        print("==========$ipAddress");
-        print("==========$deviceID");
       } else {
-        print('=========${qtyCon.text}');
-        var response = await http.post(
-            Uri.parse("http://$ipAddress/unistock/zebra/adjustment.php"),
-            body: jsonEncode(<String, dynamic>{
-              "item": itemCode,
-              "user_id": login.userId.value,
-              "qty": qtyCon.text.toString(),
-              "device": deviceID,
-              "tag_no": tagNum
-            }));
-        Get.snackbar('Success!', "Product adjust successfully",
+        if (qtyCon.text.isEmpty) {
+          qtyCon.text = '0';
+          var response = await http.post(
+              Uri.parse("https://$ipAddress/unistock/zebra/adjustment.php"),
+              body: jsonEncode(<String, dynamic>{
+                "item": itemCode,
+                "user_id": login.userId.value,
+                "qty": qtyCon.text.toString(),
+                "device": deviceID,
+                "tag_no": tagNum
+              }));
+          Get.snackbar('Warning!!', "Product isn't adjusted successfully",
+              borderWidth: 1.5,
+              borderColor: Colors.black54,
+              colorText: Colors.white,
+              backgroundColor: Colors.white.withOpacity(0.4),
+              duration: const Duration(seconds: 1),
+              snackPosition: SnackPosition.TOP);
+          Navigator.pop(context);
+          print("==========${response.statusCode}");
+        } else {
+          var response = await http.post(
+              Uri.parse("http://$ipAddress/unistock/zebra/adjustment.php"),
+              body: jsonEncode(<String, dynamic>{
+                "item": itemCode,
+                "user_id": login.userId.value,
+                "qty": qtyCon.text.toString(),
+                "device": deviceID,
+                "tag_no": tagNum
+              }));
+          print("==========${response.statusCode}");
+          Get.snackbar('Success!', "Product adjust successfully",
             borderWidth: 1.5,
             borderColor: Colors.black54,
             colorText: Colors.black,
             backgroundColor: Colors.white.withOpacity(0.8),
             duration: const Duration(seconds: 1),
             snackPosition: SnackPosition.TOP,
-        );
-        Navigator.pop(context);
+          );
+          Navigator.pop(context);
+        }
       }
+      qtyCon.clear();
+      quantity.value = 0;
+    }catch(e){
+      print('Somthing went wrong : $e');
     }
-    qtyCon.clear();
-    quantity.value = 0;
   }
 
   //make the active and di-active function

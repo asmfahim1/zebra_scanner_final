@@ -182,7 +182,7 @@ class OfflineController extends GetxController {
       String outlet,
       String storeId,
       String deviceID) async {
-    if (int.parse(qtyCon.text) > totalQty) {
+    if (double.parse(qtyCon.text) > totalQty) {
       Get.snackbar(
           'Warning!', "Quantity must be less than or equal total quantity",
           borderWidth: 1.5,
