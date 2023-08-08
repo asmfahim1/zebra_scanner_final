@@ -106,8 +106,9 @@ class _SupSelScreenState extends State<SupSelScreen> {
                                 ),
                                 child: TextButton(
                                   style: TextButton.styleFrom(backgroundColor: Colors.white,),
-                                  onPressed: (){
+                                  onPressed: () async{
                                     offline.saveData(widget.tag, widget.store, supplier.xcus);
+                                    await offline.fetchMasterItemsList(context);
                                   },
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,

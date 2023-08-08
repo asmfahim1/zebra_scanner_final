@@ -6,6 +6,7 @@ import 'package:zebra_scanner_final/controller/offline_controller.dart';
 import '../../controller/server_controller.dart';
 import '../../widgets/appBar_widget.dart';
 import '../../constants/const_colors.dart';
+import '../../widgets/reusable_alert.dart';
 import '../manual_entry/manual_entry_screen.dart';
 
 class OfflineScanScreen extends StatefulWidget {
@@ -37,14 +38,35 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
         profileName: 'FlutterDataWedge',
         onScan: (result) async {
           offline.lastCode.value = result.data;
-          await offline.addItem(
-              ipAddress,
-              offline.lastCode.value,
-              userId,
-              tagNum,
-              storeId,
-              deviceId);
-          await offline.getScannerTable();
+          int codeLength = offline.lastCode.string.length;
+          if (codeLength == 5 || codeLength == 12) {
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => ReusableAlerDialogue(
+                headTitle: "Warning!",
+                message: "Add Manually",
+                btnText: "OK",
+              ),
+            );
+          } else if (codeLength < 5) {
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => ReusableAlerDialogue(
+                headTitle: "Warning!",
+                message: "Invalid code",
+                btnText: "OK",
+              ),
+            );
+          } else {
+              await offline.addItem(
+                  ipAddress,
+                  offline.lastCode.value,
+                  userId,
+                  tagNum,
+                  storeId,
+                  deviceId);
+              await offline.getScannerTable();
+          }
         },
         onStatusUpdate: (result) {
           ScannerStatusType status = result.status;

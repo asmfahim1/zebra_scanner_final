@@ -39,11 +39,13 @@ class DBHelper {
           xcus VARCHAR(50),
           xbodycode VARCHAR(50),
           xtheircode VARCHAR(50),
-          xpaymenttype VARCHAR(50)
+          xpaymenttype VARCHAR(50),
+          tag_no VARCHAR(50)
           )""");
       await db.execute("""
         CREATE TABLE $scannerTable (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
+          scanned_code VARCHAR(150), 
           itemcode VARCHAR(150), 
           itemdesc VARCHAR(150), 
           scanqty VARCHAR(150),
@@ -51,6 +53,10 @@ class DBHelper {
           autoqty VARCHAR(50),
           manualqty VARCHAR(50),
           xcus VARCHAR(50),
+          device_id VARCHAR(50),
+          store_id VARCHAR(50),
+          tag_num VARCHAR(50),
+          user_id VARCHAR(50),
           createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
           )""");
       await db.execute("""

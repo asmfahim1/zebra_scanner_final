@@ -1,4 +1,5 @@
 import 'package:zebra_scanner_final/model/productList_model.dart';
+import '../model/offline_product_model.dart';
 import 'database_helper.dart';
 
 class MasterItems{
@@ -6,12 +7,12 @@ class MasterItems{
   DBHelper dbHelper = DBHelper();
 
   ///Insert into Master table
-  Future<int> insertToMasterTable(MasterItemsModel masterItemsModel) async {
+  Future<int> insertToMasterTable(OfflineProductModel offlineProductModel) async {
     var dbClient = await conn.db;
     int result = 0;
     try {
       result = await dbClient!
-          .insert(DBHelper.masterTable, masterItemsModel.toJson());
+          .insert(DBHelper.masterTable, offlineProductModel.toJson());
     } catch (e) {
       print('There are some issues: $e');
     }

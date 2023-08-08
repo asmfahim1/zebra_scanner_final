@@ -57,7 +57,7 @@ class _ManualEntryState extends State<ManualEntry> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Manual Entry')
+                        const Text('Manual Entry')
                       ],
                     ),
                     Container(
@@ -160,7 +160,7 @@ class _ManualEntryState extends State<ManualEntry> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20,),
+                    const SizedBox(height: 20,),
                     Container(
                       height: 50,
                       width: 120,
@@ -178,6 +178,7 @@ class _ManualEntryState extends State<ManualEntry> {
                               if(widget.mode == 'Online'){
                                 //online logic
                                 manual.addItemManually(
+                                    context,
                                     server.ipAddress.value,
                                     server.deviceId,
                                     online.user.value,
@@ -186,6 +187,7 @@ class _ManualEntryState extends State<ManualEntry> {
                                 );
                               }else{
                                 //offline login
+                                manual.addManuallyOffline(context);
                               }
                             }else{
                               print('else =========================entered');
@@ -199,7 +201,18 @@ class _ManualEntryState extends State<ManualEntry> {
                               );
                             }
                           },
-                          child: Text('Submit', style: TextStyle(fontSize: 15),)
+                          child: Obx((){
+                            return manual.entryDone.value
+                                ? const SizedBox(
+                                    height: 25,
+                                    width: 25,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : const Text('Submit', style: TextStyle(fontSize: 16),
+                                  );
+                          })
                       ),
                     ),
                   ],

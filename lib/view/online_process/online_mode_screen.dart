@@ -62,7 +62,7 @@ class _OnlineModeState extends State<OnlineMode> {
               context: context,
               builder: (BuildContext context) => ReusableAlerDialogue(
                 headTitle: "Warning!",
-                message: "Please insert manually",
+                message: "Add Manually",
                 btnText: "OK",
               ),
             );

@@ -100,7 +100,6 @@ class OnlineController extends GetxController {
       String deviceID) async {
     if (qtyCon.text.isEmpty) {
       qtyCon.text = quantity.value.toString();
-     // print('=========${qtyCon.text}');
       var response = await http.post(
           Uri.parse("http://$ipAddress/unistock/zebra/update.php"),
           body: jsonEncode(<String, dynamic>{
@@ -124,9 +123,6 @@ class OnlineController extends GetxController {
             "device": deviceID,
             "tag_no": tagNum
           }));
-      //print("==========${response.body}");
-      print("==========$ipAddress");
-      print("==========$deviceID");
     }
     qtyCon.clear();
     quantity.value = 0;

@@ -5,7 +5,9 @@ import 'package:http/http.dart' as http;
 import 'package:zebra_scanner_final/controller/login_controller.dart';
 import 'package:zebra_scanner_final/controller/server_controller.dart';
 import 'package:zebra_scanner_final/db_helper/offline_repo.dart';
+import 'package:zebra_scanner_final/widgets/special_alert.dart';
 import '../db_helper/master_item.dart';
+import '../model/offline_product_model.dart';
 import '../model/productList_model.dart';
 import '../model/supplier_model.dart';
 import '../model/taglist_model.dart';
@@ -245,8 +247,7 @@ class OfflineController extends GetxController {
       storeId.value = store;
       xCus.value = cus;
       print('=====$oTagNum===========$storeId=======$xCus');
-      await fetchMasterItemsList();
-      Get.to(()=> OfflineScanScreen());
+      // Get.to(()=> OfflineScanScreen());
       isSupLoaded(false);
     }catch(e){
       print('error occurred : $e');
@@ -254,31 +255,39 @@ class OfflineController extends GetxController {
   }
 
   RxBool isFetched = false.obs;
-  List<MasterItemsModel>? masterModel;
+  List<OfflineProductModel>? masterModel;
 
-  Future<Object> fetchMasterItemsList() async {
+  Future<Object> fetchMasterItemsList(BuildContext context) async {
     try {
       isFetched(true);
-      var responseMaster = await http.get(Uri.parse('http://${server.ipAddress.value}/unistock/masterItem.php?xcus=${xCus.value}'));
+      var responseMaster = await http.get(Uri.parse('http://${server.ipAddress.value}/unistock/masteritem.php?xcus=${xCus.value}&tag=${oTagNum.value}'));
       if (responseMaster.statusCode == 200) {
-        (json.decode(responseMaster.body) as List).map((territoryList) {
-          MasterItems().insertToMasterTable(MasterItemsModel.fromJson(territoryList));
+        await MasterItems().deleteFromTerritoryTable();
+        (json.decode(responseMaster.body) as List).map((products) {
+          MasterItems().insertToMasterTable(OfflineProductModel.fromJson(products));
         }).toList();
         isFetched(false);
-        Get.snackbar('Success', 'Data Fetched successfully',
-            backgroundColor: Colors.white,
-            duration: const Duration(seconds: 1));
-        return 'Territory list fetched Successfully';
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => SpecialAlert(
+            headTitle: "Successful!",
+            message: "Data fetched successfully",
+            btnText: "Back",
+          ),
+        );
+        return 'Product fetched Successfully';
       } else {
+        isFetched(false);
         Get.snackbar('Error', 'Something went wrong',
             backgroundColor: Colors.red, duration: const Duration(seconds: 1));
         print('Error occurred: ${responseMaster.statusCode}');
-        isFetched(false);
         return 'Error in fetching data';
       }
     } catch (error) {
-      print('There is a issue occured when territory fetching: $error');
       isFetched(false);
+      Get.snackbar('Error', 'Something went wrong',
+          backgroundColor: Colors.red, duration: const Duration(seconds: 2),);
+      print('There is a issue Product fetching: $error');
       return 'Error in the method';
     }
   }
