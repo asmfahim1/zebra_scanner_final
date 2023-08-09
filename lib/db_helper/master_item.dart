@@ -21,7 +21,7 @@ class MasterItems{
   }
 
   //get territory list
-  Future<List> getTerritoryList() async {
+  Future<List> getMasterItem() async {
     var dbClient = await conn.db;
     List allProducts = [];
     try {
@@ -45,5 +45,32 @@ class MasterItems{
     }
   }
 
+  ///insert to result table/scanner table
+  Future<int> insertToScanner(String itemCode) async {
+    var dbClient = await conn.db;
+    int result = 0;
+    int codeLength = itemCode.length;
+    try {
+      if(codeLength == 6){
+        var existingRow = await dbClient!.rawQuery('SELECT TOP 1 xitem FROM ${DBHelper.masterTable} WHERE xtheircode = $itemCode');
+
+      }else if(codeLength >= 13){
+        var existingRow = await dbClient!.rawQuery('SELECT TOP 1 xitem FROM product WHERE xbodycode = $itemCode');
+
+      }else if(codeLength >= 7 && codeLength <= 10){
+        var existingRow = await dbClient!.rawQuery('SELECT TOP 1 xitem FROM product WHERE xitem = $itemCode');
+
+      }else {
+        return 0;
+      }
+
+
+      //result = await dbClient!.insert();
+    } catch (e) {
+      print('There are some issues: $e');
+    }
+    print('the items are: $result');
+    return result;
+  }
 
 }

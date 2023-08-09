@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:zebra_scanner_final/controller/server_controller.dart';
 import 'package:zebra_scanner_final/constants/const_colors.dart';
 import '../widgets/reusable_textfield.dart';
@@ -128,6 +129,43 @@ class _ServerSetupScreenState extends State<ServerSetupScreen> {
                         ),
                       );
                     }),
+
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                "Powered By ",
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.urbanist(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              Container(
+                                height: 50,
+                                width: 100,
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    image:
+                                    AssetImage("images/Business.png"),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
                   ],
                 );
               }),

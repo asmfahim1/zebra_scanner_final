@@ -16,8 +16,8 @@ class ServerController extends GetxController {
   @override
   void onInit() {
     // TODO: implement onInit
-    getDeviceDetails();
     super.onInit();
+    getDeviceDetails();
   }
 
   Future<void> getDeviceDetails() async {

@@ -15,7 +15,7 @@ class OfflineTagScreen extends StatefulWidget {
 }
 
 class _OfflineTagScreenState extends State<OfflineTagScreen> {
-  OfflineController offline = Get.put(OfflineController());
+  OfflineController offline = Get.find<OfflineController>();
   ServerController serverController = Get.find<ServerController>();
   ConstantColors colors = ConstantColors();
 

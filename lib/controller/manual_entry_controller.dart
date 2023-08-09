@@ -27,6 +27,7 @@ class ManualController extends GetxController {
             duration: const Duration(seconds: 2));
       }else{
         try{
+          print('qty controller : ${qtyController.text}');
           var response = await http.post(
               Uri.parse("http://$idAddress/unistock/zebra/manual_Add.php"),
               body: jsonEncode(<String, dynamic>{

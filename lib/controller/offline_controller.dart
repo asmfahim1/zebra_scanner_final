@@ -292,4 +292,26 @@ class OfflineController extends GetxController {
     }
   }
 
+  RxBool got = false.obs;
+  List<Map<String, dynamic>> getAllData = [];
+  Future<void> getAll() async{
+    try{
+      got(true);
+      List<dynamic> products = await MasterItems().getMasterItem();
+      getAllData = products.map((e) => e as Map<String,dynamic>).toList();
+      print('products: $getAllData');
+      got(false);
+    }catch(e){
+      got(false);
+      print('Failed to get: $e');
+    }
+  }
+
+  Future<void> deleteAllData() async{
+    await MasterItems().deleteFromTerritoryTable();
+    Get.snackbar('Successful', 'Data deleted',
+        backgroundColor: Colors.white, duration: const Duration(seconds: 1));
+    print('Data deleted');
+  }
+
 }

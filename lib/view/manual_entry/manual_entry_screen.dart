@@ -190,7 +190,6 @@ class _ManualEntryState extends State<ManualEntry> {
                                 manual.addManuallyOffline(context);
                               }
                             }else{
-                              print('else =========================entered');
                               showDialog<String>(
                                 context: context,
                                 builder: (BuildContext context) => ReusableAlerDialogue(
