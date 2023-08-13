@@ -23,17 +23,12 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
   @override
   void initState() {
     offline.getScannerTable();
-    initScanner(
-        serverController.ipAddress.value,
-        'widget.userId',
-        'widget.tagNum',
-        'widget.storeId',
-        serverController.deviceID.value);
+    initScanner();
     super.initState();
   }
 
   //controlling the scanner button
-  Future<void> initScanner(String ipAddress, String userId, String tagNum, String storeId, String deviceId) async {
+  Future<void> initScanner() async {
     FlutterDataWedge.initScanner(
         profileName: 'FlutterDataWedge',
         onScan: (result) async {
@@ -48,6 +43,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                 btnText: "OK",
               ),
             );
+            await offline.getScannerTable();
           } else if (codeLength < 5) {
             showDialog<String>(
               context: context,
@@ -57,16 +53,14 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                 btnText: "OK",
               ),
             );
+            await offline.getScannerTable();
           } else {
-              await offline.addItem(
-                  ipAddress,
-                  offline.lastCode.value,
-                  userId,
-                  tagNum,
-                  storeId,
-                  deviceId);
-              await offline.getScannerTable();
+              //await offline.addItem(offline.lastCode.value);
+              await offline.addItem('0255789');
+              //await offline.getScannerTable();
           }
+
+
         },
         onStatusUpdate: (result) {
           ScannerStatusType status = result.status;
@@ -213,14 +207,14 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                       fontWeight: FontWeight.w800,
                                                     ),
                                                   ),
-                                                  Text('item desc',
+                                                  Text('item desc: ${scanned["itemdesc"]}',
                                                     overflow: TextOverflow.ellipsis,
                                                     style: GoogleFonts.urbanist(
                                                       color: Colors.black,
                                                       fontWeight: FontWeight.w400,
                                                     ),
                                                   ),
-                                                  Text('xcus',
+                                                  Text('xcus : ${scanned["xcus"]}',
                                                     overflow: TextOverflow.ellipsis,
                                                     style: GoogleFonts.urbanist(
                                                       color: Colors.black,
@@ -228,7 +222,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                     ),
                                                   ),
                                                   Text(
-                                                    "Total Quantity :  ",
+                                                    "Total Quantity : ${scanned["scanqty"]}",
                                                     style: GoogleFonts.urbanist(
                                                       color: Colors.black,
                                                       fontWeight: FontWeight.w800,
@@ -557,8 +551,10 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
         }),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Get.to(()=> ManualEntry(mode: 'offline',));
+        onPressed: () async{
+          await offline.addItem('0255789');
+          //await offline.getScannerTable();
+          //Get.to(()=> ManualEntry(mode: 'offline',));
         },
         label: Row(
           children: [

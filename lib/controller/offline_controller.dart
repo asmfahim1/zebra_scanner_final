@@ -127,25 +127,11 @@ class OfflineController extends GetxController {
   }
 
   //addItem(automatically)
-  Future<void> addItem(
-      String ipAddress,
-      String itemCode,
-      String userId,
-      String tagNum,
-      String storeId,
-      String deviceID) async {
+  Future<void> addItem(String itemCode) async {
     try{
       postProduct(true);
-      Map<String, dynamic> scannedProduct = {
-        'itemcode': itemCode,
-        'itemdesc': 'description',
-        'scanqty': 1.0,
-        'adjustqty': 0.0,
-        'autoqty': 0.0,
-        'manualqty': 0.0,
-        'xcus': 'sup-001'
-      };
-      OfflineRepo().insertToScannerTable(scannedProduct);
+      await OfflineRepo().insertToScanner(itemCode);
+      await getScannerTable();
     }catch(e){
       print('error occurred inserting into scan table $e');
     }
