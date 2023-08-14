@@ -235,12 +235,12 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                           ),
                                           GestureDetector(
                                             onTap: () async {
-                                              offline.updateTQ('${scanned["scanqty"]}');
+                                              offline.updateTQ('${scanned["scanqty"].toString()}');
                                             showDialog(
                                                 context: context,
                                                 builder: (context) {
                                                   return AlertDialog(
-                                                    title: Text(scanned["itemCode"],
+                                                    title: Text(scanned["itemcode"],
                                                       style: GoogleFonts.urbanist(
                                                           fontSize: 30,
                                                           fontWeight: FontWeight.w800,
@@ -251,7 +251,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                       CrossAxisAlignment.start,
                                                       children: [
                                                         Text(
-                                                          '${scanned["itemDesc"]}',
+                                                          '${scanned["itemdesc"]}',
                                                           style: GoogleFonts.urbanist(
                                                               fontSize: 15,
                                                               fontWeight:
@@ -267,7 +267,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                               color: Colors.black54),
                                                         ),
                                                         Text(
-                                                          "Total Quantity: ${scanned["scanQty"]}",
+                                                          "Total Quantity: ${scanned["scanqty"]}",
                                                           style: GoogleFonts.urbanist(
                                                               fontSize: 15,
                                                               fontWeight:
@@ -319,7 +319,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                                       offline.qtyCon.text = '0';
                                                                       print('====${offline.quantity.value}======${offline.qtyCon.text}');
                                                                     } else {
-                                                                      offline.quantity.value = int.parse(value);
+                                                                      offline.quantity.value = double.parse(value);
                                                                       print('====${offline.quantity.value}======${offline.qtyCon.text}');
                                                                     }
                                                                   },
@@ -330,7 +330,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                                     ),
                                                                     filled: true,
                                                                     hintText:
-                                                                    '${scanned["scanQty"]}',
+                                                                    '${scanned["scanqty"]}',
                                                                     hintStyle: const TextStyle(color: Colors.white, fontSize: 50,fontWeight: FontWeight.w600),
                                                                     fillColor: Colors.blueGrey[50],
                                                                   ),
@@ -375,7 +375,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                             ),
                                                             onPressed: () async {
                                                               //post to api
-                                                              await offline.adjustmentQty(context,scanned["scanQty"],scanned["itemCode"]);
+                                                              await offline.adjustmentQty(context,double.parse(scanned["scanqty"]),scanned["itemcode"]);
                                                               await offline.getScannerTable();
                                                             },
                                                             child: Text(
@@ -413,7 +413,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                                     ),
                                                                   ));
                                                               //post to api
-                                                              await offline.updateQty(scanned["itemCode"]);
+                                                              await offline.updateQty(scanned["itemcode"]);
                                                               await offline.getScannerTable();
                                                               Navigator.pop(context);
 
@@ -477,7 +477,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async{
           //await offline.addItem('2120293928');
-           //await offline.addItem('0293928');
+           //await offline.addItem('0267512');
            //await offline.addItem('5021464959043');
           //await offline.addItem('088873');
           //await offline.getScannerTable();

@@ -140,17 +140,19 @@ class OfflineController extends GetxController {
   Future<void> updateQty(String itemCode) async {
     if (qtyCon.text.isEmpty) {
       qtyCon.text = quantity.value.toString();
-      //update the database value
+      //update the database value delete the row
+
     } else {
       print('=========${qtyCon.text}');
       //update the database value
+      await OfflineRepo().updateQuantity(itemCode, qtyCon.text);
     }
     qtyCon.clear();
     quantity.value = 0;
   }
 
   //adjustment quantity
-  Future<void> adjustmentQty(context, int totalQty, String itemCode) async {
+  Future<void> adjustmentQty(context, double totalQty, String itemCode) async {
     if (double.parse(qtyCon.text) > totalQty) {
       Get.snackbar(
           'Warning!', "Quantity must be less than or equal total quantity",
@@ -164,10 +166,11 @@ class OfflineController extends GetxController {
       if (qtyCon.text.isEmpty) {
         qtyCon.text = '0';
         print('=========${qtyCon.text}');
-        //update the database in the adjustment field
+        await OfflineRepo().adjustQuantity(itemCode, qtyCon.text);
       } else {
         print('=========${qtyCon.text}');
         //update the database in the adjustment field
+        await OfflineRepo().adjustQuantity(itemCode, qtyCon.text);
         Navigator.pop(context);
       }
     }
@@ -176,14 +179,12 @@ class OfflineController extends GetxController {
   }
 
   //increment function
-  RxInt quantity = 0.obs;
+  RxDouble quantity = 0.0.obs;
 
   //making textField iterable update the value of both textController and quantity
   void updateTQ(String value) {
     qtyCon.text = value;
-    quantity.value = int.parse(value);
-    print('update first quantity with the total amount : ${quantity.value}');
-    print('update first textController with the total amount : ${qtyCon.text}');
+    quantity.value = double.parse(qtyCon.text);
   }
 
   void incrementQuantity() {

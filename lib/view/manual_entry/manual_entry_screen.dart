@@ -5,6 +5,7 @@ import 'package:zebra_scanner_final/controller/manual_entry_controller.dart';
 import 'package:zebra_scanner_final/controller/offline_controller.dart';
 import 'package:zebra_scanner_final/controller/online_controller.dart';
 import 'package:zebra_scanner_final/controller/server_controller.dart';
+import 'package:zebra_scanner_final/db_helper/offline_repo.dart';
 import 'package:zebra_scanner_final/widgets/appBar_widget.dart';
 import 'package:get/get.dart';
 import 'package:zebra_scanner_final/widgets/extension_class.dart';
@@ -38,8 +39,14 @@ class _ManualEntryState extends State<ManualEntry> {
           color: Colors.white,
           leading: GestureDetector(
             onTap: () async{
-              Get.back();
-              await online.productList(online.tagNumber.value, server.ipAddress.value, online.storeID.value);
+              if(widget.mode == 'Online'){
+
+                Get.back();
+                await online.productList(online.tagNumber.value, server.ipAddress.value, online.storeID.value);
+              }else{
+                Get.back();
+                await offline.getScannerTable();
+              }
             },
             child: const Icon(
               Icons.arrow_back,
@@ -174,8 +181,8 @@ class _ManualEntryState extends State<ManualEntry> {
                           onPressed: () {
                             // make some logic to post data into server or local database
                             if(manual.productCode.text.length == 5 || manual.productCode.text.length == 7){
-                              print('< 5/12 entered');
                               if(widget.mode == 'Online'){
+                                print('online entered');
                                 //online logic
                                 manual.addItemManually(
                                     context,
@@ -187,6 +194,7 @@ class _ManualEntryState extends State<ManualEntry> {
                                 );
                               }else{
                                 //offline login
+                                print('offline entered');
                                 manual.addManuallyOffline(context);
                               }
                             }else{

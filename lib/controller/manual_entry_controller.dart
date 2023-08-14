@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:zebra_scanner_final/controller/login_controller.dart';
+import 'package:zebra_scanner_final/controller/server_controller.dart';
+import 'package:zebra_scanner_final/db_helper/offline_repo.dart';
 import '../constants/const_colors.dart';
 import '../widgets/reusable_alert.dart';
 
 class ManualController extends GetxController {
   LoginController login = Get.find<LoginController>();
+  ServerController server = Get.find<ServerController>();
   //manual entry functionality
   TextEditingController productCode = TextEditingController();
   TextEditingController qtyController = TextEditingController();
@@ -88,6 +91,16 @@ class ManualController extends GetxController {
     }else{
       try{
         //insert into scanner table
+        entryDone(false);
+        isEmptyField(true);
+        clearTextField();
+        Get.snackbar('Success', 'Product added',
+          backgroundColor: ConstantColors.uniGreen,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 2),
+        );
+        await OfflineRepo().manualEntry(productCode.text, qtyController.text, server.deviceID.value, login.userId.value);
+
       }catch(e){
         entryDone(false);
         isEmptyField(false);
