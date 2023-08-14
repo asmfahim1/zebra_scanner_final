@@ -89,7 +89,9 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
           ),
           action: [
             GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  offline.uploadToServer();
+                },
                 child: const Padding(
                   padding: EdgeInsets.only(right: 10),
                   child: Icon(
@@ -477,11 +479,11 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async{
           //await offline.addItem('2120293928');
-          //await offline.addItem('0259175');
+           await offline.addItem('0267512');
            //await offline.addItem('5021464959043');
           //await offline.addItem('088873');
           //await offline.getScannerTable();
-          Get.to(()=> ManualEntry(mode: 'offline',));
+          //Get.to(()=> ManualEntry(mode: 'offline',));
         },
         label: Row(
           children: [

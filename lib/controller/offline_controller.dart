@@ -131,7 +131,17 @@ class OfflineController extends GetxController {
       postProduct(true);
       await OfflineRepo().insertToScanner(itemCode, server.deviceID.value, loginController.userId.value);
       await getScannerTable();
+      postProduct(false);
     }catch(e){
+      postProduct(false);
+      Get.snackbar(
+          'Warning!', "Quantity must be less than or equal total quantity",
+          borderWidth: 1.5,
+          borderColor: Colors.black54,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 2),
+          snackPosition: SnackPosition.TOP);
       print('error occurred inserting into scan table $e');
     }
   }
@@ -165,11 +175,9 @@ class OfflineController extends GetxController {
     } else {
       if (qtyCon.text.isEmpty) {
         qtyCon.text = '0';
-        print('=========${qtyCon.text}');
         await OfflineRepo().adjustQuantity(itemCode, qtyCon.text);
       } else {
         print('=========${qtyCon.text}');
-        //update the database in the adjustment field
         await OfflineRepo().adjustQuantity(itemCode, qtyCon.text);
         Navigator.pop(context);
       }
@@ -292,6 +300,17 @@ class OfflineController extends GetxController {
     Get.snackbar('Successful', 'Data deleted',
         backgroundColor: Colors.white, duration: const Duration(seconds: 1));
     print('Data deleted');
+  }
+
+  RxBool uploaded = false.obs;
+  List scannedData = [];
+  Future<void> uploadToServer() async{
+    scannedData = await OfflineRepo().getScannedProducts();
+    for(int i = 0; i < scannedData.length; i++){
+      var responseBody = jsonEncode(<String, dynamic>{
+
+      });
+    }
   }
 
 }
