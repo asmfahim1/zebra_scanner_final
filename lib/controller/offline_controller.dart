@@ -12,7 +12,6 @@ import '../model/productList_model.dart';
 import '../model/supplier_model.dart';
 import '../model/taglist_model.dart';
 import '../constants/const_colors.dart';
-import '../view/offline_process/offline-scan_screen.dart';
 
 class OfflineController extends GetxController {
   LoginController loginController = Get.find<LoginController>();
@@ -138,14 +137,7 @@ class OfflineController extends GetxController {
   }
 
   //manual entry quantity
-  Future<void> updateQty(
-      String ipAddress,
-      String itemCode,
-      String userId,
-      String tagNum,
-      String outlet,
-      String storeId,
-      String deviceID) async {
+  Future<void> updateQty(String itemCode) async {
     if (qtyCon.text.isEmpty) {
       qtyCon.text = quantity.value.toString();
       //update the database value
@@ -158,25 +150,16 @@ class OfflineController extends GetxController {
   }
 
   //adjustment quantity
-  Future<void> adjustmentQty(
-      context,
-      int totalQty,
-      String ipAddress,
-      String itemCode,
-      String userId,
-      String tagNum,
-      String outlet,
-      String storeId,
-      String deviceID) async {
+  Future<void> adjustmentQty(context, int totalQty, String itemCode) async {
     if (double.parse(qtyCon.text) > totalQty) {
       Get.snackbar(
           'Warning!', "Quantity must be less than or equal total quantity",
           borderWidth: 1.5,
           borderColor: Colors.black54,
+          backgroundColor: Colors.red,
           colorText: Colors.white,
-          backgroundColor: ConstantColors.comColor.withOpacity(0.4),
-          duration: const Duration(seconds: 1),
-          snackPosition: SnackPosition.BOTTOM);
+          duration: const Duration(seconds: 2),
+          snackPosition: SnackPosition.TOP);
     } else {
       if (qtyCon.text.isEmpty) {
         qtyCon.text = '0';
@@ -265,14 +248,24 @@ class OfflineController extends GetxController {
       } else {
         isFetched(false);
         Get.snackbar('Error', 'Something went wrong',
-            backgroundColor: Colors.red, duration: const Duration(seconds: 1));
+            borderWidth: 1.5,
+            borderColor: Colors.black54,
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+            duration: const Duration(seconds: 2),
+            snackPosition: SnackPosition.TOP);
         print('Error occurred: ${responseMaster.statusCode}');
         return 'Error in fetching data';
       }
     } catch (error) {
       isFetched(false);
       Get.snackbar('Error', 'Something went wrong',
-          backgroundColor: Colors.red, duration: const Duration(seconds: 2),);
+          borderWidth: 1.5,
+          borderColor: Colors.black54,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 2),
+          snackPosition: SnackPosition.TOP);
       print('There is a issue Product fetching: $error');
       return 'Error in the method';
     }

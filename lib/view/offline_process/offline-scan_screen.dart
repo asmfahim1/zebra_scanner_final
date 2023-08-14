@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_datawedge/flutter_datawedge.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -89,9 +90,9 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
           action: [
             GestureDetector(
                 onTap: () {},
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: const Icon(
+                child: const Padding(
+                  padding: EdgeInsets.only(right: 10),
+                  child: Icon(
                     Icons.upload_rounded,
                     size: 30,
                     color: ConstantColors.uniGreen1,
@@ -101,7 +102,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
         ),
       ),
       body: Container(
-        padding: EdgeInsets.all(5.0),
+        padding: const EdgeInsets.all(5.0),
         child: Obx((){
           return offline.productLoaded.value
               ? Center(
@@ -234,15 +235,12 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                           ),
                                           GestureDetector(
                                             onTap: () async {
-                                              /*offline.updateTQ(
-                                                '${onlineController.products[index].scanQty}');
+                                              offline.updateTQ('${scanned["scanqty"]}');
                                             showDialog(
                                                 context: context,
                                                 builder: (context) {
                                                   return AlertDialog(
-                                                    title: Text(
-                                                      onlineController
-                                                          .products[index].itemCode,
+                                                    title: Text(scanned["itemCode"],
                                                       style: GoogleFonts.urbanist(
                                                           fontSize: 30,
                                                           fontWeight: FontWeight.w800,
@@ -253,7 +251,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                       CrossAxisAlignment.start,
                                                       children: [
                                                         Text(
-                                                          '${onlineController.products[index].itemDesc}',
+                                                          '${scanned["itemDesc"]}',
                                                           style: GoogleFonts.urbanist(
                                                               fontSize: 15,
                                                               fontWeight:
@@ -261,7 +259,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                               color: Colors.black54),
                                                         ),
                                                         Text(
-                                                          "${onlineController.products[index].xcus}",
+                                                          "${scanned["xcus"]}",
                                                           style: GoogleFonts.urbanist(
                                                               fontSize: 15,
                                                               fontWeight:
@@ -269,7 +267,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                               color: Colors.black54),
                                                         ),
                                                         Text(
-                                                          "Total Quantity: ${onlineController.products[index].scanQty}",
+                                                          "Total Quantity: ${scanned["scanQty"]}",
                                                           style: GoogleFonts.urbanist(
                                                               fontSize: 15,
                                                               fontWeight:
@@ -285,13 +283,13 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                           children: [
                                                             GestureDetector(
                                                                 onTap: () {
-                                                                  onlineController.decrementQuantity();
+                                                                  offline.decrementQuantity();
                                                                 },
-                                                                child: CircleAvatar(
+                                                                child: const CircleAvatar(
                                                                   backgroundColor:
                                                                   ConstantColors.comColor,
                                                                   radius: 15,
-                                                                  child: const Icon(
+                                                                  child: Icon(
                                                                     Icons.remove,
                                                                     size: 20,
                                                                   ),
@@ -300,61 +298,39 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                               width: 10,
                                                             ),
                                                             Container(
-                                                                width: MediaQuery.of(
-                                                                    context)
-                                                                    .size
-                                                                    .width /
-                                                                    3.5,
+                                                                width: MediaQuery.of(context).size.width / 3.5,
                                                                 child: TextField(
                                                                   inputFormatters: [
-                                                                    FilteringTextInputFormatter
-                                                                        .deny(RegExp(
-                                                                        r'^0')),
-                                                                    FilteringTextInputFormatter
-                                                                        .deny(RegExp(
-                                                                        r'-')),
-                                                                    FilteringTextInputFormatter
-                                                                        .deny(RegExp(
-                                                                        r',')),
-                                                                    FilteringTextInputFormatter
-                                                                        .deny(RegExp(
-                                                                        r'\+')),
-                                                                    FilteringTextInputFormatter
-                                                                        .deny(RegExp(
-                                                                        r'\*')),
-                                                                    FilteringTextInputFormatter
-                                                                        .deny(RegExp(
-                                                                        r'/')),
-                                                                    FilteringTextInputFormatter
-                                                                        .deny(RegExp(
-                                                                        r'=')),
-                                                                    FilteringTextInputFormatter
-                                                                        .deny(RegExp(
-                                                                        r'%')),
-                                                                    FilteringTextInputFormatter
-                                                                        .deny(RegExp(
-                                                                        r' ')),
+                                                                    FilteringTextInputFormatter.deny(RegExp(r'^0')),
+                                                                    FilteringTextInputFormatter.deny(RegExp(r'-')),
+                                                                    FilteringTextInputFormatter.deny(RegExp(r',')),
+                                                                    FilteringTextInputFormatter.deny(RegExp(r'\+')),
+                                                                    FilteringTextInputFormatter.deny(RegExp(r'\*')),
+                                                                    FilteringTextInputFormatter.deny(RegExp(r'/')),
+                                                                    FilteringTextInputFormatter.deny(RegExp(r'=')),
+                                                                    FilteringTextInputFormatter.deny(RegExp(r'%')),
+                                                                    FilteringTextInputFormatter.deny(RegExp(r' ')),
                                                                   ],
                                                                   textAlign: TextAlign.center,
-                                                                  controller: onlineController.qtyCon,
+                                                                  controller: offline.qtyCon,
                                                                   //by using on submitted function, it will immediately after pressing the value done
                                                                   onSubmitted: (value) {
                                                                     if (value.isEmpty) {
-                                                                      onlineController.qtyCon.text = '0';
-                                                                      print('====${onlineController.quantity.value}======${onlineController.qtyCon.text}');
+                                                                      offline.qtyCon.text = '0';
+                                                                      print('====${offline.quantity.value}======${offline.qtyCon.text}');
                                                                     } else {
-                                                                      onlineController.quantity.value = int.parse(value);
-                                                                      print('====${onlineController.quantity.value}======${onlineController.qtyCon.text}');
+                                                                      offline.quantity.value = int.parse(value);
+                                                                      print('====${offline.quantity.value}======${offline.qtyCon.text}');
                                                                     }
                                                                   },
                                                                   decoration: InputDecoration(
                                                                     focusedBorder: OutlineInputBorder(
-                                                                      borderSide: BorderSide(width: 1.5, color: ConstantColors.comColor,),
+                                                                      borderSide: const BorderSide(width: 1.5, color: ConstantColors.comColor,),
                                                                       borderRadius: BorderRadius.circular(5.5),
                                                                     ),
                                                                     filled: true,
                                                                     hintText:
-                                                                    '${onlineController.products[index].scanQty}',
+                                                                    '${scanned["scanQty"]}',
                                                                     hintStyle: const TextStyle(color: Colors.white, fontSize: 50,fontWeight: FontWeight.w600),
                                                                     fillColor: Colors.blueGrey[50],
                                                                   ),
@@ -370,14 +346,13 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                             ),
                                                             GestureDetector(
                                                                 onTap: () {
-                                                                  onlineController
-                                                                      .incrementQuantity();
+                                                                  offline.incrementQuantity();
                                                                 },
-                                                                child: CircleAvatar(
+                                                                child: const CircleAvatar(
                                                                   backgroundColor:
                                                                   ConstantColors.comColor,
                                                                   radius: 15,
-                                                                  child: const Icon(
+                                                                  child: Icon(
                                                                     Icons.add,
                                                                     size: 20,
                                                                   ),
@@ -400,39 +375,8 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                             ),
                                                             onPressed: () async {
                                                               //post to api
-                                                              await onlineController
-                                                                  .adjustmentQty(
-                                                                  context,
-                                                                  onlineController
-                                                                      .products[
-                                                                  index]
-                                                                      .scanQty,
-                                                                  serverController
-                                                                      .ipAddress
-                                                                      .value,
-                                                                  onlineController
-                                                                      .products[
-                                                                  index]
-                                                                      .itemCode,
-                                                                  widget.userId,
-                                                                  widget.tagNum,
-                                                                  widget.outlet,
-                                                                  widget.storeId,
-                                                                  serverController
-                                                                      .deviceID
-                                                                      .value);
-                                                              await onlineController
-                                                                  .productList(
-                                                                  widget.tagNum,
-                                                                  serverController
-                                                                      .ipAddress
-                                                                      .value);
-
-                                                              // var snackBar = SnackBar(
-                                                              //     content: Text('Hello World'));
-                                                              // ScaffoldMessenger.of(context)
-                                                              //     .showSnackBar(snackBar);
-                                                              //scanBarcodeNormal();
+                                                              await offline.adjustmentQty(context,scanned["scanQty"],scanned["itemCode"]);
+                                                              await offline.getScannerTable();
                                                             },
                                                             child: Text(
                                                               "Adjustment",
@@ -469,28 +413,8 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                                     ),
                                                                   ));
                                                               //post to api
-                                                              await onlineController
-                                                                  .updateQty(
-                                                                  serverController
-                                                                      .ipAddress
-                                                                      .value,
-                                                                  onlineController
-                                                                      .products[
-                                                                  index]
-                                                                      .itemCode,
-                                                                  widget.userId,
-                                                                  widget.tagNum,
-                                                                  widget.outlet,
-                                                                  widget.storeId,
-                                                                  serverController
-                                                                      .deviceID
-                                                                      .value);
-                                                              await onlineController
-                                                                  .productList(
-                                                                  widget.tagNum,
-                                                                  serverController
-                                                                      .ipAddress
-                                                                      .value);
+                                                              await offline.updateQty(scanned["itemCode"]);
+                                                              await offline.getScannerTable();
                                                               Navigator.pop(context);
 
                                                               // var snackBar = SnackBar(
@@ -514,7 +438,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                     ],
                                                     scrollable: true,
                                                   );
-                                                });*/
+                                                });
                                             },
                                             child: Container(
                                               width: 100,
@@ -555,9 +479,9 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
           //await offline.addItem('2120293928');
            //await offline.addItem('0293928');
            //await offline.addItem('5021464959043');
-           await offline.addItem('088873');
+          //await offline.addItem('088873');
           //await offline.getScannerTable();
-          //Get.to(()=> ManualEntry(mode: 'offline',));
+          Get.to(()=> ManualEntry(mode: 'offline',));
         },
         label: Row(
           children: [
