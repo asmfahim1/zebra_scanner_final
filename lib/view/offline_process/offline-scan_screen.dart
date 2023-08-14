@@ -552,7 +552,10 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async{
-          await offline.addItem('0255789');
+          //await offline.addItem('2120293928');
+           //await offline.addItem('0293928');
+           //await offline.addItem('5021464959043');
+           await offline.addItem('088873');
           //await offline.getScannerTable();
           //Get.to(()=> ManualEntry(mode: 'offline',));
         },

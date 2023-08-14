@@ -130,7 +130,7 @@ class OfflineController extends GetxController {
   Future<void> addItem(String itemCode) async {
     try{
       postProduct(true);
-      await OfflineRepo().insertToScanner(itemCode);
+      await OfflineRepo().insertToScanner(itemCode, server.deviceID.value, loginController.userId.value);
       await getScannerTable();
     }catch(e){
       print('error occurred inserting into scan table $e');
