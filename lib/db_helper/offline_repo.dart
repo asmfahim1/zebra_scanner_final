@@ -44,7 +44,7 @@ class OfflineRepo{
             result = await dbClient.rawInsert(
               'INSERT INTO ${DBHelper.scannerTable} '
                   '(scanned_code, itemcode, itemdesc, scanqty, adjustqty, autoqty, manualqty, xcus, device_id, store_id, tag_num, user_id) '
-                  'VALUES (?, ?, ?, "1", "0", "1", "0", ?, ?, "77", ?, ?)',
+                  'VALUES (?, ?, ?, "1.0", "0.0", "1.0", "0.0", ?, ?, "77", ?, ?)',
               [itemCode, itemCode, itemDesc, xcus, deviceID, tag_no, userID],
             );
 
@@ -85,7 +85,7 @@ class OfflineRepo{
             result = await dbClient.rawInsert(
               'INSERT INTO ${DBHelper.scannerTable} '
                   '(scanned_code, itemcode, itemdesc, scanqty, adjustqty, autoqty, manualqty, xcus, device_id, store_id, tag_num, user_id) '
-                  'VALUES (?, ?, ?, "1.0", "0", "1.0", "0", ?, ?, "77", ?, ?)',
+                  'VALUES (?, ?, ?, "1.0", "0.0", "1.0", "0.0", ?, ?, "77", ?, ?)',
               [itemCode, mainItem, itemDesc, xcus, deviceID, tag_no, userID],
             );
 
@@ -134,7 +134,7 @@ class OfflineRepo{
             result = await dbClient.rawInsert(
               'INSERT INTO ${DBHelper.scannerTable} '
                   '(scanned_code, itemcode, itemdesc, scanqty, adjustqty, autoqty, manualqty, xcus, device_id, store_id, tag_num, user_id) '
-                  'VALUES (?, ?, ?, "1", "0", "1", "0", ?, ?, "77", ?, ?)',
+                  'VALUES (?, ?, ?, "1.0", "0.0", "1.0", "0.0", ?, ?, "77", ?, ?)',
               [itemCode, mainItem, itemDesc, xcus, deviceID, tag_no, userID],
             );
 
@@ -187,9 +187,9 @@ class OfflineRepo{
             // Item exists, perform an update using raw SQL query
             result = await dbClient.rawUpdate(
               'UPDATE ${DBHelper.scannerTable} '
-                  'SET scanqty = scanqty + 1, autoqty = autoqty + 1 '
+                  'SET scanqty = scanqty + ? , autoqty = autoqty + 1 '
                   'WHERE scanned_code = ?',
-              [itemCode],
+              [qty,itemCode],
             );
           } else {
             print('description: ${itemDesc}');

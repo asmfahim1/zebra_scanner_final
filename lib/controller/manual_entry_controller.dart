@@ -93,14 +93,13 @@ class ManualController extends GetxController {
         //insert into scanner table
         entryDone(false);
         isEmptyField(true);
+        await OfflineRepo().manualEntry(productCode.text, qtyController.text, server.deviceID.value, login.userId.value);
         clearTextField();
         Get.snackbar('Success', 'Product added',
           backgroundColor: ConstantColors.uniGreen,
           colorText: Colors.white,
           duration: const Duration(seconds: 2),
         );
-        await OfflineRepo().manualEntry(productCode.text, qtyController.text, server.deviceID.value, login.userId.value);
-
       }catch(e){
         entryDone(false);
         isEmptyField(false);

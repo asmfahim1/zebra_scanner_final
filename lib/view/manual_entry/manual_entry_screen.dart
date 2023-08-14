@@ -63,8 +63,8 @@ class _ManualEntryState extends State<ManualEntry> {
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text('Manual Entry')
+                      children: const [
+                        Text('Manual Entry')
                       ],
                     ),
                     Container(
