@@ -56,9 +56,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
             );
             await offline.getScannerTable();
           } else {
-              //await offline.addItem(offline.lastCode.value);
-              await offline.addItem('0255789');
-              //await offline.getScannerTable();
+              await offline.addItem(offline.lastCode.value);
           }
 
 
@@ -89,17 +87,16 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
           ),
           action: [
             GestureDetector(
-                onTap: () {
-                  offline.uploadToServer();
-                },
-                child: const Padding(
-                  padding: EdgeInsets.only(right: 10),
-                  child: Icon(
-                    Icons.upload_rounded,
-                    size: 30,
-                    color: ConstantColors.uniGreen1,
-                  ),
-                ))
+            onTap: () {offline.uploadToServer();},
+            child: const Padding(
+                padding: EdgeInsets.only(right: 10),
+                child: Icon(
+                  Icons.upload_rounded,
+                  size: 30,
+                  color: ConstantColors.uniGreen1,
+                )
+              ),
+            )
           ],
         ),
       ),
@@ -478,12 +475,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async{
-          //await offline.addItem('2120293928');
-           await offline.addItem('0267512');
-           //await offline.addItem('5021464959043');
-          //await offline.addItem('088873');
-          //await offline.getScannerTable();
-          //Get.to(()=> ManualEntry(mode: 'offline',));
+          Get.to(()=> ManualEntry(mode: 'offline',));
         },
         label: Row(
           children: [
@@ -510,7 +502,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                 //     right: 10,
                 //     top: -1,
                 //     child: BigText(
-                //       text: '${cartController.totalClick}',
+                //   0285602    text: '${cartController.totalClick}',
                 //       color: Colors.white,
                 //     ),
                 //   ),

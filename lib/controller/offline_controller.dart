@@ -6,6 +6,7 @@ import 'package:zebra_scanner_final/controller/login_controller.dart';
 import 'package:zebra_scanner_final/controller/server_controller.dart';
 import 'package:zebra_scanner_final/db_helper/offline_repo.dart';
 import 'package:zebra_scanner_final/widgets/special_alert.dart';
+import '../constants/app_constants.dart';
 import '../db_helper/master_item.dart';
 import '../model/offline_product_model.dart';
 import '../model/productList_model.dart';
@@ -129,8 +130,19 @@ class OfflineController extends GetxController {
   Future<void> addItem(String itemCode) async {
     try{
       postProduct(true);
-      await OfflineRepo().insertToScanner(itemCode, server.deviceID.value, loginController.userId.value);
-      await getScannerTable();
+      int result = await OfflineRepo().insertToScanner(itemCode, server.deviceID.value, loginController.userId.value);
+      if(result == 0){
+        await getScannerTable();
+      }else{
+        Get.snackbar(
+            'Warning!', "Invalid code",
+            borderWidth: 1.5,
+            borderColor: Colors.black54,
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+            duration: const Duration(seconds: 2),
+            snackPosition: SnackPosition.TOP);
+      }
       postProduct(false);
     }catch(e){
       postProduct(false);
@@ -302,14 +314,58 @@ class OfflineController extends GetxController {
     print('Data deleted');
   }
 
-  RxBool uploaded = false.obs;
+  //RxBool uploaded = false.obs;
   List scannedData = [];
   Future<void> uploadToServer() async{
     scannedData = await OfflineRepo().getScannedProducts();
-    for(int i = 0; i < scannedData.length; i++){
-      var responseBody = jsonEncode(<String, dynamic>{
-
-      });
+    if(scannedData.isEmpty){
+      Get.snackbar('Warning!', 'Your have no data to upload',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 1));
+    }else{
+      try{
+        productLoaded(true);
+        for(int i = 0; i < scannedData.length; i++){
+          var responseBody = jsonEncode(<String, dynamic>{
+            "scanned_code" : scannedData[i]["scanned_code"],
+            "xitem" : scannedData[i]["itemcode"],
+            "scanqty" : scannedData[i]["scanqty"],
+            "adjustqty" : scannedData[i]["adjustqty"],
+            "autoqty" : scannedData[i]["autoqty"],
+            "manualqty" : scannedData[i]["manualqty"],
+            "xcus" : scannedData[i]["xcus"],
+            "device" : scannedData[i]["device_id"],
+            "user_id" : scannedData[i]["userIud"],
+            "tag_no" : scannedData[i]["tag_num"],
+          });
+          var response = await http.post(Uri.parse('http://${server.ipAddress}/unistock/zebra/offlineUpload.php'),
+              body: responseBody);
+          if(response.statusCode == 200){
+            //delete itemwise scanner table row
+            await OfflineRepo().itemWiseDelete(scannedData[i]["itemcode"]);
+          }else{
+            Get.snackbar('Warning!', 'Please check your internet connection',
+                backgroundColor: Colors.red,
+                colorText: Colors.white,
+                duration: const Duration(seconds: 1));
+          }
+        }
+        await getScannerTable();
+        productLoaded(false);
+        Get.snackbar('Successful!', 'Uploaded to server successfully',
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+            duration: const Duration(seconds: 1));
+        print("all data uploaded successfully and deleted form the table");
+      }catch(e){
+        productLoaded(false);
+        Get.snackbar('Warning!', 'Upload Failed',
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+            duration: const Duration(seconds: 1));
+        //get snackbar message server problem
+      }
     }
   }
 
