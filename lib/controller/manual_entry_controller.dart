@@ -94,15 +94,26 @@ class ManualController extends GetxController {
     }else{
       try{
         //insert into scanner table
+        int result = await OfflineRepo().manualEntry(productCode.text, qtyController.text, server.deviceID.value, login.userId.value);
+        if(result == 0){
+          clearTextField();
+          Get.snackbar('Success', 'Product added',
+            backgroundColor: ConstantColors.uniGreen,
+            colorText: Colors.white,
+            duration: const Duration(seconds: 2),
+          );
+        }else{
+          Get.snackbar(
+              'Warning!', "Invalid code",
+              borderWidth: 1.5,
+              borderColor: Colors.black54,
+              backgroundColor: Colors.red,
+              colorText: Colors.white,
+              duration: const Duration(seconds: 2),
+              snackPosition: SnackPosition.TOP);
+        }
         entryDone(false);
-        isEmptyField(true);
-        await OfflineRepo().manualEntry(productCode.text, qtyController.text, server.deviceID.value, login.userId.value);
-        clearTextField();
-        Get.snackbar('Success', 'Product added',
-          backgroundColor: ConstantColors.uniGreen,
-          colorText: Colors.white,
-          duration: const Duration(seconds: 2),
-        );
+        isEmptyField(false);
       }catch(e){
         entryDone(false);
         isEmptyField(false);

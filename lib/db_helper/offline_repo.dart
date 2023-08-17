@@ -8,6 +8,7 @@ class OfflineRepo{
   ///insert to result table/scanner table
   Future<int> insertToScanner(String itemCode,String deviceID,String userID) async {
     var dbClient = await conn.db;
+    int success = 0;
     int result = 0;
     int codeLength = itemCode.length;
     try {
@@ -53,7 +54,8 @@ class OfflineRepo{
 
         }
         else{
-
+          success = 1;
+          return success;
         }
 
       } else if (codeLength >= 13) {
@@ -94,7 +96,8 @@ class OfflineRepo{
 
         }
         else{
-
+          success = 1;
+          return success;
         }
 
 
@@ -143,25 +146,31 @@ class OfflineRepo{
 
         }
         else{
-
+          success = 1;
+          return success;
         }
 
 
         // Similar logic for xbodycode
 
       } else {
-        return 0;
+        success = 1;
+        return success;
       }
     } catch (e) {
+
       print('There are some issues: $e');
+      success = 1;
+      return success;
     }
     print('the items are: $result');
-    return result;
+    return success;
   }
 
   //Manual Add
   Future<int> manualEntry(String itemCode,String qty,String deviceID,String userID) async {
     var dbClient = await conn.db;
+    int success = 0;
     int result = 0;
     int codeLength = itemCode.length;
     try {
@@ -207,17 +216,21 @@ class OfflineRepo{
 
         }
         else{
-
+          success = 1;
+          return success;
         }
 
       } else {
-        return 0;
+        success = 1;
+        return success;
       }
     } catch (e) {
       print('There are some issues: $e');
+      success = 1;
+      return success;
     }
     print('the items are: $result');
-    return result;
+    return success;
   }
 
 
@@ -315,6 +328,16 @@ class OfflineRepo{
     }
     // print("All cart product from Header: $cartList");
     return scannedProducts;
+  }
+
+  Future<void> itemWiseDelete(String itemcode) async{
+    try {
+    var dbClient = await conn.db;
+    dbClient!.rawQuery('DELETE FROM ${DBHelper.scannerTable} WHERE itemcode = ?', [itemcode]);
+    print("Row deleted successfully");
+    } catch (e) {
+    print('Something went wrong when deleting Item: $e');
+    }
   }
 
 }
