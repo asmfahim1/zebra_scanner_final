@@ -29,44 +29,56 @@ class LoginController extends GetxController {
 
   Future<void> loginMethod(
       String deviceId, String ipAddress, BuildContext context) async {
-    isLoading(true);
-    var response = await http.get(Uri.parse(
-        'http://$ipAddress/unistock/zebra/login.php?zemail=${user.text}&xpassword=${pass.text}'));
-    if (response.statusCode == 200) {
-      loginModel = loginModelFromJson(response.body);
-      if(user.text == loginModel.zemail && pass.text == loginModel.xpassword){
-        isLoading(false);
-        userId.value = loginModel.xposition.toString();
-        Get.to(() => const ModeSelect());
-        Get.snackbar('Success!', "Successfully logged in",
-          borderWidth: 1.5,
-          borderColor: Colors.black54,
-          colorText: Colors.white,
-          backgroundColor: ConstantColors.comColor.withOpacity(0.4),
-          duration: const Duration(seconds: 1),
-          snackPosition: SnackPosition.TOP,
-        );
-      }else{
+    try{
+      isLoading(true);
+      var response = await http.get(Uri.parse(
+          'http://$ipAddress/unistock/zebra/login.php?zemail=${user.text}&xpassword=${pass.text}'));
+      if (response.statusCode == 200) {
+        loginModel = loginModelFromJson(response.body);
+        if(user.text == loginModel.zemail && pass.text == loginModel.xpassword){
+          isLoading(false);
+          userId.value = loginModel.xposition.toString();
+          Get.to(() => const ModeSelect());
+          Get.snackbar('Success!', "Successfully logged in",
+            borderWidth: 1.5,
+            borderColor: Colors.black54,
+            colorText: Colors.white,
+            backgroundColor: ConstantColors.comColor.withOpacity(0.4),
+            duration: const Duration(seconds: 1),
+            snackPosition: SnackPosition.TOP,
+          );
+        }else{
+          isLoading(false);
+          showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => ReusableAlerDialogue(
+              headTitle: "Warning!",
+              message: "Invalid user name or password",
+              btnText: "Back",
+            ),
+          );
+        }
+      } else if (response.statusCode == 404) {
         isLoading(false);
         showDialog<String>(
           context: context,
           builder: (BuildContext context) => ReusableAlerDialogue(
             headTitle: "Warning!",
-            message: "Invalid user name or password",
+            message: "Invalid userid or password",
             btnText: "Back",
           ),
         );
       }
-    } else if (response.statusCode == 404) {
+    }catch(e){
       isLoading(false);
-      showDialog<String>(
-        context: context,
-        builder: (BuildContext context) => ReusableAlerDialogue(
-          headTitle: "Warning!",
-          message: "Invalid userid or password",
-          btnText: "Back",
-        ),
-      );
+      Get.snackbar('Warning!', 'Failed to connect server',
+          borderWidth: 1.5,
+          borderColor: Colors.black54,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 2),
+          snackPosition: SnackPosition.TOP);
+      print('There is a issue connecting to internet: $e');
     }
   }
 

@@ -6,7 +6,6 @@ import 'package:flutter_datawedge/flutter_datawedge.dart';
 import 'package:zebra_scanner_final/controller/login_controller.dart';
 import '../model/productList_model.dart';
 import '../constants/const_colors.dart';
-import '../widgets/reusable_alert.dart';
 
 class OnlineController extends GetxController {
   LoginController login = Get.find<LoginController>();
@@ -14,12 +13,6 @@ class OnlineController extends GetxController {
   RxString lastCode = ''.obs;
   TextEditingController qtyCon = TextEditingController();
   ConstantColors colors = ConstantColors();
-
-/*  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
-  }*/
 
   //API for ProductList
   RxBool haveProduct = false.obs;
@@ -44,12 +37,25 @@ class OnlineController extends GetxController {
         products = masterItemsModelFromJson(response.body);
       } else {
         haveProduct(false);
-        // print(response.body);
+        Get.snackbar('Warning!', 'Failed to fetch products',
+            borderWidth: 1.5,
+            borderColor: Colors.black54,
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+            duration: const Duration(seconds: 2),
+            snackPosition: SnackPosition.TOP);
         products = [];
       }
     }catch(e){
       haveProduct(false);
-      print('Error occured: $e');
+      Get.snackbar('Warning!', 'Failed to connect server',
+          borderWidth: 1.5,
+          borderColor: Colors.black54,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 2),
+          snackPosition: SnackPosition.TOP);
+      print('There is a issue connecting to internet: $e');
     }
   }
 
@@ -67,26 +73,42 @@ class OnlineController extends GetxController {
       String tagNum,
       String storeId,
       String deviceID) async {
-    postProduct(true);
-    var response = await http.post(
-        Uri.parse("http://$ipAddress/unistock/zebra/add_item.php"),
-        body: jsonEncode(<String, dynamic>{
-          "item": itemCode,
-          "user_id": login.userId.value,
-          "qty": 1.0,
-          "tag_no": tagNum,
-          "store": storeId,
-          "device": deviceID
-        }));
-    if(response.statusCode == 200){
-      print('response : ${response.statusCode}');
+    try{
+      postProduct(true);
+      var response = await http.post(
+          Uri.parse("http://$ipAddress/unistock/zebra/add_item.php"),
+          body: jsonEncode(<String, dynamic>{
+            "item": itemCode,
+            "user_id": login.userId.value,
+            "qty": 1.0,
+            "tag_no": tagNum,
+            "store": storeId,
+            "device": deviceID
+          }));
+      if(response.statusCode == 200){
+        print('response : ${response.statusCode}');
+        postProduct(false);
+      } else{
+        print('response : ${response.statusCode}');
+        postProduct(false);
+        Get.snackbar('Error', 'Invalid item code',
+            borderColor: Colors.black54,
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+            duration: const Duration(seconds: 2),
+        );
+        print('Error occurred: ${response.statusCode}');
+      }
+    }catch(e){
       postProduct(false);
-    } else{
-      print('response : ${response.statusCode}');
-      postProduct(false);
-      Get.snackbar('Error', 'Invalid item code',
-          backgroundColor: Colors.red, duration: const Duration(seconds: 1));
-      print('Error occurred: ${response.statusCode}');
+      Get.snackbar('Warning!', 'Failed to connect server',
+          borderWidth: 1.5,
+          borderColor: Colors.black54,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 2),
+          snackPosition: SnackPosition.TOP);
+      print('There is a issue connecting to internet: $e');
     }
   }
 
@@ -126,6 +148,13 @@ class OnlineController extends GetxController {
       qtyCon.clear();
       quantity.value = 0;
     }catch(e){
+      Get.snackbar('Warning!', 'Failed to connect server',
+          borderWidth: 1.5,
+          borderColor: Colors.black54,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 2),
+          snackPosition: SnackPosition.TOP);
       print('Somthing went wrong manual: $e');
     }
   }
@@ -201,6 +230,13 @@ class OnlineController extends GetxController {
       qtyCon.clear();
       quantity.value = 0;
     }catch(e){
+      Get.snackbar('Warning!', 'Failed to connect server',
+          borderWidth: 1.5,
+          borderColor: Colors.black54,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 2),
+          snackPosition: SnackPosition.TOP);
       print('Somthing went wrong : $e');
     }
   }

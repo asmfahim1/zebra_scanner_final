@@ -66,10 +66,13 @@ class ManualController extends GetxController {
         }catch(e){
           entryDone(false);
           isEmptyField(false);
-          Get.snackbar('Error', 'Something went wrong',
-            backgroundColor: Colors.red,
-            colorText: Colors.white,
-            duration: const Duration(seconds: 2),
+          Get.snackbar('Warning!', 'Failed to connect server',
+              borderWidth: 1.5,
+              borderColor: Colors.black54,
+              backgroundColor: Colors.red,
+              colorText: Colors.white,
+              duration: const Duration(seconds: 2),
+              snackPosition: SnackPosition.TOP
           );
           print('Exception : $e');
         }
