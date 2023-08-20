@@ -25,20 +25,19 @@ class ReusableTextPassField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      //margin: const EdgeInsets.only(left: 10, right: 10),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
       child: TextFormField(
         controller: server,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               width: 1.5,
               color: ConstantColors.uniGreen,
             ),
             borderRadius: BorderRadius.circular(40.0),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               width: 1.5,
               color: ConstantColors.comColor,
             ),
