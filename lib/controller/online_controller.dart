@@ -12,6 +12,7 @@ class OnlineController extends GetxController {
   RxString scannerStatus = "Scanner status".obs;
   RxString lastCode = ''.obs;
   TextEditingController qtyCon = TextEditingController();
+
   ConstantColors colors = ConstantColors();
 
   //API for ProductList
@@ -59,6 +60,25 @@ class OnlineController extends GetxController {
     }
   }
 
+  TextEditingController searchByName = TextEditingController();
+  //search mechanism for any name
+  RxString searchQuery = ''.obs;
+
+  // Filter suppliers based on search query
+  List get filteredSupList {
+    if (searchQuery.value.isEmpty) {
+      return products.toList();
+    } else {
+      return products
+          .where((addedProducts) => addedProducts.itemDesc.toLowerCase().contains(searchQuery.value.toLowerCase()))
+          .toList();
+    }
+  }
+
+  // Set the search query
+  void search(String query) {
+    searchQuery.value = query;
+  }
   void clearValue() {
     tagNumber.close();
     ipAdd.close();

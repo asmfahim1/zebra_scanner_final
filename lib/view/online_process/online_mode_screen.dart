@@ -82,8 +82,7 @@ class _OnlineModeState extends State<OnlineMode> {
             );
             await onlineController.productList(widget.tagNum, ipAddress, storeId);
           }
-        }
-        ,
+        },
         onStatusUpdate: (result) {
           ScannerStatusType status = result.status;
           onlineController.scannerStatus.value =
@@ -96,9 +95,9 @@ class _OnlineModeState extends State<OnlineMode> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
-        child: ReusableAppBar(
+        child: AppBar(
           elevation: 0,
-          color: Colors.white,
+          backgroundColor: Colors.white,
           leading: GestureDetector(
             onTap: () {
               Get.back();
@@ -109,7 +108,20 @@ class _OnlineModeState extends State<OnlineMode> {
               color: Colors.black,
             ),
           ),
-          action: [
+          title: Container(
+            height: 50,
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
+            child: TextFormField(
+              controller: onlineController.searchByName,
+              decoration: const InputDecoration(
+                  hintText: 'Search by name',
+                  border: OutlineInputBorder(),
+                  suffixIcon: Icon(Icons.search)),
+              onChanged: (value) => onlineController.search(value),
+            ),
+          ),
+          actions: [
             Padding(
               padding: const EdgeInsets.only(right: 5),
               child: Obx(
@@ -177,7 +189,7 @@ class _OnlineModeState extends State<OnlineMode> {
                   ),
                 );
               } else {
-                if (onlineController.products.isEmpty) {
+                if (onlineController.filteredSupList.isEmpty) {
                   return Center(
                       child: Text(
                     "No product found",
@@ -189,8 +201,9 @@ class _OnlineModeState extends State<OnlineMode> {
                   ));
                 } else {
                   return ListView.builder(
-                      itemCount: onlineController.products.length,
+                      itemCount: onlineController.filteredSupList.length,
                       itemBuilder: (context, index) {
+                        var products = onlineController.filteredSupList[index];
                         return Container(
                           height: MediaQuery.of(context).size.height / 4.22,
                           padding: const EdgeInsets.only(
@@ -218,8 +231,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
                                         Text(
-                                          onlineController
-                                              .products[index].itemCode,
+                                          products.itemCode,
                                           style: GoogleFonts.urbanist(
                                             color: Colors.black,
                                             fontSize: 20,
@@ -227,8 +239,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                           ),
                                         ),
                                         Text(
-                                          onlineController
-                                              .products[index].itemDesc,
+                                          products.itemDesc,
                                           overflow: TextOverflow.ellipsis,
                                           style: GoogleFonts.urbanist(
                                             color: Colors.black,
@@ -236,7 +247,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                           ),
                                         ),
                                         Text(
-                                          onlineController.products[index].xcus,
+                                          products.xcus,
                                           overflow: TextOverflow.ellipsis,
                                           style: GoogleFonts.urbanist(
                                             color: Colors.black,
@@ -244,7 +255,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                           ),
                                         ),
                                         Text(
-                                          "Total Quantity :  ${onlineController.products[index].scanQty}",
+                                          "Total Quantity :  ${products.scanQty}",
                                           style: GoogleFonts.urbanist(
                                             color: Colors.black,
                                             fontWeight: FontWeight.w800,
@@ -257,7 +268,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                 GestureDetector(
                                   onTap: () async {
                                     onlineController.updateTQ(
-                                        '${onlineController.products[index].scanQty}');
+                                        '${products.scanQty}');
                                     showDialog(
                                         context: context,
                                         builder: (context) {
@@ -275,7 +286,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  '${onlineController.products[index].itemDesc}',
+                                                  '${products.itemDesc}',
                                                   style: GoogleFonts.urbanist(
                                                       fontSize: 15,
                                                       fontWeight:
@@ -283,7 +294,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                       color: Colors.black54),
                                                 ),
                                                 Text(
-                                                  "${onlineController.products[index].xcus}",
+                                                  "${products.xcus}",
                                                   style: GoogleFonts.urbanist(
                                                       fontSize: 15,
                                                       fontWeight:
@@ -291,7 +302,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                       color: Colors.black54),
                                                 ),
                                                 Text(
-                                                  "Total Quantity: ${onlineController.products[index].scanQty}",
+                                                  "Total Quantity: ${products.scanQty}",
                                                   style: GoogleFonts.urbanist(
                                                       fontSize: 15,
                                                       fontWeight:
@@ -363,10 +374,8 @@ class _OnlineModeState extends State<OnlineMode> {
                                                           onSubmitted: (value) {
                                                             if (value.isEmpty) {
                                                               onlineController.qtyCon.text = '0';
-                                                              print('====${onlineController.quantity.value}======${onlineController.qtyCon.text}');
                                                             } else {
                                                               onlineController.quantity.value = double.parse(value);
-                                                              print('====${onlineController.quantity.value}======${onlineController.qtyCon.text}');
                                                             }
                                                           },
                                                           decoration: InputDecoration(
@@ -424,9 +433,9 @@ class _OnlineModeState extends State<OnlineMode> {
                                                       //post to api
                                                       await onlineController.adjustmentQty(
                                                               context,
-                                                              onlineController.products[index].scanQty,
+                                                              products.scanQty,
                                                               login.serverIp.value,
-                                                              onlineController.products[index].itemCode,
+                                                              products.itemCode,
                                                               widget.tagNum,
                                                               widget.outlet,
                                                               widget.storeId,
@@ -479,7 +488,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                       await onlineController
                                                           .updateQty(
                                                               login.serverIp.value,
-                                                              onlineController.products[index].itemCode,
+                                                              products.itemCode,
                                                               widget.tagNum,
                                                               widget.outlet,
                                                               widget.storeId,
@@ -540,6 +549,7 @@ class _OnlineModeState extends State<OnlineMode> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
+
           Get.to(()=> ManualEntry(mode: 'Online',));
         },
         label: Row(
@@ -563,15 +573,6 @@ class _OnlineModeState extends State<OnlineMode> {
                     ),
                   ),
                 ),
-                // Obx(() => Positioned(
-                //     right: 10,
-                //     top: -1,
-                //     child: BigText(
-                //       text: '${cartController.totalClick}',
-                //       color: Colors.white,
-                //     ),
-                //   ),
-                // ),
               ],
             )
           ],
