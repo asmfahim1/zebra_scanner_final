@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:zebra_scanner_final/constants/const_colors.dart';
+import 'package:zebra_scanner_final/controller/login_controller.dart';
 import 'package:zebra_scanner_final/controller/manual_entry_controller.dart';
 import 'package:zebra_scanner_final/controller/offline_controller.dart';
 import 'package:zebra_scanner_final/controller/online_controller.dart';
-import 'package:zebra_scanner_final/controller/server_controller.dart';
-import 'package:zebra_scanner_final/db_helper/offline_repo.dart';
 import 'package:zebra_scanner_final/widgets/appBar_widget.dart';
 import 'package:get/get.dart';
-import 'package:zebra_scanner_final/widgets/extension_class.dart';
-
 import '../../widgets/reusable_alert.dart';
 
 class ManualEntry extends StatefulWidget {
@@ -24,10 +21,10 @@ class ManualEntry extends StatefulWidget {
 }
 
 class _ManualEntryState extends State<ManualEntry> {
+  LoginController login = Get.find<LoginController>();
   ManualController manual = Get.put(ManualController());
   OnlineController online = Get.put(OnlineController());
   OfflineController offline = Get.put(OfflineController());
-  ServerController server = Get.put(ServerController());
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +39,7 @@ class _ManualEntryState extends State<ManualEntry> {
               if(widget.mode == 'Online'){
 
                 Get.back();
-                await online.productList(online.tagNumber.value, server.ipAddress.value, online.storeID.value);
+                await online.productList(online.tagNumber.value, login.serverIp.value, online.storeID.value);
               }else{
                 Get.back();
                 await offline.getScannerTable();
@@ -179,22 +176,18 @@ class _ManualEntryState extends State<ManualEntry> {
                             primary: ConstantColors.uniGreen,
                           ),
                           onPressed: () {
-                            // make some logic to post data into server or local database
                             if(manual.productCode.text.length == 5 || manual.productCode.text.length == 7){
                               if(widget.mode == 'Online'){
-                                print('online entered');
                                 //online logic
                                 manual.addItemManually(
                                     context,
-                                    server.ipAddress.value,
-                                    server.deviceId,
+                                    login.serverIp.value,
+                                    login.deviceID.value,
                                     online.user.value,
                                     online.tagNumber.value,
                                     online.storeID.value
                                 );
                               }else{
-                                //offline login
-                                print('offline entered');
                                 manual.addManuallyOffline(context);
                               }
                             }else{

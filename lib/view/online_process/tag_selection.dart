@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:zebra_scanner_final/controller/login_controller.dart';
 import 'package:zebra_scanner_final/controller/tag_controller.dart';
 import 'package:zebra_scanner_final/view/online_process/online_mode_screen.dart';
 import 'package:zebra_scanner_final/widgets/appBar_widget.dart';
 import 'package:get/get.dart';
 import 'package:zebra_scanner_final/constants/const_colors.dart';
-
-import '../../controller/server_controller.dart';
 
 class TagSelectScreen extends StatefulWidget {
   const TagSelectScreen({Key? key}) : super(key: key);
@@ -16,8 +15,8 @@ class TagSelectScreen extends StatefulWidget {
 }
 
 class _TagSelectScreenState extends State<TagSelectScreen> {
+  LoginController login = Get.find<LoginController>();
   TagController tagController = Get.put(TagController());
-  ServerController serverController = Get.put(ServerController());
   ConstantColors colors = ConstantColors();
 
   //need to call the tagList for first build
@@ -25,7 +24,7 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    tagController.listOfTags(serverController.ipAddress.value);
+    tagController.listOfTags(login.serverIp.value);
   }
 
   @override
@@ -106,16 +105,12 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
                             return GestureDetector(
                                 onTap: () {
                                   Get.to(() => OnlineMode(
-                                        tagNum: tagController
-                                            .tagList[index].xtagnum,
-                                        storeId: tagController
-                                            .tagList[index].xwh,
-                                        userId: tagController
-                                            .tagList[index].zauserid,
-                                        outlet: tagController
-                                            .tagList[index].xwh,
-                                        //adminId: 'tagController.tagList[index].zaip',
-                                      ));
+                                        tagNum: tagController.tagList[index].xtagnum,
+                                        storeId: tagController.tagList[index].xwh,
+                                        userId: tagController.tagList[index].zauserid,
+                                        outlet: tagController.tagList[index].xwh,
+                                      )
+                                  );
                                 },
                                 child: Stack(
                                   alignment: Alignment.center,

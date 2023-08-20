@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zebra_scanner_final/controller/login_controller.dart';
+import 'package:zebra_scanner_final/view/login_screen.dart';
 import 'package:zebra_scanner_final/view/online_process/tag_selection.dart';
 import 'package:get/get.dart';
 import 'package:zebra_scanner_final/view/server_setup_screen.dart';
@@ -39,22 +41,12 @@ class _ModeSelectState extends State<ModeSelect> {
           child: ReusableAppBar(
             elevation: 0,
             color: Colors.white,
-            // leading: GestureDetector(
-            //   onTap: () {
-            //     Get.back();
-            //   },
-            //   child: const Icon(
-            //     Icons.arrow_back,
-            //     size: 30,
-            //     color: Colors.black,
-            //   ),
-            // ),
             action: [
               GestureDetector(
-                onTap: () {
-                  Get.offAll(()=> ServerSetupScreen());
+                onTap: () async{
+                  await login.loginOutMethod(context);
                 },
-                child: const Icon(
+                child:  const Icon(
                   Icons.logout_sharp,
                   color: ConstantColors.uniGreen,
                   size: 30,

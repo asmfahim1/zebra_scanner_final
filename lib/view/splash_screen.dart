@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zebra_scanner_final/view/login_screen.dart';
 import 'package:zebra_scanner_final/view/server_setup_screen.dart';
 import 'package:zebra_scanner_final/constants/const_colors.dart';
 
@@ -11,11 +13,20 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with TickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController controller;
   ConstantColors colors = ConstantColors();
+
+  String? obtainedIpAddress;
+  Future getValidationData() async{
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    var savedIp = preferences.getString('ipAddress');
+    setState(() {
+      obtainedIpAddress = savedIp;
+    });
+    print('Saved Ip address is : $obtainedIpAddress');
+  }
 
   @override
   void initState() {
@@ -25,8 +36,10 @@ class _SplashScreenState extends State<SplashScreen>
       duration: const Duration(seconds: 3),
     )..forward();
     animation = CurvedAnimation(parent: controller, curve: Curves.linear);
-    Timer(const Duration(seconds: 4), () {
-      Get.to(() => const ServerSetupScreen());
+    getValidationData().whenComplete(() async{
+      Timer(const Duration(seconds: 3), () {
+        Get.to(() => obtainedIpAddress == null ? const ServerSetupScreen() : const LoginScreen());
+      });
     });
     super.initState();
   }

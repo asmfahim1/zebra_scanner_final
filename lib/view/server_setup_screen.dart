@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zebra_scanner_final/controller/server_controller.dart';
 import 'package:zebra_scanner_final/constants/const_colors.dart';
 import '../widgets/reusable_textfield.dart';
@@ -102,7 +103,6 @@ class _ServerSetupScreenState extends State<ServerSetupScreen> {
                     Obx(() {
                       return GestureDetector(
                         onTap: () async {
-                          //serverController.saveValue();
                           serverController.serverSetup();
                         },
                         child: Container(

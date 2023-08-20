@@ -143,10 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          loginController.loginMethod(
-                              serverController.deviceID.value,
-                              serverController.ipAddress.value,
-                              context);
+                          loginController.loginMethod(context);
                         },
                         child: Container(
                           height: MediaQuery.of(context).size.width / 6,
@@ -155,27 +152,18 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(10.0),
                             color: ConstantColors.comColor,
                           ),
-                          child: Center(
-                            child: Obx((){
-                              return loginController.isLoading.value
-                                  ? const SizedBox(
-                                      height: 25,
-                                      width: 25,
-                                      child: CircularProgressIndicator(color: Colors.white,),
-                                    )
-                                  : const Text(
-                                    'LOGIN',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                              );
-                            }),
+                          child: const Center(
+                            child: Text(
+                              'LOGIN',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-
                       const SizedBox(
                         height: 15,
                       ),

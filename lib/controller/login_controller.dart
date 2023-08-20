@@ -1,10 +1,13 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zebra_scanner_final/constants/const_colors.dart';
 import '../model/login_model.dart';
+import '../view/login_screen.dart';
 import '../view/mode_selector_screen.dart';
 import '../widgets/reusable_alert.dart';
 
@@ -16,29 +19,37 @@ class LoginController extends GetxController {
   var obscureText = true.obs;
 
   void toggle() {
-    print('$obscureText');
     obscureText.value = !obscureText.value;
-    print('$obscureText');
   }
 
   RxBool isChecked = false.obs;
   //login method
-  RxBool isLoading = false.obs;
+  //RxBool isLoading = false.obs;
   late LoginModel loginModel;
   RxString userId = ''.obs;
+  RxString serverIp = ''.obs;
+  RxString deviceID = ''.obs;
+  RxString accessToken = ''.obs;
 
-  Future<void> loginMethod(
-      String deviceId, String ipAddress, BuildContext context) async {
+  Future<void> loginMethod(BuildContext context) async {
     try{
-      isLoading(true);
+      //isLoading(true);
+      BotToast.showLoading();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      serverIp.value = prefs.getString('ipAddress')!;
+      deviceID.value = prefs.getString('deviceId')!;
       var response = await http.get(Uri.parse(
-          'http://$ipAddress/unistock/zebra/login.php?zemail=${user.text}&xpassword=${pass.text}'));
+          'http://${serverIp.value}/unistock/zebra/login.php?zemail=${user.text}&xpassword=${pass.text}'));
       if (response.statusCode == 200) {
         loginModel = loginModelFromJson(response.body);
         if(user.text == loginModel.zemail && pass.text == loginModel.xpassword){
-          isLoading(false);
+          //isLoading(false);
+          BotToast.closeAllLoading();
           userId.value = loginModel.xposition.toString();
+          await prefs.setString('accessToken', loginModel.xaccess.toString());
+          accessToken.value = prefs.getString('accessToken')!;
           Get.to(() => const ModeSelect());
+          print('serverIp : $serverIp=========deviceId: $deviceID=============accessToken: $accessToken');
           Get.snackbar('Success!', "Successfully logged in",
             borderWidth: 1.5,
             borderColor: Colors.black54,
@@ -48,7 +59,8 @@ class LoginController extends GetxController {
             snackPosition: SnackPosition.TOP,
           );
         }else{
-          isLoading(false);
+          //isLoading(false);
+          BotToast.closeAllLoading();
           showDialog<String>(
             context: context,
             builder: (BuildContext context) => ReusableAlerDialogue(
@@ -58,8 +70,20 @@ class LoginController extends GetxController {
             ),
           );
         }
-      } else if (response.statusCode == 404) {
-        isLoading(false);
+      }else if(response.statusCode == 403){
+        //isLoading(false);
+        BotToast.closeAllLoading();
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => ReusableAlerDialogue(
+            headTitle: "Warning!",
+            message: "User is already logged in from another device.",
+            btnText: "Back",
+          ),
+        );
+      }else if (response.statusCode == 404) {
+        //isLoading(false);
+        BotToast.closeAllLoading();
         showDialog<String>(
           context: context,
           builder: (BuildContext context) => ReusableAlerDialogue(
@@ -70,7 +94,8 @@ class LoginController extends GetxController {
         );
       }
     }catch(e){
-      isLoading(false);
+      //isLoading(false);
+      BotToast.closeAllLoading();
       Get.snackbar('Warning!', 'Failed to connect server',
           borderWidth: 1.5,
           borderColor: Colors.black54,
@@ -151,40 +176,41 @@ class LoginController extends GetxController {
       ],
     ),
   );
-}
 
-/*showDialog(
-context: context,
-builder: (context) {
-return AlertDialog(
-title: const Text(
-'Warning!',
-style: TextStyle(
-fontSize: 30,
-fontWeight: FontWeight.w800,
-color: Colors.black54),
-),
-content: const Text(
-'Invalid username or password',
-style: TextStyle(fontSize: 30, color: Colors.black),
-),
-actions: [
-TextButton(
-style: TextButton.styleFrom(
-backgroundColor: Colors.blue.shade400,
-),
-onPressed: () async {
-Get.back();
-},
-child: Text(
-"Ok",
-style: GoogleFonts.urbanist(
-color: Colors.black,
-fontWeight: FontWeight.w600,
-),
-),
-),
-],
-scrollable: true,
-);
-});*/
+
+  RxBool isLogout = false.obs;
+  Future<void> loginOutMethod(BuildContext context) async {
+    try{
+      isLogout(true);
+      BotToast.showLoading();
+      var response = await http.post(Uri.parse('http://${serverIp.value}/unistock/login.php?zemail=${userId.value}'));
+      print('userId: $userId');
+      print('statusCode: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        isLogout(false);
+        BotToast.closeAllLoading();
+        Get.offAll(()=> const LoginScreen());
+      }else{
+        isLogout(false);
+        BotToast.closeAllLoading();
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => ReusableAlerDialogue(
+            headTitle: "Warning!",
+            message: "Failed to connect server",
+            btnText: "Back",
+          ),
+        );
+      }
+    }catch(e){
+      isLogout(false);
+      Get.snackbar('Warning!', 'Failed to connect server',
+          borderWidth: 1.5,
+          borderColor: Colors.black54,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 2),
+          snackPosition: SnackPosition.TOP);
+    }
+  }
+}

@@ -1,8 +1,10 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zebra_scanner_final/view/server_setup_screen.dart';
 import 'package:zebra_scanner_final/view/splash_screen.dart';
+import 'package:zebra_scanner_final/view/test.dart';
 
 void main() {
   //ensure initializing dewa hoy app a jeisob async function ase oigula surute initialize kore newa.
@@ -26,6 +28,9 @@ class MyApp extends StatelessWidget {
               ),
         ),
       ),
+      builder: BotToastInit(),
+      locale: const Locale('en'),
+      navigatorObservers: [BotToastNavigatorObserver()],
       home: const SplashScreen(),
     );
   }

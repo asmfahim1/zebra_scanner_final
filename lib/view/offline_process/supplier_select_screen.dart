@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:zebra_scanner_final/controller/login_controller.dart';
 import 'package:zebra_scanner_final/controller/offline_controller.dart';
-import 'package:zebra_scanner_final/view/offline_process/offline-scan_screen.dart';
 import 'package:zebra_scanner_final/constants/const_colors.dart';
-
-import '../../controller/server_controller.dart';
 import '../../widgets/appBar_widget.dart';
 
 class SupSelScreen extends StatefulWidget {
@@ -17,15 +15,15 @@ class SupSelScreen extends StatefulWidget {
 }
 
 class _SupSelScreenState extends State<SupSelScreen> {
+  LoginController login = Get.find<LoginController>();
   OfflineController offline = Get.find<OfflineController>();
-  ServerController serverController = Get.find<ServerController>();
   TextEditingController name = TextEditingController();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    offline.listOfSuppliers(serverController.ipAddress.value);
+    offline.listOfSuppliers(login.serverIp.value);
   }
 
   @override

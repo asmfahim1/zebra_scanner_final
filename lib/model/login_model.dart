@@ -13,19 +13,22 @@ class LoginModel {
   String xposition;
   String zemail;
   String xpassword;
+  int xaccess;
 
   LoginModel({
     required this.name,
     required this.xposition,
     required this.zemail,
     required this.xpassword,
+    required this.xaccess,
   });
 
   factory LoginModel.fromJson(Map<String, dynamic> json) => LoginModel(
-    name: json["name"] ?? '',
-    xposition: json["xposition"] ?? '',
-    zemail: json["zemail"] ?? '',
-    xpassword: json["xpassword"] ?? '',
+    name: json["name"],
+    xposition: json["xposition"],
+    zemail: json["zemail"],
+    xpassword: json["xpassword"],
+    xaccess: json["xaccess"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -33,5 +36,6 @@ class LoginModel {
     "xposition": xposition,
     "zemail": zemail,
     "xpassword": xpassword,
+    "xaccess": xaccess,
   };
 }

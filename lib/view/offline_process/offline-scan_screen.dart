@@ -411,19 +411,12 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                                       ),
                                                                     ),
                                                                   ));
-                                                              //post to api
                                                               await offline.updateQty(scanned["itemcode"]);
                                                               await offline.getScannerTable();
                                                               Navigator.pop(context);
-
-                                                              // var snackBar = SnackBar(
-                                                              //     content: Text('Hello World'));
-                                                              // ScaffoldMessenger.of(context)
-                                                              //     .showSnackBar(snackBar);
-                                                              //scanBarcodeNormal();
                                                             },
                                                             child: Text(
-                                                              "Manual",
+                                                              "Add",
                                                               style:
                                                               GoogleFonts.urbanist(
                                                                 color: Colors.black,

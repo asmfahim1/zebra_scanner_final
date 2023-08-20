@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:zebra_scanner_final/controller/offline_controller.dart';
 import 'package:get/get.dart';
 import 'package:zebra_scanner_final/view/offline_process/supplier_select_screen.dart';
-import '../../controller/server_controller.dart';
+import '../../controller/login_controller.dart';
 import '../../widgets/appBar_widget.dart';
 import '../../constants/const_colors.dart';
 
@@ -15,8 +15,8 @@ class OfflineTagScreen extends StatefulWidget {
 }
 
 class _OfflineTagScreenState extends State<OfflineTagScreen> {
+  LoginController login = Get.find<LoginController>();
   OfflineController offline = Get.find<OfflineController>();
-  ServerController serverController = Get.find<ServerController>();
   ConstantColors colors = ConstantColors();
 
   //need to call the tagList for first build
@@ -24,7 +24,7 @@ class _OfflineTagScreenState extends State<OfflineTagScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    offline.listOfTags(serverController.ipAddress.value);
+    offline.listOfTags(login.serverIp.value);
   }
 
   @override

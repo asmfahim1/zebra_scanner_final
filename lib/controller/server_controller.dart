@@ -2,6 +2,7 @@ import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zebra_scanner_final/constants/const_colors.dart';
 import 'dart:io';
 import '../view/login_screen.dart';
@@ -29,7 +30,6 @@ class ServerController extends GetxController {
         deviceName = build.model;
         deviceId = build.androidId;
         normalId = build.id;
-        print('======$deviceName=========$deviceId=========$normalId');
       }
     } catch (e) {
       print("Something occurs $e");
@@ -54,6 +54,9 @@ class ServerController extends GetxController {
           duration: const Duration(seconds: 1),
         );
       } else {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('ipAddress', server.text,);
+        prefs.setString('deviceId', deviceId,);
         var response = await http.post(
             Uri.parse('http://${server.text}/unistock/zebra/server_config.php'),
             body: <String, dynamic>{
@@ -62,7 +65,7 @@ class ServerController extends GetxController {
             });
         if(response.statusCode == 200){
           isLoading1(false);
-          saveValue(server.text.toString());
+          //saveValue(server.text.toString());
           Get.to(() => const LoginScreen());
         }else{
           isLoading1(false);
@@ -93,12 +96,12 @@ class ServerController extends GetxController {
     }
   }
 
-  //saving data for further use
-  RxString deviceID = ''.obs;
-  RxString ipAddress = ''.obs;
-
-  void saveValue(String serverIP) {
-    deviceID.value = deviceId;
-    ipAddress.value = serverIP;
-  }
+  // //saving data for further use
+  // // RxString deviceID = ''.obs;
+  // // RxString ipAddress = ''.obs;
+  //
+  // void saveValue(String serverIP) {
+  //   deviceID.value = deviceId;
+  //   ipAddress.value = serverIP;
+  // }
 }

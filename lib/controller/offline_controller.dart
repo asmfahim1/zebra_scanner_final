@@ -3,20 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:zebra_scanner_final/controller/login_controller.dart';
-import 'package:zebra_scanner_final/controller/server_controller.dart';
 import 'package:zebra_scanner_final/db_helper/offline_repo.dart';
 import 'package:zebra_scanner_final/widgets/special_alert.dart';
-import '../constants/app_constants.dart';
 import '../db_helper/master_item.dart';
 import '../model/offline_product_model.dart';
 import '../model/productList_model.dart';
 import '../model/supplier_model.dart';
 import '../model/taglist_model.dart';
-import '../constants/const_colors.dart';
 
 class OfflineController extends GetxController {
   LoginController loginController = Get.find<LoginController>();
-  ServerController server = Get.find<ServerController>();
   //list of open tags
   RxBool isLoading = false.obs;
   RxList offlineTags = <TagListModel>[].obs;
@@ -130,7 +126,7 @@ class OfflineController extends GetxController {
   Future<void> addItem(String itemCode) async {
     try{
       postProduct(true);
-      int result = await OfflineRepo().insertToScanner(itemCode, server.deviceID.value, loginController.userId.value);
+      int result = await OfflineRepo().insertToScanner(itemCode, loginController.deviceID.value, loginController.userId.value);
       if(result == 0){
         await getScannerTable();
       }else{
@@ -250,7 +246,7 @@ class OfflineController extends GetxController {
   Future<Object> fetchMasterItemsList(BuildContext context) async {
     try {
       isFetched(true);
-      var responseMaster = await http.get(Uri.parse('http://${server.ipAddress.value}/unistock/masteritem.php?xcus=${xCus.value}&tag=${oTagNum.value}'));
+      var responseMaster = await http.get(Uri.parse('http://${loginController.serverIp.value}/unistock/masteritem.php?xcus=${xCus.value}&tag=${oTagNum.value}'));
       if (responseMaster.statusCode == 200) {
         await MasterItems().deleteFromTerritoryTable();
         (json.decode(responseMaster.body) as List).map((products) {
@@ -339,10 +335,9 @@ class OfflineController extends GetxController {
             "user_id" : scannedData[i]["userIud"],
             "tag_no" : scannedData[i]["tag_num"],
           });
-          var response = await http.post(Uri.parse('http://${server.ipAddress}/unistock/zebra/offlineUpload.php'),
+          var response = await http.post(Uri.parse('http://${loginController.serverIp.value}/unistock/zebra/offlineUpload.php'),
               body: responseBody);
           if(response.statusCode == 200){
-            //delete itemwise scanner table row
             await OfflineRepo().itemWiseDelete(scannedData[i]["itemcode"]);
           }else{
             Get.snackbar('Warning!', 'Please check your internet connection',
@@ -363,8 +358,8 @@ class OfflineController extends GetxController {
         Get.snackbar('Warning!', 'Upload Failed',
             backgroundColor: Colors.red,
             colorText: Colors.white,
-            duration: const Duration(seconds: 1));
-        //get snackbar message server problem
+            duration: const Duration(seconds: 1),
+        );
       }
     }
   }

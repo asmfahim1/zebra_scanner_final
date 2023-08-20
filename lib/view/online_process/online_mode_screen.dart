@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:flutter_datawedge/flutter_datawedge.dart';
+import 'package:zebra_scanner_final/controller/login_controller.dart';
 import 'package:zebra_scanner_final/controller/online_controller.dart';
-import 'package:zebra_scanner_final/controller/server_controller.dart';
 import 'package:zebra_scanner_final/view/manual_entry/manual_entry_screen.dart';
 import 'package:zebra_scanner_final/widgets/appBar_widget.dart';
 import 'package:zebra_scanner_final/constants/const_colors.dart';
-
 import '../../widgets/reusable_alert.dart';
 
 class OnlineMode extends StatefulWidget {
-  //apatoto storeId and outlet same e rakhtesi .
   String tagNum;
   String storeId;
   String userId;
@@ -33,19 +30,19 @@ class OnlineMode extends StatefulWidget {
 }
 
 class _OnlineModeState extends State<OnlineMode> {
+  LoginController login = Get.find<LoginController>();
   OnlineController onlineController = Get.put(OnlineController());
-  ServerController serverController = Get.put(ServerController());
   ConstantColors colors = ConstantColors();
 
   @override
   void initState() {
     onlineController.productList(
-        widget.tagNum, serverController.ipAddress.value, widget.storeId);
+        widget.tagNum, login.serverIp.value, widget.storeId);
     initScanner(
-        serverController.ipAddress.value,
-        widget.tagNum,
-        widget.storeId,
-        serverController.deviceID.value,
+      login.serverIp.value,
+      widget.tagNum,
+      widget.storeId,
+      login.deviceID.value,
     );
     super.initState();
   }
@@ -428,14 +425,15 @@ class _OnlineModeState extends State<OnlineMode> {
                                                       await onlineController.adjustmentQty(
                                                               context,
                                                               onlineController.products[index].scanQty,
-                                                              serverController.ipAddress.value,
+                                                              login.serverIp.value,
                                                               onlineController.products[index].itemCode,
                                                               widget.tagNum,
                                                               widget.outlet,
                                                               widget.storeId,
-                                                              serverController.deviceID.value);
+                                                              login.deviceID.value,
+                                                      );
                                                       await onlineController
-                                                          .productList(widget.tagNum, serverController.ipAddress.value, widget.storeId);
+                                                          .productList(widget.tagNum, login.serverIp.value, widget.storeId);
 
                                                       // var snackBar = SnackBar(
                                                       //     content: Text('Hello World'));
@@ -480,31 +478,19 @@ class _OnlineModeState extends State<OnlineMode> {
                                                       //post to api
                                                       await onlineController
                                                           .updateQty(
-                                                              serverController
-                                                                  .ipAddress
-                                                                  .value,
-                                                              onlineController
-                                                                  .products[
-                                                                      index]
-                                                                  .itemCode,
+                                                              login.serverIp.value,
+                                                              onlineController.products[index].itemCode,
                                                               widget.tagNum,
                                                               widget.outlet,
                                                               widget.storeId,
-                                                              serverController
-                                                                  .deviceID
-                                                                  .value);
+                                                              login.deviceID.value,
+                                                      );
                                                       await onlineController
-                                                          .productList(widget.tagNum, serverController.ipAddress.value, widget.storeId);
+                                                          .productList(widget.tagNum, login.serverIp.value, widget.storeId);
                                                       Navigator.pop(context);
-
-                                                      // var snackBar = SnackBar(
-                                                      //     content: Text('Hello World'));
-                                                      // ScaffoldMessenger.of(context)
-                                                      //     .showSnackBar(snackBar);
-                                                      //scanBarcodeNormal();
                                                     },
                                                     child: Text(
-                                                      "Manual",
+                                                      "Add",
                                                       style:
                                                           GoogleFonts.urbanist(
                                                         color: Colors.black,
