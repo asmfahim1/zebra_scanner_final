@@ -65,7 +65,7 @@ class OnlineController extends GetxController {
   RxString searchQuery = ''.obs;
 
   // Filter suppliers based on search query
-  List get filteredSupList {
+  List get filteredProductList {
     if (searchQuery.value.isEmpty) {
       return products.toList();
     } else {

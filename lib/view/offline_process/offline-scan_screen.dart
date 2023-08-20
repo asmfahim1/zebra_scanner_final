@@ -72,9 +72,9 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
-        child: ReusableAppBar(
+        child: AppBar(
           elevation: 0,
-          color: Colors.white,
+          backgroundColor: Colors.white,
           leading: GestureDetector(
             onTap: () {
               Get.back();
@@ -85,7 +85,20 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
               color: Colors.black,
             ),
           ),
-          action: [
+            title: Container(
+              height: 50,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
+              child: TextFormField(
+                controller: offline.searchByName,
+                decoration: const InputDecoration(
+                    hintText: 'Search by name',
+                    border: OutlineInputBorder(),
+                    suffixIcon: Icon(Icons.search)),
+                onChanged: (value) => offline.searchProduct(value),
+              ),
+            ),
+          actions: [
             GestureDetector(
             onTap: () {offline.uploadToServer();},
             child: const Padding(
@@ -102,9 +115,41 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
       ),
       body: Container(
         padding: const EdgeInsets.all(5.0),
-        child: Obx((){
-          return offline.productLoaded.value
-              ? Center(
+        child: Column(
+          children: [
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Obx(
+                          () => Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Text('Last code: '),
+                          Text(offline.lastCode.value,
+                              style: const TextStyle(fontSize: 14)),
+                          const SizedBox(width: 10.0),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Text(
+              "List of Products added",
+              style: GoogleFonts.urbanist(
+                color: Colors.black,
+                fontSize: 25,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            Expanded(child: Obx(() {
+              if (offline.productLoaded.value) {
+                return Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -117,352 +162,312 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                       const Text('Loading...'),
                     ],
                   ),
-                )
-              : Column(
-                  children: [
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Obx(
-                                  () => Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  const Text('Last code: '),
-                                  Text(offline.lastCode.value,
-                                      style: const TextStyle(fontSize: 14)),
-                                  const SizedBox(width: 10.0),
-                                ],
-                              ),
-                            )
-                          ],
+                ) ;
+              } else {
+                if (offline.filteredProductList.isEmpty) {
+                  return Center(
+                      child: Text(
+                        "No product found",
+                        style: GoogleFonts.urbanist(
+                          color: Colors.black,
+                          fontSize: 25,
+                          fontWeight: FontWeight.w400,
                         ),
-                      ),
-                    ),
-                    Text(
-                      "List of Products added",
-                      style: GoogleFonts.urbanist(
-                        color: Colors.black,
-                        fontSize: 25,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    Expanded(child: Obx(() {
-                      if (offline.haveProduct.value) {
-                        return const Center(
-                          child: CircularProgressIndicator(
-                            color: ConstantColors.comColor,
+                      ));
+                } else {
+                  return ListView.builder(
+                      itemCount: offline.filteredProductList.length,
+                      itemBuilder: (context, index) {
+                        var scanned = offline.filteredProductList[index];
+                        return Container(
+                          height: MediaQuery.of(context).size.height / 4.22,
+                          padding: const EdgeInsets.only(
+                              bottom: 5, left: 5, right: 5),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.0),
                           ),
-                        );
-                      } else {
-                        if (offline.scannedProductList.isEmpty) {
-                          return Center(
-                              child: Text(
-                                "No product found",
-                                style: GoogleFonts.urbanist(
-                                  color: Colors.black,
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ));
-                        } else {
-                          return ListView.builder(
-                              itemCount: offline.scannedProductList.length,
-                              itemBuilder: (context, index) {
-                                var scanned = offline.scannedProductList[index];
-                                return Container(
-                                  height: MediaQuery.of(context).size.height / 4.22,
-                                  padding: const EdgeInsets.only(
-                                      bottom: 5, left: 5, right: 5),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
-                                  child: Card(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20.0)),
-                                    color: Colors.white,
-                                    elevation: 2,
-                                    shadowColor: Colors.blueGrey,
-                                    child: Row(
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0)),
+                            color: Colors.white,
+                            elevation: 2,
+                            shadowColor: Colors.blueGrey,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    padding: const EdgeInsets.only(
+                                      left: 10,
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        Expanded(
-                                          child: Container(
-                                            padding: const EdgeInsets.only(
-                                              left: 10,
-                                            ),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                Text('${scanned["itemcode"]}',
-                                                  style: GoogleFonts.urbanist(
-                                                    color: Colors.black,
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.w800,
-                                                  ),
-                                                ),
-                                                Text('item desc: ${scanned["itemdesc"]}',
-                                                  overflow: TextOverflow.ellipsis,
-                                                  style: GoogleFonts.urbanist(
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
-                                                Text('xcus : ${scanned["xcus"]}',
-                                                  overflow: TextOverflow.ellipsis,
-                                                  style: GoogleFonts.urbanist(
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.w800,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  "Total Quantity : ${scanned["scanqty"]}",
-                                                  style: GoogleFonts.urbanist(
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.w800,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
+                                        Text('${scanned["itemcode"]}',
+                                          style: GoogleFonts.urbanist(
+                                            color: Colors.black,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w800,
                                           ),
                                         ),
-                                        GestureDetector(
-                                          onTap: () async {
-                                            offline.updateTQ('${scanned["scanqty"].toString()}');
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return AlertDialog(
-                                                  title: Text(scanned["itemcode"],
-                                                    style: GoogleFonts.urbanist(
-                                                        fontSize: 30,
-                                                        fontWeight: FontWeight.w800,
-                                                        color: Colors.black54),
-                                                  ),
-                                                  content: Column(
-                                                    crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text(
-                                                        '${scanned["itemdesc"]}',
-                                                        style: GoogleFonts.urbanist(
-                                                            fontSize: 15,
-                                                            fontWeight:
-                                                            FontWeight.w800,
-                                                            color: Colors.black54),
-                                                      ),
-                                                      Text(
-                                                        "${scanned["xcus"]}",
-                                                        style: GoogleFonts.urbanist(
-                                                            fontSize: 15,
-                                                            fontWeight:
-                                                            FontWeight.w800,
-                                                            color: Colors.black54),
-                                                      ),
-                                                      Text(
-                                                        "Total Quantity: ${scanned["scanqty"]}",
-                                                        style: GoogleFonts.urbanist(
-                                                            fontSize: 15,
-                                                            fontWeight:
-                                                            FontWeight.w800,
-                                                            color: Colors.black54),
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                        children: [
-                                                          GestureDetector(
-                                                              onTap: () {
-                                                                offline.decrementQuantity();
-                                                              },
-                                                              child: const CircleAvatar(
-                                                                backgroundColor:
-                                                                ConstantColors.comColor,
-                                                                radius: 15,
-                                                                child: Icon(
-                                                                  Icons.remove,
-                                                                  size: 20,
-                                                                ),
-                                                              )),
-                                                          const SizedBox(
-                                                            width: 10,
-                                                          ),
-                                                          Container(
-                                                              width: MediaQuery.of(context).size.width / 3.5,
-                                                              child: TextField(
-                                                                inputFormatters: [
-                                                                  FilteringTextInputFormatter.deny(RegExp(r'^0')),
-                                                                  FilteringTextInputFormatter.deny(RegExp(r'-')),
-                                                                  FilteringTextInputFormatter.deny(RegExp(r',')),
-                                                                  FilteringTextInputFormatter.deny(RegExp(r'\+')),
-                                                                  FilteringTextInputFormatter.deny(RegExp(r'\*')),
-                                                                  FilteringTextInputFormatter.deny(RegExp(r'/')),
-                                                                  FilteringTextInputFormatter.deny(RegExp(r'=')),
-                                                                  FilteringTextInputFormatter.deny(RegExp(r'%')),
-                                                                  FilteringTextInputFormatter.deny(RegExp(r' ')),
-                                                                ],
-                                                                textAlign: TextAlign.center,
-                                                                controller: offline.qtyCon,
-                                                                //by using on submitted function, it will immediately after pressing the value done
-                                                                onSubmitted: (value) {
-                                                                  if (value.isEmpty) {
-                                                                    offline.qtyCon.text = '0';
-                                                                    print('====${offline.quantity.value}======${offline.qtyCon.text}');
-                                                                  } else {
-                                                                    offline.quantity.value = double.parse(value);
-                                                                    print('====${offline.quantity.value}======${offline.qtyCon.text}');
-                                                                  }
-                                                                },
-                                                                decoration: InputDecoration(
-                                                                  focusedBorder: OutlineInputBorder(
-                                                                    borderSide: const BorderSide(width: 1.5, color: ConstantColors.comColor,),
-                                                                    borderRadius: BorderRadius.circular(5.5),
-                                                                  ),
-                                                                  filled: true,
-                                                                  hintText:
-                                                                  '${scanned["scanqty"]}',
-                                                                  hintStyle: const TextStyle(color: Colors.white, fontSize: 50,fontWeight: FontWeight.w600),
-                                                                  fillColor: Colors.blueGrey[50],
-                                                                ),
-                                                                style:
-                                                                const TextStyle(
-                                                                    fontSize: 50),
-                                                                keyboardType:
-                                                                TextInputType
-                                                                    .number,
-                                                              )),
-                                                          const SizedBox(
-                                                            width: 10,
-                                                          ),
-                                                          GestureDetector(
-                                                              onTap: () {
-                                                                offline.incrementQuantity();
-                                                              },
-                                                              child: const CircleAvatar(
-                                                                backgroundColor:
-                                                                ConstantColors.comColor,
-                                                                radius: 15,
-                                                                child: Icon(
-                                                                  Icons.add,
-                                                                  size: 20,
-                                                                ),
-                                                              )),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  actions: [
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                      children: [
-                                                        TextButton(
-                                                          style: TextButton.styleFrom(
-                                                            backgroundColor: ConstantColors
-                                                                .comColor
-                                                                .withOpacity(0.7),
-                                                          ),
-                                                          onPressed: () async {
-                                                            //post to api
-                                                            await offline.adjustmentQty(context,double.parse(scanned["scanqty"]),scanned["itemcode"]);
-                                                            await offline.getScannerTable();
-                                                          },
-                                                          child: Text(
-                                                            "Adjustment",
-                                                            style:
-                                                            GoogleFonts.urbanist(
-                                                              color: Colors.black,
-                                                              fontWeight:
-                                                              FontWeight.w600,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        TextButton(
-                                                          style: TextButton.styleFrom(
-                                                            backgroundColor: ConstantColors
-                                                                .uniGreen
-                                                                .withOpacity(0.7),
-                                                          ),
-                                                          onPressed: () async {
-                                                            ScaffoldMessenger.of(
-                                                                context)
-                                                                .showSnackBar(
-                                                                const SnackBar(
-                                                                  duration: Duration(
-                                                                      seconds: 1),
-                                                                  content: Text(
-                                                                    "Product updated successfully",
-                                                                    textAlign:
-                                                                    TextAlign.center,
-                                                                    style: TextStyle(
-                                                                      //fontWeight: FontWeight.bold,
-                                                                      fontSize: 18,
-                                                                      color: Colors.white,
-                                                                    ),
-                                                                  ),
-                                                                ));
-                                                            await offline.updateQty(scanned["itemcode"]);
-                                                            await offline.getScannerTable();
-                                                            Navigator.pop(context);
-                                                          },
-                                                          child: Text(
-                                                            "Add",
-                                                            style:
-                                                            GoogleFonts.urbanist(
-                                                              color: Colors.black,
-                                                              fontWeight:
-                                                              FontWeight.w600,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                  scrollable: true,
-                                                );
-                                              });
-                                          },
-                                          child: Container(
-                                            width: 100,
-                                            decoration: BoxDecoration(
-                                              color: ConstantColors.comColor.withOpacity(0.6),
-                                              borderRadius: const BorderRadius.only(
-                                                  topRight: Radius.circular(20.0),
-                                                  bottomRight: Radius.circular(20.0)),
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                "Edit",
-                                                style: GoogleFonts.urbanist(
-                                                  color: Colors.black,
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            ),
+                                        Text('${scanned["itemdesc"]}',
+                                          overflow: TextOverflow.ellipsis,
+                                          style: GoogleFonts.urbanist(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                        Text('xcus : ${scanned["xcus"]}',
+                                          overflow: TextOverflow.ellipsis,
+                                          style: GoogleFonts.urbanist(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                        ),
+                                        Text(
+                                          "Total Quantity : ${scanned["scanqty"]}",
+                                          style: GoogleFonts.urbanist(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w800,
                                           ),
                                         ),
                                       ],
                                     ),
                                   ),
-                                );
-                              });
-                        }
-                      }
-                    }),
-                    ),
-                  ],
-                );
-        }),
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    offline.updateTQ('${scanned["scanqty"].toString()}');
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title: Text(scanned["itemcode"],
+                                              style: GoogleFonts.urbanist(
+                                                  fontSize: 30,
+                                                  fontWeight: FontWeight.w800,
+                                                  color: Colors.black54),
+                                            ),
+                                            content: Column(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  '${scanned["itemdesc"]}',
+                                                  style: GoogleFonts.urbanist(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                      FontWeight.w800,
+                                                      color: Colors.black54),
+                                                ),
+                                                Text(
+                                                  "${scanned["xcus"]}",
+                                                  style: GoogleFonts.urbanist(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                      FontWeight.w800,
+                                                      color: Colors.black54),
+                                                ),
+                                                Text(
+                                                  "Total Quantity: ${scanned["scanqty"]}",
+                                                  style: GoogleFonts.urbanist(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                      FontWeight.w800,
+                                                      color: Colors.black54),
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                                  children: [
+                                                    GestureDetector(
+                                                        onTap: () {
+                                                          offline.decrementQuantity();
+                                                        },
+                                                        child: const CircleAvatar(
+                                                          backgroundColor:
+                                                          ConstantColors.comColor,
+                                                          radius: 15,
+                                                          child: Icon(
+                                                            Icons.remove,
+                                                            size: 20,
+                                                          ),
+                                                        )),
+                                                    const SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Container(
+                                                        width: MediaQuery.of(context).size.width / 3.5,
+                                                        child: TextField(
+                                                          inputFormatters: [
+                                                            FilteringTextInputFormatter.deny(RegExp(r'^0')),
+                                                            FilteringTextInputFormatter.deny(RegExp(r'-')),
+                                                            FilteringTextInputFormatter.deny(RegExp(r',')),
+                                                            FilteringTextInputFormatter.deny(RegExp(r'\+')),
+                                                            FilteringTextInputFormatter.deny(RegExp(r'\*')),
+                                                            FilteringTextInputFormatter.deny(RegExp(r'/')),
+                                                            FilteringTextInputFormatter.deny(RegExp(r'=')),
+                                                            FilteringTextInputFormatter.deny(RegExp(r'%')),
+                                                            FilteringTextInputFormatter.deny(RegExp(r' ')),
+                                                          ],
+                                                          textAlign: TextAlign.center,
+                                                          controller: offline.qtyCon,
+                                                          //by using on submitted function, it will immediately after pressing the value done
+                                                          onSubmitted: (value) {
+                                                            if (value.isEmpty) {
+                                                              offline.qtyCon.text = '0';
+                                                              print('====${offline.quantity.value}======${offline.qtyCon.text}');
+                                                            } else {
+                                                              offline.quantity.value = double.parse(value);
+                                                              print('====${offline.quantity.value}======${offline.qtyCon.text}');
+                                                            }
+                                                          },
+                                                          decoration: InputDecoration(
+                                                            focusedBorder: OutlineInputBorder(
+                                                              borderSide: const BorderSide(width: 1.5, color: ConstantColors.comColor,),
+                                                              borderRadius: BorderRadius.circular(5.5),
+                                                            ),
+                                                            filled: true,
+                                                            hintText:
+                                                            '${scanned["scanqty"]}',
+                                                            hintStyle: const TextStyle(color: Colors.white, fontSize: 50,fontWeight: FontWeight.w600),
+                                                            fillColor: Colors.blueGrey[50],
+                                                          ),
+                                                          style:
+                                                          const TextStyle(
+                                                              fontSize: 50),
+                                                          keyboardType:
+                                                          TextInputType
+                                                              .number,
+                                                        )),
+                                                    const SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    GestureDetector(
+                                                        onTap: () {
+                                                          offline.incrementQuantity();
+                                                        },
+                                                        child: const CircleAvatar(
+                                                          backgroundColor:
+                                                          ConstantColors.comColor,
+                                                          radius: 15,
+                                                          child: Icon(
+                                                            Icons.add,
+                                                            size: 20,
+                                                          ),
+                                                        )),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                            actions: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment
+                                                    .spaceBetween,
+                                                children: [
+                                                  TextButton(
+                                                    style: TextButton.styleFrom(
+                                                      backgroundColor: ConstantColors
+                                                          .comColor
+                                                          .withOpacity(0.7),
+                                                    ),
+                                                    onPressed: () async {
+                                                      //post to api
+                                                      await offline.adjustmentQty(context,double.parse(scanned["scanqty"]),scanned["itemcode"]);
+                                                      await offline.getScannerTable();
+                                                    },
+                                                    child: Text(
+                                                      "Adjustment",
+                                                      style:
+                                                      GoogleFonts.urbanist(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                        FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  TextButton(
+                                                    style: TextButton.styleFrom(
+                                                      backgroundColor: ConstantColors
+                                                          .uniGreen
+                                                          .withOpacity(0.7),
+                                                    ),
+                                                    onPressed: () async {
+                                                      ScaffoldMessenger.of(
+                                                          context)
+                                                          .showSnackBar(
+                                                          const SnackBar(
+                                                            duration: Duration(
+                                                                seconds: 1),
+                                                            content: Text(
+                                                              "Product updated successfully",
+                                                              textAlign:
+                                                              TextAlign.center,
+                                                              style: TextStyle(
+                                                                //fontWeight: FontWeight.bold,
+                                                                fontSize: 18,
+                                                                color: Colors.white,
+                                                              ),
+                                                            ),
+                                                          ));
+                                                      await offline.updateQty(scanned["itemcode"]);
+                                                      await offline.getScannerTable();
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Text(
+                                                      "Add",
+                                                      style:
+                                                      GoogleFonts.urbanist(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                        FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                            scrollable: true,
+                                          );
+                                        });
+                                  },
+                                  child: Container(
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      color: ConstantColors.comColor.withOpacity(0.6),
+                                      borderRadius: const BorderRadius.only(
+                                          topRight: Radius.circular(20.0),
+                                          bottomRight: Radius.circular(20.0)),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "Edit",
+                                        style: GoogleFonts.urbanist(
+                                          color: Colors.black,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      });
+                }
+              }
+            }),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async{

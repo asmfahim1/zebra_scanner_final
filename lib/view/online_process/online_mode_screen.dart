@@ -189,7 +189,7 @@ class _OnlineModeState extends State<OnlineMode> {
                   ),
                 );
               } else {
-                if (onlineController.filteredSupList.isEmpty) {
+                if (onlineController.filteredProductList.isEmpty) {
                   return Center(
                       child: Text(
                     "No product found",
@@ -201,9 +201,9 @@ class _OnlineModeState extends State<OnlineMode> {
                   ));
                 } else {
                   return ListView.builder(
-                      itemCount: onlineController.filteredSupList.length,
+                      itemCount: onlineController.filteredProductList.length,
                       itemBuilder: (context, index) {
-                        var products = onlineController.filteredSupList[index];
+                        var products = onlineController.filteredProductList[index];
                         return Container(
                           height: MediaQuery.of(context).size.height / 4.22,
                           padding: const EdgeInsets.only(
