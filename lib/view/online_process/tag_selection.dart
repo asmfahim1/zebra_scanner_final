@@ -107,8 +107,6 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
                                   Get.to(() => OnlineMode(
                                         tagNum: tagController.tagList[index].xtagnum,
                                         storeId: tagController.tagList[index].xwh,
-                                        userId: tagController.tagList[index].zauserid,
-                                        outlet: tagController.tagList[index].xwh,
                                       )
                                   );
                                 },

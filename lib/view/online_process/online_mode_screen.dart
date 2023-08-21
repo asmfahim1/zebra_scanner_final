@@ -1,28 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:flutter_datawedge/flutter_datawedge.dart';
 import 'package:zebra_scanner_final/controller/login_controller.dart';
 import 'package:zebra_scanner_final/controller/online_controller.dart';
 import 'package:zebra_scanner_final/view/manual_entry/manual_entry_screen.dart';
-import 'package:zebra_scanner_final/widgets/appBar_widget.dart';
 import 'package:zebra_scanner_final/constants/const_colors.dart';
 import '../../widgets/reusable_alert.dart';
 
 class OnlineMode extends StatefulWidget {
   String tagNum;
   String storeId;
-  String userId;
-  String outlet;
 
   OnlineMode({
     Key? key,
     required this.tagNum,
     required this.storeId,
-    required this.userId,
-    required this.outlet,
   }) : super(key: key);
 
   @override
@@ -110,7 +104,7 @@ class _OnlineModeState extends State<OnlineMode> {
           ),
           title: Container(
             height: 50,
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            width: 250,
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
             child: TextFormField(
               controller: onlineController.searchByName,
@@ -122,26 +116,17 @@ class _OnlineModeState extends State<OnlineMode> {
             ),
           ),
           actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 5),
-              child: Obx(
-                () => FlutterSwitch(
-                  height: 30,
-                  width: 65,
-                  value: onlineController.isEnabled.value,
-                  activeColor: ConstantColors.uniGreen,
-                  inactiveColor: ConstantColors.comColor,
-                  activeText: 'ON',
-                  activeTextColor: Colors.white,
-                  inactiveText: 'OFF',
-                  inactiveTextColor: Colors.white,
-                  showOnOff: true,
-                  onToggle: (value) {
-                    onlineController.enableButton(value);
-                  },
-                ),
+            GestureDetector(
+              onTap: () {},
+              child: const Padding(
+                  padding: EdgeInsets.only(right: 10),
+                  child: Icon(
+                    Icons.upload_rounded,
+                    size: 30,
+                    color: Colors.white,
+                  )
               ),
-            ),
+            )
           ],
         ),
       ),
@@ -437,7 +422,6 @@ class _OnlineModeState extends State<OnlineMode> {
                                                               login.serverIp.value,
                                                               products.itemCode,
                                                               widget.tagNum,
-                                                              widget.outlet,
                                                               widget.storeId,
                                                               login.deviceID.value,
                                                       );
@@ -490,7 +474,6 @@ class _OnlineModeState extends State<OnlineMode> {
                                                               login.serverIp.value,
                                                               products.itemCode,
                                                               widget.tagNum,
-                                                              widget.outlet,
                                                               widget.storeId,
                                                               login.deviceID.value,
                                                       );
@@ -549,8 +532,7 @@ class _OnlineModeState extends State<OnlineMode> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-
-          Get.to(()=> ManualEntry(mode: 'Online',));
+          Get.to(()=> ManualEntry(mode: 'Online',tagNum: widget.tagNum, storeId: widget.storeId,));
         },
         label: Row(
           children: [

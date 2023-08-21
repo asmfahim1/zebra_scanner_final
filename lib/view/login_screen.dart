@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zebra_scanner_final/controller/login_controller.dart';
 import 'package:zebra_scanner_final/constants/const_colors.dart';
+import 'package:zebra_scanner_final/view/server_setup_screen.dart';
 import 'package:zebra_scanner_final/widgets/reusable_passfield.dart';
 import 'package:zebra_scanner_final/widgets/reusable_textfield.dart';
 import '../controller/server_controller.dart';
@@ -28,8 +29,6 @@ class _LoginScreenState extends State<LoginScreen> {
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              /*(for controlling Colors opacity)*/
-              // colors: gradient,
               colors: [
                 Colors.red.shade300,
                 Colors.green.shade300,
@@ -42,7 +41,29 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 50),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: GestureDetector(
+                  onTap: (){
+                    Get.offAll(()=> const ServerSetupScreen());
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: const [
+                      Icon(Icons.arrow_back_ios),
+                      Text(
+                        "Server setup",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
