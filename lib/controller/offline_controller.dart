@@ -122,6 +122,24 @@ class OfflineController extends GetxController {
     }
   }
 
+  TextEditingController searchByName = TextEditingController();
+  RxString filteredQuery = ''.obs;
+
+  List get filteredProductList {
+    if (filteredQuery.value.isEmpty) {
+      return scannedProductList.toList();
+    } else {
+      return scannedProductList
+          .where((addedProducts) => addedProducts["itemdesc"].toLowerCase().contains(filteredQuery.value.toLowerCase()))
+          .toList();
+    }
+
+  }
+
+  // Set the search query
+  void searchProduct(String query) {
+    filteredQuery.value = query;
+  }
   //addItem(automatically)
   Future<void> addItem(String itemCode) async {
     try{
