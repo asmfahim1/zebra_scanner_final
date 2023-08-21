@@ -18,6 +18,7 @@ class ManualController extends GetxController {
   Future<void> addItemManually(BuildContext context, String idAddress,String deviceID,String userId,String tagNum,String storeId) async {
       BotToast.showLoading();
       if(productCode.text.isEmpty || qtyController.text.isEmpty){
+        entryDone(false);
         isEmptyField(true);
         Get.snackbar('Warning!',
             'Please fill up all the field',
@@ -26,6 +27,7 @@ class ManualController extends GetxController {
             duration: const Duration(seconds: 2));
       }else{
         try{
+          entryDone(true);
           var response = await http.post(
               Uri.parse("http://$idAddress/unistock/zebra/manual_Add.php"),
               body: jsonEncode(<String, dynamic>{
@@ -37,8 +39,6 @@ class ManualController extends GetxController {
                 "device": deviceID
               }));
           if(response.statusCode == 200){
-            isEmptyField(false);
-            BotToast.closeAllLoading();
             clearTextField();
             await getManualAddedProduct(tagNum,userId);
             Get.snackbar('Success', 'Product added',
@@ -46,7 +46,11 @@ class ManualController extends GetxController {
               colorText: Colors.white,
               duration: const Duration(seconds: 2),
             );
+            entryDone(false);
+            isEmptyField(false);
+            BotToast.closeAllLoading();
           }else{
+            entryDone(false);
             isEmptyField(false);
             BotToast.closeAllLoading();
             showDialog<String>(
@@ -59,6 +63,7 @@ class ManualController extends GetxController {
             );
           }
         }catch(e){
+          entryDone(false);
           isEmptyField(false);
           BotToast.closeAllLoading();
           Get.snackbar('Warning!', 'Failed to connect server',
