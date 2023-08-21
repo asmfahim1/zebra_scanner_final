@@ -137,7 +137,6 @@ class OnlineController extends GetxController {
       String ipAddress,
       String itemCode,
       String tagNum,
-      String outlet,
       String storeId,
       String deviceID) async {
     try{
@@ -186,7 +185,6 @@ class OnlineController extends GetxController {
       String ipAddress,
       String itemCode,
       String tagNum,
-      String outlet,
       String storeId,
       String deviceID) async {
     try{

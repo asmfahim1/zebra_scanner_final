@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zebra_scanner_final/controller/offline_controller.dart';
 import '../../controller/server_controller.dart';
-import '../../widgets/appBar_widget.dart';
 import '../../constants/const_colors.dart';
 import '../../widgets/reusable_alert.dart';
 import '../manual_entry/manual_entry_screen.dart';
@@ -87,7 +86,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
           ),
             title: Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              width: 250,
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
               child: TextFormField(
                 controller: offline.searchByName,
