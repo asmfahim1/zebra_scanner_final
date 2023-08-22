@@ -18,7 +18,7 @@ class ManualController extends GetxController {
   Future<void> addItemManually(BuildContext context, String idAddress,String deviceID,String userId,String tagNum,String storeId) async {
       BotToast.showLoading();
       if(productCode.text.isEmpty || qtyController.text.isEmpty){
-        entryDone(false);
+        //entryDone(false);
         isEmptyField(true);
         Get.snackbar('Warning!',
             'Please fill up all the field',
@@ -27,7 +27,7 @@ class ManualController extends GetxController {
             duration: const Duration(seconds: 2));
       }else{
         try{
-          entryDone(true);
+          //entryDone(true);
           var response = await http.post(
               Uri.parse("http://$idAddress/unistock/zebra/manual_Add.php"),
               body: jsonEncode(<String, dynamic>{
@@ -46,11 +46,11 @@ class ManualController extends GetxController {
               colorText: Colors.white,
               duration: const Duration(seconds: 2),
             );
-            entryDone(false);
+            //entryDone(false);
             isEmptyField(false);
             BotToast.closeAllLoading();
           }else{
-            entryDone(false);
+            //entryDone(false);
             isEmptyField(false);
             BotToast.closeAllLoading();
             showDialog<String>(
@@ -63,7 +63,7 @@ class ManualController extends GetxController {
             );
           }
         }catch(e){
-          entryDone(false);
+          //entryDone(false);
           isEmptyField(false);
           BotToast.closeAllLoading();
           Get.snackbar('Warning!', 'Failed to connect server',
@@ -133,15 +133,19 @@ class ManualController extends GetxController {
   ManualAddedProductModel? manualAddedProduct;
   RxBool entryDone = false.obs;
   Future<void> getManualAddedProduct(String tagNum, String userId,) async{
+    print('manual added api calling');
     try {
       entryDone(true);
+      BotToast.showLoading();
       var response = await http
           .get(Uri.parse('http://${login.serverIp.value}/unistock/zebra/lastAddedProduct.php?tag_no=$tagNum&userID=$userId'));
       if (response.statusCode == 200) {
-        entryDone(false);
         manualAddedProduct = manualAddedProductModelFromJson(response.body);
+        entryDone(false);
+        BotToast.closeAllLoading();
       } else {
         entryDone(false);
+        BotToast.closeAllLoading();
         Get.snackbar('Warning!', 'Something went wrong',
             borderWidth: 1.5,
             borderColor: Colors.black54,
@@ -150,9 +154,9 @@ class ManualController extends GetxController {
             duration: const Duration(seconds: 2),
             snackPosition: SnackPosition.TOP);
       }
-      entryDone(false);
     } catch (e) {
       entryDone(false);
+      BotToast.closeAllLoading();
       Get.snackbar('Warning!', 'Failed to connect server',
           borderWidth: 1.5,
           borderColor: Colors.black54,
