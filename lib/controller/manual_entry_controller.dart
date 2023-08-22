@@ -13,6 +13,7 @@ class ManualController extends GetxController {
   LoginController login = Get.find<LoginController>();
   TextEditingController productCode = TextEditingController();
   TextEditingController qtyController = TextEditingController();
+  RxString lastCode = ''.obs;
   RxBool isEmptyField = false.obs;
 
   Future<void> addItemManually(BuildContext context, String idAddress,String deviceID,String userId,String tagNum,String storeId) async {

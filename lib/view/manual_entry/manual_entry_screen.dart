@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_datawedge/flutter_datawedge.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zebra_scanner_final/constants/const_colors.dart';
 import 'package:zebra_scanner_final/controller/login_controller.dart';
@@ -31,9 +32,24 @@ class _ManualEntryState extends State<ManualEntry> {
   OnlineController online = Get.put(OnlineController());
   OfflineController offline = Get.put(OfflineController());
 
+  //controlling the scanner button
+  Future<void> initScanner() async {
+    FlutterDataWedge.initScanner(
+        profileName: 'FlutterDataWedge',
+        onScan: (result) async {
+          manual.lastCode.value = result.data;
+          manual.productCode.text = manual.lastCode.value;
+          print('Product code: ${manual.productCode.text}');
+        },
+        onStatusUpdate: (result) {
+          ScannerStatusType status = result.status;
+        });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
+    initScanner();
     super.initState();
     if(widget.mode == 'Online'){
       manual.getManualAddedProduct(widget.tagNum.toString(), login.userId.value);
@@ -47,9 +63,9 @@ class _ManualEntryState extends State<ManualEntry> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
-        child: ReusableAppBar(
+        child: AppBar(
           elevation: 0,
-          color: Colors.white,
+          backgroundColor: Colors.white,
           leading: GestureDetector(
             onTap: () async{
               if(widget.mode == 'Online'){
@@ -66,6 +82,13 @@ class _ManualEntryState extends State<ManualEntry> {
               color: Colors.black,
             ),
           ),
+          title: Text(
+            "Manual Scan",
+            style: GoogleFonts.urbanist(
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
         ),
       ),
       body: Obx((){
@@ -75,14 +98,8 @@ class _ManualEntryState extends State<ManualEntry> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text('Manual Entry')
-                ],
-              ),
               Container(
-                height: 70,
+                height: 50,
                 width: double.maxFinite,
                 padding:
                 const EdgeInsets.only(left: 10, right: 10),
@@ -132,12 +149,12 @@ class _ManualEntryState extends State<ManualEntry> {
                     hintText: 'Enter product code',
                   ),
                   style: const TextStyle(
-                    fontSize: 18.0,
+                    fontSize: 14,
                   ),
                 ),
               ),
               Container(
-                height: 70,
+                height: 50,
                 width: double.maxFinite,
                 padding:
                 const EdgeInsets.only(left: 10, right: 10),
@@ -177,7 +194,7 @@ class _ManualEntryState extends State<ManualEntry> {
                     hintText: 'Enter quantity',
                   ),
                   style: const TextStyle(
-                    fontSize: 18.0,
+                    fontSize: 14,
                   ),
                 ),
               ),

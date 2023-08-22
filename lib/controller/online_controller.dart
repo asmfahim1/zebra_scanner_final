@@ -69,9 +69,10 @@ class OnlineController extends GetxController {
     if (searchQuery.value.isEmpty) {
       return products.toList();
     } else {
-      return products
-          .where((addedProducts) => addedProducts.itemDesc.toLowerCase().contains(searchQuery.value.toLowerCase()))
-          .toList();
+      return products.where((addedProducts) {
+        final lowerCaseQuery = searchQuery.value.toLowerCase();
+        return addedProducts.itemCode.toLowerCase().contains(lowerCaseQuery);
+      }).toList();
     }
   }
 
@@ -79,6 +80,7 @@ class OnlineController extends GetxController {
   void search(String query) {
     searchQuery.value = query;
   }
+
   void clearValue() {
     tagNumber.close();
     ipAdd.close();

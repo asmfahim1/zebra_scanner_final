@@ -102,7 +102,14 @@ class _OnlineModeState extends State<OnlineMode> {
               color: Colors.black,
             ),
           ),
-          title: Container(
+          title: Text(
+            "Automatic Scan",
+            style: GoogleFonts.urbanist(
+            color: Colors.black,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+          /*title: Container(
             height: 50,
             width: 250,
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
@@ -114,7 +121,7 @@ class _OnlineModeState extends State<OnlineMode> {
                   suffixIcon: Icon(Icons.search)),
               onChanged: (value) => onlineController.search(value),
             ),
-          ),
+          ),*/
           actions: [
             GestureDetector(
               onTap: () {},
@@ -161,7 +168,7 @@ class _OnlineModeState extends State<OnlineMode> {
             "List of Products added",
             style: GoogleFonts.urbanist(
               color: Colors.black,
-              fontSize: 25,
+              fontSize: 16,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -177,7 +184,7 @@ class _OnlineModeState extends State<OnlineMode> {
                 if (onlineController.filteredProductList.isEmpty) {
                   return Center(
                       child: Text(
-                    "No product found",
+                    "No product added yet",
                     style: GoogleFonts.urbanist(
                       color: Colors.black,
                       fontSize: 25,
@@ -219,7 +226,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                           products.itemCode,
                                           style: GoogleFonts.urbanist(
                                             color: Colors.black,
-                                            fontSize: 20,
+                                            fontSize: 16,
                                             fontWeight: FontWeight.w800,
                                           ),
                                         ),
@@ -250,7 +257,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                     ),
                                   ),
                                 ),
-                                GestureDetector(
+                               /* GestureDetector(
                                   onTap: () async {
                                     onlineController.updateTQ(
                                         '${products.scanQty}');
@@ -401,7 +408,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                               Row(
                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
-                                                  /*TextButton(
+                                                  *//*TextButton(
                                                     style: TextButton.styleFrom(
                                                       backgroundColor: ConstantColors
                                                           .comColor
@@ -430,7 +437,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                             FontWeight.w600,
                                                       ),
                                                     ),
-                                                  ),*/
+                                                  ),*//*
                                                   Container(
                                                     height: MediaQuery.of(context).size.width / 8.5,
                                                     width: MediaQuery.of(context).size.width / 4,
@@ -500,7 +507,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                       ),
                                     ),
                                   ),
-                                ),
+                                ),*/
                               ],
                             ),
                           ),

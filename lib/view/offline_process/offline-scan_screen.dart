@@ -166,7 +166,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                 if (offline.filteredProductList.isEmpty) {
                   return Center(
                       child: Text(
-                        "No product found",
+                        "No product added yet",
                         style: GoogleFonts.urbanist(
                           color: Colors.black,
                           fontSize: 25,
@@ -236,7 +236,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                     ),
                                   ),
                                 ),
-                                GestureDetector(
+                                /*GestureDetector(
                                   onTap: () async {
                                     offline.updateTQ('${scanned["scanqty"].toString()}');
                                     showDialog(
@@ -368,7 +368,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                               Row(
                                                 mainAxisAlignment: MainAxisAlignment.center ,
                                                 children: [
-                                                  /*TextButton(
+                                                  *//*TextButton(
                                                     style: TextButton.styleFrom(
                                                       backgroundColor: ConstantColors
                                                           .comColor
@@ -388,7 +388,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                         FontWeight.w600,
                                                       ),
                                                     ),
-                                                  ),*/
+                                                  ),*//*
                                                   Container(
                                                     height: MediaQuery.of(context).size.width / 8.5,
                                                     width: MediaQuery.of(context).size.width / 4,
@@ -460,7 +460,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                       ),
                                     ),
                                   ),
-                                ),
+                                ),*/
                               ],
                             ),
                           ),
