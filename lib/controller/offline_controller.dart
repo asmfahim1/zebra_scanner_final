@@ -118,6 +118,7 @@ class OfflineController extends GetxController {
       scannedProductList = await OfflineRepo().getScannedProducts();
       productLoaded(false);
     } catch (error) {
+      productLoaded(false);
       print('There are some issue getting cart header list: $error');
     }
   }

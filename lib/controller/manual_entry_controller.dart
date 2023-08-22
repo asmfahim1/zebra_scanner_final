@@ -78,6 +78,43 @@ class ManualController extends GetxController {
       }
   }
 
+  //for manual add in online mode
+  ManualAddedProductModel? manualAddedProduct;
+  RxBool entryDone = false.obs;
+  Future<void> getManualAddedProduct(String tagNum, String userId,) async{
+    try {
+      entryDone(true);
+      var response = await http
+          .get(Uri.parse('http://${login.serverIp.value}/unistock/zebra/lastAddedProduct.php?tag_no=$tagNum&userID=$userId'));
+      if (response.statusCode == 200) {
+        entryDone(false);
+        manualAddedProduct = manualAddedProductModelFromJson(response.body);
+      } else {
+        entryDone(false);
+        Get.snackbar('Warning!', 'Something went wrong',
+            borderWidth: 1.5,
+            borderColor: Colors.black54,
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+            duration: const Duration(seconds: 2),
+            snackPosition: SnackPosition.TOP);
+      }
+      entryDone(false);
+    } catch (e) {
+      entryDone(false);
+      Get.snackbar('Warning!', 'Failed to connect server',
+          borderWidth: 1.5,
+          borderColor: Colors.black54,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 2),
+          snackPosition: SnackPosition.TOP);
+      print('There is a issue connecting to internet: $e');
+    }
+  }
+
+
+
 
   Future<void> addManuallyOffline(BuildContext context) async {
     entryDone(true);
@@ -123,49 +160,21 @@ class ManualController extends GetxController {
     }
   }
 
+  //for manual add in offline mode
+  List singleAddedProducts = [];
+  Future<void> getSingleScannedProduct() async{
+    try {
+      entryDone(true);
+      singleAddedProducts = await OfflineRepo().getManualAddedProduct();
+      entryDone(false);
+    } catch (error) {
+      entryDone(false);
+      print('There are some issue getting cart header list: $error');
+    }
+  }
 
   void clearTextField(){
     productCode.clear();
     qtyController.clear();
   }
-
-  //for manual add in online mode
-  ManualAddedProductModel? manualAddedProduct;
-  RxBool entryDone = false.obs;
-  Future<void> getManualAddedProduct(String tagNum, String userId,) async{
-    print('manual added api calling');
-    try {
-      entryDone(true);
-      BotToast.showLoading();
-      var response = await http
-          .get(Uri.parse('http://${login.serverIp.value}/unistock/zebra/lastAddedProduct.php?tag_no=$tagNum&userID=$userId'));
-      if (response.statusCode == 200) {
-        manualAddedProduct = manualAddedProductModelFromJson(response.body);
-        entryDone(false);
-        BotToast.closeAllLoading();
-      } else {
-        entryDone(false);
-        BotToast.closeAllLoading();
-        Get.snackbar('Warning!', 'Something went wrong',
-            borderWidth: 1.5,
-            borderColor: Colors.black54,
-            backgroundColor: Colors.red,
-            colorText: Colors.white,
-            duration: const Duration(seconds: 2),
-            snackPosition: SnackPosition.TOP);
-      }
-    } catch (e) {
-      entryDone(false);
-      BotToast.closeAllLoading();
-      Get.snackbar('Warning!', 'Failed to connect server',
-          borderWidth: 1.5,
-          borderColor: Colors.black54,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-          duration: const Duration(seconds: 2),
-          snackPosition: SnackPosition.TOP);
-      print('There is a issue connecting to internet: $e');
-    }
-  }
-
 }

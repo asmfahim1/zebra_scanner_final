@@ -366,11 +366,9 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                             ),
                                             actions: [
                                               Row(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceBetween,
+                                                mainAxisAlignment: MainAxisAlignment.center ,
                                                 children: [
-                                                  TextButton(
+                                                  /*TextButton(
                                                     style: TextButton.styleFrom(
                                                       backgroundColor: ConstantColors
                                                           .comColor
@@ -390,42 +388,49 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                         FontWeight.w600,
                                                       ),
                                                     ),
-                                                  ),
-                                                  TextButton(
-                                                    style: TextButton.styleFrom(
-                                                      backgroundColor: ConstantColors
-                                                          .uniGreen
-                                                          .withOpacity(0.7),
+                                                  ),*/
+                                                  Container(
+                                                    height: MediaQuery.of(context).size.width / 8.5,
+                                                    width: MediaQuery.of(context).size.width / 4,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(10.0),
+                                                      color: ConstantColors.uniGreen,
                                                     ),
-                                                    onPressed: () async {
-                                                      ScaffoldMessenger.of(
-                                                          context)
-                                                          .showSnackBar(
-                                                          const SnackBar(
-                                                            duration: Duration(
-                                                                seconds: 1),
-                                                            content: Text(
-                                                              "Product updated successfully",
-                                                              textAlign:
-                                                              TextAlign.center,
-                                                              style: TextStyle(
-                                                                //fontWeight: FontWeight.bold,
-                                                                fontSize: 18,
-                                                                color: Colors.white,
+                                                    clipBehavior: Clip.hardEdge,
+                                                    child: TextButton(
+                                                      style: TextButton.styleFrom(
+                                                        backgroundColor: ConstantColors
+                                                            .uniGreen
+                                                            .withOpacity(0.7),
+                                                      ),
+                                                      onPressed: () async {
+                                                        ScaffoldMessenger.of(context).showSnackBar(
+                                                            const SnackBar(
+                                                              duration: Duration(seconds: 1),
+                                                              content: Text(
+                                                                "Product updated successfully",
+                                                                textAlign:
+                                                                TextAlign.center,
+                                                                style: TextStyle(
+                                                                  //fontWeight: FontWeight.bold,
+                                                                  fontSize: 18,
+                                                                  color: Colors.white,
+                                                                ),
                                                               ),
                                                             ),
-                                                          ));
-                                                      await offline.updateQty(scanned["itemcode"]);
-                                                      await offline.getScannerTable();
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: Text(
-                                                      "Add",
-                                                      style:
-                                                      GoogleFonts.urbanist(
-                                                        color: Colors.black,
-                                                        fontWeight:
-                                                        FontWeight.w600,
+                                                        );
+                                                        await offline.updateQty(scanned["itemcode"]);
+                                                        await offline.getScannerTable();
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: Text(
+                                                        "Update",
+                                                        style:
+                                                        GoogleFonts.urbanist(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                          FontWeight.w600,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),

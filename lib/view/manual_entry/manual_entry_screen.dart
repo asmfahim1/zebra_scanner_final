@@ -6,17 +6,15 @@ import 'package:zebra_scanner_final/controller/login_controller.dart';
 import 'package:zebra_scanner_final/controller/manual_entry_controller.dart';
 import 'package:zebra_scanner_final/controller/offline_controller.dart';
 import 'package:zebra_scanner_final/controller/online_controller.dart';
-import 'package:zebra_scanner_final/view/offline_process/offline-scan_screen.dart';
 import 'package:zebra_scanner_final/widgets/appBar_widget.dart';
 import 'package:get/get.dart';
 import '../../widgets/reusable_alert.dart';
-import '../online_process/online_mode_screen.dart';
 
 class ManualEntry extends StatefulWidget {
-  String? mode;
-  String? tagNum;
-  String? storeId;
-  ManualEntry({
+  final String? mode;
+  final String? tagNum;
+  final String? storeId;
+  const ManualEntry({
     this.mode,
     this.tagNum,
     this.storeId,

@@ -298,8 +298,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                   height: 10,
                                                 ),
                                                 Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
+                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                                   children: [
                                                     GestureDetector(
                                                         onTap: () {
@@ -318,11 +317,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                       width: 10,
                                                     ),
                                                     Container(
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width /
-                                                            3.5,
+                                                        width: MediaQuery.of(context).size.width / 3.5,
                                                         child: TextField(
                                                           inputFormatters: [
                                                             FilteringTextInputFormatter
@@ -404,11 +399,9 @@ class _OnlineModeState extends State<OnlineMode> {
                                             ),
                                             actions: [
                                               Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
+                                                mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
-                                                  TextButton(
+                                                  /*TextButton(
                                                     style: TextButton.styleFrom(
                                                       backgroundColor: ConstantColors
                                                           .comColor
@@ -427,12 +420,6 @@ class _OnlineModeState extends State<OnlineMode> {
                                                       );
                                                       await onlineController
                                                           .productList(widget.tagNum, login.serverIp.value, widget.storeId);
-
-                                                      // var snackBar = SnackBar(
-                                                      //     content: Text('Hello World'));
-                                                      // ScaffoldMessenger.of(context)
-                                                      //     .showSnackBar(snackBar);
-                                                      //scanBarcodeNormal();
                                                     },
                                                     child: Text(
                                                       "Adjustment",
@@ -443,51 +430,47 @@ class _OnlineModeState extends State<OnlineMode> {
                                                             FontWeight.w600,
                                                       ),
                                                     ),
-                                                  ),
-                                                  TextButton(
-                                                    style: TextButton.styleFrom(
-                                                      backgroundColor: ConstantColors
-                                                          .uniGreen
-                                                          .withOpacity(0.7),
+                                                  ),*/
+                                                  Container(
+                                                    height: MediaQuery.of(context).size.width / 8.5,
+                                                    width: MediaQuery.of(context).size.width / 4,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(10.0),
+                                                      color: ConstantColors.uniGreen,
                                                     ),
-                                                    onPressed: () async {
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                              const SnackBar(
-                                                        duration: Duration(
-                                                            seconds: 1),
-                                                        content: Text(
-                                                          "Product updated successfully",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                            //fontWeight: FontWeight.bold,
-                                                            fontSize: 18,
-                                                            color: Colors.white,
+                                                    clipBehavior: Clip.hardEdge,
+                                                    child: TextButton(
+                                                      style: TextButton.styleFrom(
+                                                        backgroundColor: ConstantColors.uniGreen.withOpacity(0.7),
+                                                      ),
+                                                      onPressed: () async {
+                                                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                          duration: Duration(seconds: 1),
+                                                          content: Text(
+                                                            "Product updated successfully",
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            style: TextStyle(
+                                                              //fontWeight: FontWeight.bold,
+                                                              fontSize: 18,
+                                                              color: Colors.white,
+                                                            ),
                                                           ),
-                                                        ),
-                                                      ));
-                                                      //post to api
-                                                      await onlineController
-                                                          .updateQty(
-                                                              login.serverIp.value,
-                                                              products.itemCode,
-                                                              widget.tagNum,
-                                                              widget.storeId,
-                                                              login.deviceID.value,
-                                                      );
-                                                      await onlineController
-                                                          .productList(widget.tagNum, login.serverIp.value, widget.storeId);
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: Text(
-                                                      "Add",
-                                                      style:
-                                                          GoogleFonts.urbanist(
-                                                        color: Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.w600,
+                                                        ));
+                                                        await onlineController.updateQty(
+                                                                login.serverIp.value,
+                                                                products.itemCode,
+                                                                widget.tagNum,
+                                                                widget.storeId,
+                                                                login.deviceID.value,
+                                                        );
+                                                        await onlineController
+                                                            .productList(widget.tagNum, login.serverIp.value, widget.storeId);
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: Text(
+                                                        "Update",
+                                                        style: GoogleFonts.urbanist(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w600,),
                                                       ),
                                                     ),
                                                   ),
