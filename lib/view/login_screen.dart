@@ -40,6 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              SizedBox(height: 30,),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: GestureDetector(
@@ -62,29 +63,26 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("Uni",
-                        style: TextStyle(
-                            fontSize: 60,
-                            fontWeight: FontWeight.w800,
-                            color: ConstantColors.comColor)),
-                    Image.asset(
-                      'images/Upgraded S.png',
-                      width: MediaQuery.of(context).size.width / 5.33,
-                    ),
-                    const Text(
-                      "tock",
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Uni",
                       style: TextStyle(
                           fontSize: 60,
                           fontWeight: FontWeight.w800,
-                          color: ConstantColors.uniGreen),
-                    ),
-                  ],
-                ),
+                          color: ConstantColors.comColor)),
+                  Image.asset(
+                    'images/Upgraded S.png',
+                    width: MediaQuery.of(context).size.width / 5.33,
+                  ),
+                  const Text(
+                    "tock",
+                    style: TextStyle(
+                        fontSize: 60,
+                        fontWeight: FontWeight.w800,
+                        color: ConstantColors.uniGreen),
+                  ),
+                ],
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 20),
@@ -100,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           server: loginController.user,
                           icon: const Icon(
                             Icons.person,
-                            size: 25,
+                            size: 20,
                             color: ConstantColors.uniGreen,
                           )),
                       const SizedBox(
@@ -113,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           server: loginController.pass,
                           prefIcon: const Icon(
                             Icons.vpn_key_outlined,
-                            size: 25,
+                            size: 20,
                             color: ConstantColors.uniGreen,
                           ),
                           obscureText: loginController.obscureText.value,
@@ -125,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 loginController.obscureText.value
                                     ? Icons.visibility_off_outlined
                                     : Icons.remove_red_eye_outlined,
-                                size: 25,
+                                size: 20,
                                 color: loginController.obscureText.value
                                     ? ConstantColors.uniGreen
                                     : ConstantColors.comColor,
@@ -167,8 +165,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           loginController.loginMethod(context);
                         },
                         child: Container(
-                          height: MediaQuery.of(context).size.width / 6,
-                          width: MediaQuery.of(context).size.width / 2.13,
+                          height: MediaQuery.of(context).size.width / 7,
+                          width: MediaQuery.of(context).size.width / 3,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
                             color: ConstantColors.comColor,

@@ -43,11 +43,11 @@ class ReusableTextFormField extends StatelessWidget {
           filled: true,
           hintText: hintText,
           hintStyle: const TextStyle(
-              color: Colors.black54, fontSize: 18, fontWeight: FontWeight.w600),
+              color: Colors.black54, fontSize: 16, fontWeight: FontWeight.w600),
           fillColor: Colors.white10,
           labelText: labelText,
           labelStyle: const TextStyle(
-              color: Colors.black, fontSize: 20, fontWeight: FontWeight.w800),
+              color: Colors.black, fontSize: 16, fontWeight: FontWeight.w800),
         ),
       ),
     );

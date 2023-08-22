@@ -222,6 +222,15 @@ class _ManualEntryState extends State<ManualEntry> {
                 ),
               ),
               const SizedBox(height: 20,),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const [
+                    Text('Last added product', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                  ],
+                ),
+              ),
               if(widget.mode == 'Online')...[
                 if(manual.manualAddedProduct == null)...[
                   Card(
