@@ -92,8 +92,6 @@ class OfflineRepo{
             );
 
           }
-
-
         }
         else{
           success = 1;
@@ -118,10 +116,6 @@ class OfflineRepo{
           xcus = existingRow.first['xcus'] as String?;
           tag_no = existingRow.first['tag_no'] as String?;
 
-          // print('Sub String: ${extractedItemCode}');
-          // print('MainItem: ${mainItem}');
-
-
           if (scanningRow.isNotEmpty) {
             // Item exists, perform an update using raw SQL query
             result = await dbClient.rawUpdate(
@@ -131,8 +125,6 @@ class OfflineRepo{
               [itemCode],
             );
           } else {
-
-
             // Item doesn't exist, perform an insert using raw SQL query
             result = await dbClient.rawInsert(
               'INSERT INTO ${DBHelper.scannerTable} '
@@ -140,10 +132,7 @@ class OfflineRepo{
                   'VALUES (?, ?, ?, "1.0", "0.0", "1.0", "0.0", ?, ?, "77", ?, ?)',
               [itemCode, mainItem, itemDesc, xcus, deviceID, tag_no, userID],
             );
-
           }
-
-
         }
         else{
           success = 1;
@@ -231,6 +220,22 @@ class OfflineRepo{
     }
     print('the items are: $result');
     return success;
+  }
+
+  Future getManualAddedProduct() async{
+    var dbClient = await conn.db;
+    List scannedProducts = [];
+    try {
+      List<Map<String, dynamic>> maps = await dbClient!.rawQuery(
+          "SELECT * FROM ${DBHelper.scannerTable} LIMIT 1");
+      for (var products in maps) {
+        scannedProducts.add(products);
+      }
+    } catch (e) {
+      print("There are some issues getting products : $e");
+    }
+    // print("All cart product from Header: $cartList");
+    return scannedProducts;
   }
 
 
