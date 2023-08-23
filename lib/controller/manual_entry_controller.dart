@@ -83,7 +83,8 @@ class ManualController extends GetxController {
   //for manual add in online mode
   ManualAddedProductModel? manualAddedProduct;
   RxBool entryDone = false.obs;
-  Future<void> getManualAddedProduct(String tagNum,String itemCode,) async{
+  Future<void> getManualAddedProduct(String tagNum, String itemCode) async{
+
     try {
       entryDone(true);
       var response = await http
@@ -181,6 +182,7 @@ class ManualController extends GetxController {
     qtyController.clear(); // Clear the TextEditingController
     // Reset other variables or states within the manual controller if needed
    entryDone.value = false;
+   isEmptyField.value = false;
    manualAddedProduct = null;
   }
 }

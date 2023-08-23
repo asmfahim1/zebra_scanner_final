@@ -26,26 +26,27 @@ class ManualEntry extends StatefulWidget {
 class _ManualEntryState extends State<ManualEntry> {
      LoginController login = Get.find<LoginController>();
      ManualController manual = Get.put(ManualController());
-  // OnlineController online = Get.put(OnlineController());
-  // OfflineController offline = Get.put(OfflineController());
 
   //controlling the scanner button
   Future<void> initScanner() async {
     FlutterDataWedge.initScanner(
         profileName: 'FlutterDataWedge',
         onScan: (result) async{
-          manual.productCode.clear();
-          print('=====${manual.productCode.text}');
-          manual.lastCode.value = result.data;
-          manual.productCode.text = manual.lastCode.value;
-        });
+          print('Before scan: ${manual.productCode.text}');
+          //manual.lastCode.value = result.data;
+          manual.productCode.text = result.data;
+          //manual.productCode.clear();
+          print('After scan : ${manual.productCode.text}');
+        },
+
+    );
+
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    initScanner();
   }
 
   @override
@@ -133,15 +134,19 @@ class _ManualEntryState extends State<ManualEntry> {
                   fontSize: 14,
                 ),
                 onChanged: (value) async{
+
                   if(widget.mode == 'Online'){
                     if(manual.productCode.text.length >= 5){
-                      print('==============Search from server : ${manual.productCode}============');
+                      //await initScanner();
+                      print('latest textfield value: ${manual.productCode.text}');
                       await manual.getManualAddedProduct(widget.tagNum.toString(), manual.productCode.text);
+                      manual.productCode.clear();
                     }else{
                     }
                   }else{
-                    print('go to offline mode');
+
                   }
+
                 },
               ),
             ),
