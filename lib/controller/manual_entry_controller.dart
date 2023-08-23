@@ -20,6 +20,7 @@ class ManualController extends GetxController {
       BotToast.showLoading();
       if(productCode.text.isEmpty || qtyController.text.isEmpty){
         //entryDone(false);
+        BotToast.closeAllLoading();
         isEmptyField(true);
         Get.snackbar('Warning!',
             'Please fill up all the field',
@@ -41,7 +42,7 @@ class ManualController extends GetxController {
               }));
           if(response.statusCode == 200){
             clearTextField();
-            await getManualAddedProduct(tagNum,userId);
+            //await getManualAddedProduct(tagNum,userId);
             Get.snackbar('Success', 'Product added',
               backgroundColor: ConstantColors.uniGreen,
               colorText: Colors.white,
@@ -82,34 +83,29 @@ class ManualController extends GetxController {
   //for manual add in online mode
   ManualAddedProductModel? manualAddedProduct;
   RxBool entryDone = false.obs;
-  Future<void> getManualAddedProduct(String tagNum, String userId,) async{
+  Future<void> getManualAddedProduct(String tagNum,String itemCode,) async{
     try {
       entryDone(true);
       var response = await http
-          .get(Uri.parse('http://${login.serverIp.value}/unistock/zebra/lastAddedProduct.php?tag_no=$tagNum&userID=$userId'));
+          .get(Uri.parse('http://${login.serverIp.value}/unistock/zebra/searchedProduct.php?tag_no=$tagNum&userID=${login.userId.value}&device=${login.deviceID.value}&item=$itemCode'));
       if (response.statusCode == 200) {
         entryDone(false);
         manualAddedProduct = manualAddedProductModelFromJson(response.body);
       } else {
         entryDone(false);
-        Get.snackbar('Warning!', 'Something went wrong',
+        manualAddedProduct =null;
+        /*Get.snackbar('Warning!', 'Invalid code',
             borderWidth: 1.5,
             borderColor: Colors.black54,
             backgroundColor: Colors.red,
             colorText: Colors.white,
             duration: const Duration(seconds: 2),
-            snackPosition: SnackPosition.TOP);
+            snackPosition: SnackPosition.TOP);*/
       }
       entryDone(false);
     } catch (e) {
       entryDone(false);
-      Get.snackbar('Warning!', 'Failed to connect server',
-          borderWidth: 1.5,
-          borderColor: Colors.black54,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-          duration: const Duration(seconds: 2),
-          snackPosition: SnackPosition.TOP);
+      manualAddedProduct = null;
       print('There is a issue connecting to internet: $e');
     }
   }
@@ -177,5 +173,14 @@ class ManualController extends GetxController {
   void clearTextField(){
     productCode.clear();
     qtyController.clear();
+  }
+
+  void releaseVariables(){
+    // Clear the fields and variables within the manual controller
+    productCode.clear(); // Clear the TextEditingController
+    qtyController.clear(); // Clear the TextEditingController
+    // Reset other variables or states within the manual controller if needed
+   entryDone.value = false;
+   manualAddedProduct = null;
   }
 }

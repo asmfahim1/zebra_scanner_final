@@ -65,13 +65,12 @@ class ServerController extends GetxController {
             });
         if(response.statusCode == 200){
           isLoading1(false);
-          //saveValue(server.text.toString());
           Get.to(() => const LoginScreen());
         }else{
           isLoading1(false);
           Get.snackbar(
             'Error!',
-            "Failed to connect server",
+            "Something went wrong",
             borderWidth: 1.5,
             borderColor: Colors.black54,
             colorText: Colors.white,
@@ -95,13 +94,4 @@ class ServerController extends GetxController {
       print('Server error: $e');
     }
   }
-
-  // //saving data for further use
-  // // RxString deviceID = ''.obs;
-  // // RxString ipAddress = ''.obs;
-  //
-  // void saveValue(String serverIP) {
-  //   deviceID.value = deviceId;
-  //   ipAddress.value = serverIP;
-  // }
 }

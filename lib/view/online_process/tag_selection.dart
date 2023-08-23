@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zebra_scanner_final/controller/login_controller.dart';
 import 'package:zebra_scanner_final/controller/tag_controller.dart';
+import 'package:zebra_scanner_final/view/offline_process/scan_type_screen.dart';
 import 'package:zebra_scanner_final/view/online_process/online_mode_screen.dart';
+import 'package:zebra_scanner_final/view/online_process/type_of_scanning_screen.dart';
 import 'package:zebra_scanner_final/widgets/appBar_widget.dart';
 import 'package:get/get.dart';
 import 'package:zebra_scanner_final/constants/const_colors.dart';
@@ -59,8 +61,7 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
           ),
           Expanded(
             child: Container(
-              //wrap ListView with Obc() for state-management. So that the product will show at the time when the screen is built.
-              margin: const EdgeInsets.only(left: 05, right: 05),
+               margin: const EdgeInsets.only(left: 05, right: 05),
               padding: const EdgeInsets.symmetric(vertical: 5),
               child: Obx(() {
                 if (tagController.isLoading.value) {
@@ -104,7 +105,7 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
                           } else {
                             return GestureDetector(
                                 onTap: () {
-                                  Get.to(() => OnlineMode(
+                                  Get.to(() => OnlineScanTypeScreen(
                                         tagNum: tagController.tagList[index].xtagnum,
                                         storeId: tagController.tagList[index].xwh,
                                       )
@@ -114,42 +115,27 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
                                   alignment: Alignment.center,
                                   children: [
                                     Container(
-                                        height: MediaQuery.of(context)
-                                                .size
-                                                .width /
-                                            2.6,
-                                        width: MediaQuery.of(context)
-                                                .size
-                                                .width /
-                                            2.13,
+                                        height: MediaQuery.of(context).size.width / 2.6,
+                                        width: MediaQuery.of(context).size.width / 2.13,
                                         decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
+                                          borderRadius: BorderRadius.circular(20.0),
                                           gradient: LinearGradient(
                                             stops: tagController.stops,
-                                            colors: [
+                                            colors: const [
                                               ConstantColors.comColor,
                                               ConstantColors.uniGreen,
                                             ],
                                             begin: Alignment.topLeft,
                                             end: Alignment.bottomRight,
                                           ),
-                                        )),
+                                        ),),
                                     Container(
-                                      /*height: 118,
-                                      width: 142,*/
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
-                                          color:
-                                              Colors.white.withOpacity(0.2)
-                                          /*color: Colors.transparent
-                                            .withOpacity(0.2),*/
-                                          ),
+                                          borderRadius: BorderRadius.circular(20.0),
+                                          color: Colors.white.withOpacity(0.2)),
                                       child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             tagController
@@ -184,9 +170,11 @@ class _TagSelectScreenState extends State<TagSelectScreen> {
                                       ),
                                     )
                                   ],
-                                ));
+                                ),
+                            );
                           }
-                        });
+                        },
+                    );
                   }
                 }
               }),

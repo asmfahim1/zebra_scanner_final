@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,10 +33,9 @@ class LoginController extends GetxController {
   RxString accessToken = ''.obs;
 
   Future<void> loginMethod(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     try{
-      //isLoading(true);
       BotToast.showLoading();
-      SharedPreferences prefs = await SharedPreferences.getInstance();
       serverIp.value = prefs.getString('ipAddress')!;
       deviceID.value = prefs.getString('deviceId')!;
       var response = await http.get(Uri.parse(
@@ -43,13 +43,11 @@ class LoginController extends GetxController {
       if (response.statusCode == 200) {
         loginModel = loginModelFromJson(response.body);
         if(user.text == loginModel.zemail && pass.text == loginModel.xpassword){
-          //isLoading(false);
           BotToast.closeAllLoading();
           userId.value = loginModel.xposition.toString();
           await prefs.setString('accessToken', loginModel.xaccess.toString());
           accessToken.value = prefs.getString('accessToken')!;
           Get.to(() => const ModeSelect());
-          print('serverIp : $serverIp=========deviceId: $deviceID=============accessToken: $accessToken');
           Get.snackbar('Success!', "Successfully logged in",
             borderWidth: 1.5,
             borderColor: Colors.black54,
@@ -59,7 +57,6 @@ class LoginController extends GetxController {
             snackPosition: SnackPosition.TOP,
           );
         }else{
-          //isLoading(false);
           BotToast.closeAllLoading();
           showDialog<String>(
             context: context,
@@ -71,7 +68,6 @@ class LoginController extends GetxController {
           );
         }
       }else if(response.statusCode == 403){
-        //isLoading(false);
         BotToast.closeAllLoading();
         showDialog<String>(
           context: context,
@@ -82,7 +78,6 @@ class LoginController extends GetxController {
           ),
         );
       }else if (response.statusCode == 404) {
-        //isLoading(false);
         BotToast.closeAllLoading();
         showDialog<String>(
           context: context,
@@ -94,7 +89,6 @@ class LoginController extends GetxController {
         );
       }
     }catch(e){
-      //isLoading(false);
       BotToast.closeAllLoading();
       Get.snackbar('Warning!', 'Failed to connect server',
           borderWidth: 1.5,
@@ -103,7 +97,6 @@ class LoginController extends GetxController {
           colorText: Colors.white,
           duration: const Duration(seconds: 2),
           snackPosition: SnackPosition.TOP);
-      print('There is a issue connecting to internet: $e');
     }
   }
 
@@ -184,8 +177,6 @@ class LoginController extends GetxController {
       isLogout(true);
       BotToast.showLoading();
       var response = await http.post(Uri.parse('http://${serverIp.value}/unistock/login.php?zemail=${userId.value}'));
-      print('userId: $userId');
-      print('statusCode: ${response.statusCode}');
       if (response.statusCode == 200) {
         isLogout(false);
         BotToast.closeAllLoading();
@@ -212,5 +203,19 @@ class LoginController extends GetxController {
           duration: const Duration(seconds: 2),
           snackPosition: SnackPosition.TOP);
     }
+  }
+
+
+
+  //clear cache memory
+  Future<void> clearCache() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try{
+      await prefs.remove('ipAddress');
+      await prefs.remove('deviceId');
+    }catch(e){
+      log("Failed to clear cache");
+    }
+
   }
 }

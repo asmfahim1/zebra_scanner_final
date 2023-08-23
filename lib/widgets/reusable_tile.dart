@@ -3,11 +3,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:zebra_scanner_final/constants/const_colors.dart';
 
 class TileBtn extends StatelessWidget {
-  String buttonName;
-  String imageName;
-  VoidCallback onPressed;
+  final String buttonName;
+  final String imageName;
+  final VoidCallback onPressed;
 
-  TileBtn({
+  const TileBtn({
     required this.imageName,
     required this.buttonName,
     required this.onPressed,
@@ -17,8 +17,8 @@ class TileBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.width / 2.5,
-      width: MediaQuery.of(context).size.width / 2.65,
+      height: MediaQuery.of(context).size.width / 2.8,
+      width: MediaQuery.of(context).size.width / 2.8,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -44,8 +44,8 @@ class TileBtn extends StatelessWidget {
               children: [
                 Image(
                   image: AssetImage(imageName),
-                  height: MediaQuery.of(context).size.height / 8.5,
-                  width: MediaQuery.of(context).size.width / 6,
+                  height: MediaQuery.of(context).size.height / 10,
+                  width: MediaQuery.of(context).size.width / 8,
                 ),
                 const SizedBox(
                   height: 10,
@@ -54,7 +54,7 @@ class TileBtn extends StatelessWidget {
                   buttonName,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.bakbakOne(
-                    fontSize: MediaQuery.of(context).size.height / 48,
+                    fontSize: MediaQuery.of(context).size.height / 40,
                     color: ConstantColors.uniGreen,
                   ),
                 )

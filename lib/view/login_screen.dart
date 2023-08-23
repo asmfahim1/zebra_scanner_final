@@ -40,11 +40,12 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 30,),
+              const SizedBox(height: 30,),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: GestureDetector(
                   onTap: (){
+                    //loginController.clearCache();
                     Get.offAll(()=> const ServerSetupScreen());
                   },
                   child: Row(
@@ -95,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ReusableTextFormField(
                           hintText: "Enter User Name",
                           labelText: "User name",
-                          server: loginController.user,
+                          controller: loginController.user,
                           icon: const Icon(
                             Icons.person,
                             size: 20,
@@ -104,11 +105,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Obx(
-                            () => ReusableTextPassField(
+                      Obx(() => ReusableTextPassField(
                           hintText: "Enter Password",
                           labelText: "Password",
-                          server: loginController.pass,
+                          controller: loginController.pass,
                           prefIcon: const Icon(
                             Icons.vpn_key_outlined,
                             size: 20,
@@ -184,7 +184,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       const SizedBox(
-                        height: 15,
+                        height: 10,
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),

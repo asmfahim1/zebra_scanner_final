@@ -4,14 +4,14 @@ import 'package:zebra_scanner_final/constants/const_colors.dart';
 class ReusableTextFormField extends StatelessWidget {
   String hintText;
   String labelText;
-  TextEditingController server = TextEditingController();
+  TextEditingController controller = TextEditingController();
   Widget icon;
 
   ReusableTextFormField(
       {Key? key,
       required this.hintText,
       required this.labelText,
-      required this.server,
+      required this.controller,
       required this.icon})
       : super(key: key);
 
@@ -23,7 +23,7 @@ class ReusableTextFormField extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       //margin: const EdgeInsets.only(left: 10, right: 10),
       child: TextFormField(
-        controller: server,
+        controller: controller,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
