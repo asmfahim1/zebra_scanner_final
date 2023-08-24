@@ -33,12 +33,9 @@ class _ManualEntryState extends State<ManualEntry> {
         profileName: 'FlutterDataWedge',
         onScan: (result) async{
           print('Before scan: ${manual.productCode.text}');
-          //manual.lastCode.value = result.data;
           manual.productCode.text = result.data;
-          //manual.productCode.clear();
           print('After scan : ${manual.productCode.text}');
         },
-
     );
 
   }
@@ -138,9 +135,8 @@ class _ManualEntryState extends State<ManualEntry> {
                   if(widget.mode == 'Online'){
                     if(manual.productCode.text.length >= 5){
                       //await initScanner();
-                      print('latest textfield value: ${manual.productCode.text}');
+                      print('onChanged Call: ${manual.productCode.text}');
                       await manual.getManualAddedProduct(widget.tagNum.toString(), manual.productCode.text);
-                      manual.productCode.clear();
                     }else{
                     }
                   }else{
@@ -171,7 +167,7 @@ class _ManualEntryState extends State<ManualEntry> {
                           width: double.maxFinite,
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: const Center(
-                            child: Text('No product added yet'),
+                            child: Text('No product searched'),
                           ),
                         ),
                       ),

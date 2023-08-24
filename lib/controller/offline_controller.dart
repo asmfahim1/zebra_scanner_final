@@ -272,14 +272,16 @@ class OfflineController extends GetxController {
           MasterItems().insertToMasterTable(OfflineProductModel.fromJson(products));
         }).toList();
         isFetched(false);
-        showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => SpecialAlert(
-            headTitle: "Successful!",
-            message: "Data fetched successfully",
-            btnText: "Back",
-          ),
-        );
+        if (context.mounted){
+          showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => SpecialAlert(
+              headTitle: "Successful!",
+              message: "Data fetched successfully",
+              btnText: "Back",
+            ),
+          );
+        }
         return 'Product fetched Successfully';
       } else {
         isFetched(false);

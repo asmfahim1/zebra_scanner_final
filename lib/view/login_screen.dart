@@ -160,29 +160,32 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(
                         height: 05,
                       ),
-                      GestureDetector(
-                        onTap: () async {
-                          loginController.loginMethod(context);
-                        },
-                        child: Container(
-                          height: MediaQuery.of(context).size.width / 7,
-                          width: MediaQuery.of(context).size.width / 3,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                            color: ConstantColors.comColor,
-                          ),
-                          child: const Center(
-                            child: Text(
-                              'LOGIN',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                              ),
+                      Obx((){
+                        return GestureDetector(
+                          onTap: () async {
+                            loginController.loginMethod(context);
+                          },
+                          child: Container(
+                            height: MediaQuery.of(context).size.width / 7,
+                            width: MediaQuery.of(context).size.width / 3,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                              color: ConstantColors.comColor,
                             ),
-                          ),
-                        ),
-                      ),
+                            child: loginController.isLoading.value
+                                    ? const CircularProgressIndicator(color: Colors.white,)
+                                    : const Text(
+                                        'LOGIN',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                            ),
+                        );
+                      }),
                       const SizedBox(
                         height: 10,
                       ),

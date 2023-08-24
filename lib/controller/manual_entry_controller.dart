@@ -54,15 +54,18 @@ class ManualController extends GetxController {
           }else{
             //entryDone(false);
             isEmptyField(false);
-            BotToast.closeAllLoading();
-            showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => ReusableAlerDialogue(
-                headTitle: "Warning!",
-                message: "Invalid item code",
-                btnText: "Back",
-              ),
-            );
+            if (context.mounted){
+              BotToast.closeAllLoading();
+              showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => const ReusableAlerDialogue(
+                  headTitle: "Warning!",
+                  message: "Invalid item code",
+                  btnText: "Back",
+                ),
+              );
+            }
+
           }
         }catch(e){
           //entryDone(false);

@@ -3,10 +3,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:zebra_scanner_final/constants/const_colors.dart';
 
 class ReusableAlerDialogue extends StatelessWidget {
-  String? headTitle;
-  String? message;
-  String? btnText;
-  ReusableAlerDialogue({Key? key, this.headTitle, this.message, this.btnText})
+  final String? headTitle;
+  final String? message;
+  final String? btnText;
+  const ReusableAlerDialogue({Key? key, this.headTitle, this.message, this.btnText})
       : super(key: key);
 
   @override

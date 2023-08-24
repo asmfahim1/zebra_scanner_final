@@ -25,7 +25,7 @@ class LoginController extends GetxController {
 
   RxBool isChecked = false.obs;
   //login method
-  //RxBool isLoading = false.obs;
+  RxBool isLoading = false.obs;
   late LoginModel loginModel;
   RxString userId = ''.obs;
   RxString serverIp = ''.obs;
@@ -35,7 +35,8 @@ class LoginController extends GetxController {
   Future<void> loginMethod(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try{
-      BotToast.showLoading();
+      isLoading(true);
+      //BotToast.showLoading();
       serverIp.value = prefs.getString('ipAddress')!;
       deviceID.value = prefs.getString('deviceId')!;
       var response = await http.get(Uri.parse(
@@ -43,7 +44,8 @@ class LoginController extends GetxController {
       if (response.statusCode == 200) {
         loginModel = loginModelFromJson(response.body);
         if(user.text == loginModel.zemail && pass.text == loginModel.xpassword){
-          BotToast.closeAllLoading();
+          isLoading(false);
+          // BotToast.closeAllLoading();
           userId.value = loginModel.xposition.toString();
           await prefs.setString('accessToken', loginModel.xaccess.toString());
           accessToken.value = prefs.getString('accessToken')!;
@@ -57,39 +59,49 @@ class LoginController extends GetxController {
             snackPosition: SnackPosition.TOP,
           );
         }else{
-          BotToast.closeAllLoading();
+          isLoading(false);
+          //BotToast.closeAllLoading();
+          if (context.mounted){
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => const ReusableAlerDialogue(
+                headTitle: "Warning!",
+                message: "Invalid user name or password",
+                btnText: "Back",
+              ),
+            );
+          }
+
+        }
+      }else if(response.statusCode == 403){
+        isLoading(false);
+        if (context.mounted){
           showDialog<String>(
             context: context,
-            builder: (BuildContext context) => ReusableAlerDialogue(
+            builder: (BuildContext context) => const ReusableAlerDialogue(
               headTitle: "Warning!",
-              message: "Invalid user name or password",
+              message: "User is already logged in from another device.",
               btnText: "Back",
             ),
           );
         }
-      }else if(response.statusCode == 403){
-        BotToast.closeAllLoading();
-        showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => ReusableAlerDialogue(
-            headTitle: "Warning!",
-            message: "User is already logged in from another device.",
-            btnText: "Back",
-          ),
-        );
       }else if (response.statusCode == 404) {
-        BotToast.closeAllLoading();
-        showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => ReusableAlerDialogue(
-            headTitle: "Warning!",
-            message: "Invalid userid or password",
-            btnText: "Back",
-          ),
-        );
+        isLoading(false);
+        //BotToast.closeAllLoading();
+        if (context.mounted){
+          showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => const ReusableAlerDialogue(
+              headTitle: "Warning!",
+              message: "Invalid userid or password",
+              btnText: "Back",
+            ),
+          );
+        }
       }
     }catch(e){
-      BotToast.closeAllLoading();
+      isLoading(false);
+      //BotToast.closeAllLoading();
       Get.snackbar('Warning!', 'Failed to connect server',
           borderWidth: 1.5,
           borderColor: Colors.black54,
@@ -112,9 +124,9 @@ class LoginController extends GetxController {
           fontWeight: FontWeight.w800,
         ),
       ),
-      content: SingleChildScrollView(
+      content: const SingleChildScrollView(
         child: ListBody(
-          children: const <Widget>[
+          children: <Widget>[
             Text(
               'Do you want to exit the app?',
               style: TextStyle(
@@ -184,14 +196,16 @@ class LoginController extends GetxController {
       }else{
         isLogout(false);
         BotToast.closeAllLoading();
-        showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => ReusableAlerDialogue(
-            headTitle: "Warning!",
-            message: "Failed to connect server",
-            btnText: "Back",
-          ),
-        );
+        if (context.mounted){
+          showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => const ReusableAlerDialogue(
+              headTitle: "Warning!",
+              message: "Failed to connect server",
+              btnText: "Back",
+            ),
+          );
+        }
       }
     }catch(e){
       isLogout(false);
