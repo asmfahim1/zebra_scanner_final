@@ -222,12 +222,12 @@ class OfflineRepo{
     return success;
   }
 
-  Future getManualAddedProduct() async{
+  Future getManualAddedProduct(String itemCode) async{
     var dbClient = await conn.db;
     List scannedProducts = [];
     try {
       List<Map<String, dynamic>> maps = await dbClient!.rawQuery(
-          "SELECT * FROM ${DBHelper.scannerTable} LIMIT 1");
+          "SELECT * FROM ${DBHelper.scannerTable} WHERE itemcode = $itemCode");
       for (var products in maps) {
         scannedProducts.add(products);
       }

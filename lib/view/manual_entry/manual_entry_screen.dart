@@ -6,7 +6,6 @@ import 'package:zebra_scanner_final/constants/const_colors.dart';
 import 'package:zebra_scanner_final/controller/login_controller.dart';
 import 'package:zebra_scanner_final/controller/manual_entry_controller.dart';
 import 'package:get/get.dart';
-import '../../widgets/reusable_alert.dart';
 
 class ManualEntry extends StatefulWidget {
   final String? mode;
@@ -32,9 +31,8 @@ class _ManualEntryState extends State<ManualEntry> {
     FlutterDataWedge.initScanner(
         profileName: 'FlutterDataWedge',
         onScan: (result) async{
-          print('Before scan: ${manual.productCode.text}');
+          manual.productCode.clear();
           manual.productCode.text = result.data;
-          print('After scan : ${manual.productCode.text}');
         },
     );
 
@@ -44,6 +42,7 @@ class _ManualEntryState extends State<ManualEntry> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    initScanner();
   }
 
   @override
@@ -131,12 +130,17 @@ class _ManualEntryState extends State<ManualEntry> {
                   fontSize: 14,
                 ),
                 onChanged: (value) async{
-
                   if(widget.mode == 'Online'){
                     if(manual.productCode.text.length >= 5){
-                      //await initScanner();
                       print('onChanged Call: ${manual.productCode.text}');
                       await manual.getManualAddedProduct(widget.tagNum.toString(), manual.productCode.text);
+                    }else{
+                    }
+                  }else if(widget.mode == 'Offline'){
+                    print('offline entered');
+                    if(manual.productCode.text.length >= 5){
+                      print('onChanged Call: ${manual.productCode.text}');
+                      await manual.getSingleScannedProduct();
                     }else{
                     }
                   }else{
@@ -176,30 +180,32 @@ class _ManualEntryState extends State<ManualEntry> {
                     return _manualAddedProduct(manual: manual);
                   }
                 } else {
-                  if (manual.manualAddedProduct == null) {
-                    return Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      color: Colors.white,
-                      elevation: 2,
-                      shadowColor: Colors.blueGrey,
-                      child: Container(
-                        height: 100,
-                        width: double.maxFinite,
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: const Center(
-                          child: Text('No product added yet'),
+                  if (manual.singleAddedProducts.isEmpty) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        color: Colors.white,
+                        elevation: 2,
+                        shadowColor: Colors.blueGrey,
+                        child: Container(
+                          height: 100,
+                          width: double.maxFinite,
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: const Center(
+                            child: Text('No product searched'),
+                          ),
                         ),
                       ),
                     );
                   } else {
-                    return const SizedBox(); // Return an empty SizedBox if not needed
+                    return _manualOfflineAddedProduct(manual: manual);
                   }
                 }
               }
             }),
-
             const SizedBox(height: 10,),
             Container(
               height: 50,
@@ -269,6 +275,7 @@ class _ManualEntryState extends State<ManualEntry> {
                         widget.storeId.toString(),
                       );
                     }else{
+                      print('offline entered');
                       manual.addManuallyOffline(context);
                     }
                   },
@@ -309,14 +316,6 @@ class _ManualEntryState extends State<ManualEntry> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              /*Text(
-                      subTitle,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.urbanist(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),*/
               Row(
                 children: [
                   Text(
@@ -343,4 +342,58 @@ class _ManualEntryState extends State<ManualEntry> {
       ),
     );
   }
+
+     Widget _manualOfflineAddedProduct({
+       required ManualController manual
+     }){
+       return Padding(
+         padding: const EdgeInsets.symmetric(horizontal: 10),
+         child: Card(
+           shape: RoundedRectangleBorder(
+               borderRadius: BorderRadius.circular(10.0)),
+           color: Colors.white,
+           elevation: 2,
+           shadowColor: Colors.blueGrey,
+           child: Container(
+             height: 80,
+             width: double.maxFinite,
+             padding: const EdgeInsets.symmetric(horizontal: 10),
+             child: Column(
+               crossAxisAlignment: CrossAxisAlignment.start,
+               mainAxisAlignment: MainAxisAlignment.center,
+               children: [
+                 Text(
+                   manual.singleAddedProducts[0]["itemdesc"] ?? 'Description : ',
+                   style: GoogleFonts.poppins(
+                     color: Colors.black,
+                     fontSize: 12,
+                     fontWeight: FontWeight.w500,
+                   ),
+                 ),
+                 Row(
+                   children: [
+                     Text(
+                       'Previous Count :',
+                       style: GoogleFonts.urbanist(
+                         color: Colors.black,
+                         fontSize: 12,
+                         fontWeight: FontWeight.w500,
+                       ),
+                     ),
+                     Text(
+                       manual.singleAddedProducts[0]["scanqty"] ?? 'Description : ',
+                       style: GoogleFonts.urbanist(
+                         color: Colors.black,
+                         fontSize: 13,
+                         fontWeight: FontWeight.w800,
+                       ),
+                     ),
+                   ],
+                 ),
+               ],
+             ),
+           ),
+         ),
+       );
+     }
 }

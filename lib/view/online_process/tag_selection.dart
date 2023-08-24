@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zebra_scanner_final/controller/login_controller.dart';
 import 'package:zebra_scanner_final/controller/tag_controller.dart';
-import 'package:zebra_scanner_final/view/offline_process/scan_type_screen.dart';
-import 'package:zebra_scanner_final/view/online_process/online_mode_screen.dart';
 import 'package:zebra_scanner_final/view/online_process/type_of_scanning_screen.dart';
 import 'package:zebra_scanner_final/widgets/appBar_widget.dart';
 import 'package:get/get.dart';

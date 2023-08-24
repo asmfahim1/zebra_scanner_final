@@ -19,7 +19,7 @@ class ManualController extends GetxController {
   Future<void> addItemManually(BuildContext context, String idAddress,String deviceID,String userId,String tagNum,String storeId) async {
       BotToast.showLoading();
       if(productCode.text.isEmpty || qtyController.text.isEmpty){
-        //entryDone(false);
+        entryDone(false);
         BotToast.closeAllLoading();
         isEmptyField(true);
         Get.snackbar('Warning!',
@@ -29,7 +29,7 @@ class ManualController extends GetxController {
             duration: const Duration(seconds: 2));
       }else{
         try{
-          //entryDone(true);
+          entryDone(true);
           var response = await http.post(
               Uri.parse("http://$idAddress/unistock/zebra/manual_Add.php"),
               body: jsonEncode(<String, dynamic>{
@@ -48,11 +48,11 @@ class ManualController extends GetxController {
               colorText: Colors.white,
               duration: const Duration(seconds: 2),
             );
-            //entryDone(false);
+            entryDone(false);
             isEmptyField(false);
             BotToast.closeAllLoading();
           }else{
-            //entryDone(false);
+            entryDone(false);
             isEmptyField(false);
             if (context.mounted){
               BotToast.closeAllLoading();
@@ -68,7 +68,7 @@ class ManualController extends GetxController {
 
           }
         }catch(e){
-          //entryDone(false);
+          entryDone(false);
           isEmptyField(false);
           BotToast.closeAllLoading();
           Get.snackbar('Warning!', 'Failed to connect server',
@@ -119,9 +119,11 @@ class ManualController extends GetxController {
 
   Future<void> addManuallyOffline(BuildContext context) async {
     entryDone(true);
+    BotToast.showLoading();
     if(productCode.text.isEmpty || qtyController.text.isEmpty){
       entryDone(false);
       isEmptyField(true);
+      BotToast.closeAllLoading();
       Get.snackbar('Warning!',
           'Please fill up all the field',
           backgroundColor: Colors.red,
@@ -149,9 +151,11 @@ class ManualController extends GetxController {
         }
         entryDone(false);
         isEmptyField(false);
+        BotToast.closeAllLoading();
       }catch(e){
         entryDone(false);
         isEmptyField(false);
+        BotToast.closeAllLoading();
         Get.snackbar('Error', 'Something went wrong',
           backgroundColor: Colors.red,
           colorText: Colors.white,
@@ -166,26 +170,28 @@ class ManualController extends GetxController {
   Future<void> getSingleScannedProduct() async{
     try {
       entryDone(true);
-      singleAddedProducts = await OfflineRepo().getManualAddedProduct();
+      singleAddedProducts = await OfflineRepo().getManualAddedProduct(productCode.text);
       entryDone(false);
     } catch (error) {
       entryDone(false);
+      singleAddedProducts = [];
       print('There are some issue getting cart header list: $error');
     }
   }
 
   void clearTextField(){
     productCode.clear();
+    manualAddedProduct = null;
+    singleAddedProducts = [];
+    print('manual searched product: $manualAddedProduct');
     qtyController.clear();
   }
 
   void releaseVariables(){
-    // Clear the fields and variables within the manual controller
-    productCode.clear(); // Clear the TextEditingController
-    qtyController.clear(); // Clear the TextEditingController
-    // Reset other variables or states within the manual controller if needed
+    // Clear the fields and variables within the manual con
    entryDone.value = false;
    isEmptyField.value = false;
    manualAddedProduct = null;
+   singleAddedProducts = [];
   }
 }

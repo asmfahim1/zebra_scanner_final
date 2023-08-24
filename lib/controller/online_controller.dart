@@ -12,6 +12,14 @@ class OnlineController extends GetxController {
   RxString scannerStatus = "Scanner status".obs;
   RxString lastCode = ''.obs;
   TextEditingController qtyCon = TextEditingController();
+  //gradient calculation
+  static const double fillPercent = 52;
+  // fills 56.23% for container from bottom
+  static const double fillStop = (100 - fillPercent) / 95;
+  final List<double> stops = [
+    fillStop,
+    fillStop,
+  ];
 
   ConstantColors colors = ConstantColors();
 
@@ -96,30 +104,31 @@ class OnlineController extends GetxController {
       String storeId,
       String deviceID) async {
     try{
+      print('userId: ${login.userId.value}');
       postProduct(true);
       var response = await http.post(
           Uri.parse("http://$ipAddress/unistock/zebra/add_item.php"),
           body: jsonEncode(<String, dynamic>{
             "item": itemCode,
-            "user_id": login.userId.value,
+            "user_id": login.userId.value ?? '',
             "qty": 1.0,
             "tag_no": tagNum,
             "store": storeId,
             "device": deviceID
           }));
+      print("status code: ${response.statusCode}");
       if(response.statusCode == 200){
-        print('response : ${response.statusCode}');
         postProduct(false);
       } else{
-        print('response : ${response.statusCode}');
         postProduct(false);
         Get.snackbar('Error', 'Invalid item code',
+            borderWidth: 1.5,
             borderColor: Colors.black54,
             backgroundColor: Colors.red,
             colorText: Colors.white,
             duration: const Duration(seconds: 2),
+            snackPosition: SnackPosition.TOP
         );
-        print('Error occurred: ${response.statusCode}');
       }
     }catch(e){
       postProduct(false);
@@ -130,7 +139,6 @@ class OnlineController extends GetxController {
           colorText: Colors.white,
           duration: const Duration(seconds: 2),
           snackPosition: SnackPosition.TOP);
-      print('There is a issue connecting to internet: $e');
     }
   }
 
@@ -152,8 +160,9 @@ class OnlineController extends GetxController {
               "qty": qtyCon.text.toString(),
               "device": deviceID,
               "tag_no": tagNum
-            }));
-        print('manual response: ${response.statusCode}');
+            },
+          ),
+        );
       } else {
         var response = await http.post(
             Uri.parse("http://$ipAddress/unistock/zebra/update.php"),
@@ -163,8 +172,9 @@ class OnlineController extends GetxController {
               "qty": qtyCon.text.toString(),
               "device": deviceID,
               "tag_no": tagNum
-            }));
-        print('manual response: ${response.statusCode}');
+            },
+          ),
+        );
       }
       qtyCon.clear();
       quantity.value = 0;
@@ -176,7 +186,6 @@ class OnlineController extends GetxController {
           colorText: Colors.white,
           duration: const Duration(seconds: 2),
           snackPosition: SnackPosition.TOP);
-      print('Somthing went wrong manual: $e');
     }
   }
 
@@ -190,11 +199,6 @@ class OnlineController extends GetxController {
       String storeId,
       String deviceID) async {
     try{
-      print('item: $itemCode');
-      print('user: ${login.userId.value}');
-      print('qty: ${qtyCon.text.toString()}');
-      print('deviceId: $deviceID');
-      print('tagnum: $tagNum');
       if (double.parse(qtyCon.text) > totalQty) {
         Get.snackbar(
             'Warning!', "Quantity must be less than or equal total quantity",
@@ -224,7 +228,6 @@ class OnlineController extends GetxController {
               duration: const Duration(seconds: 1),
               snackPosition: SnackPosition.TOP);
           Navigator.pop(context);
-          print("==========${response.statusCode}");
         } else {
           var response = await http.post(
               Uri.parse("http://$ipAddress/unistock/zebra/adjustment.php"),
@@ -235,7 +238,6 @@ class OnlineController extends GetxController {
                 "device": deviceID,
                 "tag_no": tagNum
               }));
-          print("==========${response.statusCode}");
           Get.snackbar('Success!', "Product adjust successfully",
             borderWidth: 1.5,
             borderColor: Colors.black54,
@@ -257,7 +259,6 @@ class OnlineController extends GetxController {
           colorText: Colors.white,
           duration: const Duration(seconds: 2),
           snackPosition: SnackPosition.TOP);
-      print('Somthing went wrong : $e');
     }
   }
 
@@ -271,13 +272,10 @@ class OnlineController extends GetxController {
 
   //increment function
   RxDouble quantity = 0.0.obs;
-
   //making textField iterable update the value of both textController and quantity
   void updateTQ(String value) {
     qtyCon.text = value;
     quantity.value = double.parse(value);
-    print('update first quantity with the total amount : ${quantity.value}');
-    print('update first textController with the total amount : ${qtyCon.text}');
   }
 
   void incrementQuantity() {

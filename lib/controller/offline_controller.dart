@@ -325,10 +325,17 @@ class OfflineController extends GetxController {
   }
 
   Future<void> deleteAllData() async{
-    await MasterItems().deleteFromTerritoryTable();
-    Get.snackbar('Successful', 'Data deleted',
-        backgroundColor: Colors.white, duration: const Duration(seconds: 1));
-    print('Data deleted');
+    try{
+      await MasterItems().deleteFromTerritoryTable();
+      await getAll();
+      Get.snackbar('Successful', 'Data deleted',
+          backgroundColor: Colors.white, duration: const Duration(seconds: 1));
+      print('Data deleted');
+    }catch(e){
+      got(false);
+      print('Data deleted');
+    }
+
   }
 
   //RxBool uploaded = false.obs;

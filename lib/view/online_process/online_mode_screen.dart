@@ -49,7 +49,7 @@ class _OnlineModeState extends State<OnlineMode> {
           if (codeLength == 5 || codeLength == 12) {
             showDialog<String>(
               context: context,
-              builder: (BuildContext context) => ReusableAlerDialogue(
+              builder: (BuildContext context) => const ReusableAlerDialogue(
                 headTitle: "Warning!",
                 message: "Add Manually",
                 btnText: "OK",
@@ -58,7 +58,7 @@ class _OnlineModeState extends State<OnlineMode> {
           } else if (codeLength < 5) {
             showDialog<String>(
               context: context,
-              builder: (BuildContext context) => ReusableAlerDialogue(
+              builder: (BuildContext context) => const ReusableAlerDialogue(
                 headTitle: "Warning!",
                 message: "Invalid code",
                 btnText: "OK",
@@ -184,7 +184,7 @@ class _OnlineModeState extends State<OnlineMode> {
                   "No product added yet",
                   style: GoogleFonts.urbanist(
                     color: Colors.black,
-                    fontSize: 25,
+                    fontSize: 16,
                     fontWeight: FontWeight.w400,
                   ),
                 ));
@@ -195,8 +195,7 @@ class _OnlineModeState extends State<OnlineMode> {
                       var products = onlineController.filteredProductList[index];
                       return Container(
                         height: MediaQuery.of(context).size.height / 4.22,
-                        padding: const EdgeInsets.only(
-                            bottom: 5, left: 5, right: 5),
+                        padding: const EdgeInsets.only(bottom: 5, left: 5, right: 5),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20.0),
                         ),
@@ -210,14 +209,10 @@ class _OnlineModeState extends State<OnlineMode> {
                             children: [
                               Expanded(
                                 child: Container(
-                                  padding: const EdgeInsets.only(
-                                    left: 20,
-                                  ),
+                                  padding: const EdgeInsets.only(left: 20,),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
                                       Text(
                                         products.itemCode,
