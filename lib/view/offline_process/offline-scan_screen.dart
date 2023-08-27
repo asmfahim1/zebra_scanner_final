@@ -240,7 +240,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                     ),
                                   ),
                                 ),
-                                /*GestureDetector(
+                                GestureDetector(
                                   onTap: () async {
                                     offline.updateTQ('${scanned["scanqty"].toString()}');
                                     showDialog(
@@ -308,8 +308,8 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                         width: MediaQuery.of(context).size.width / 3.5,
                                                         child: TextField(
                                                           inputFormatters: [
-                                                            FilteringTextInputFormatter.deny(RegExp(r'^0')),
-                                                            FilteringTextInputFormatter.deny(RegExp(r'-')),
+                                                            /*FilteringTextInputFormatter.deny(RegExp(r'^0')),
+                                                            FilteringTextInputFormatter.deny(RegExp(r'-')),*/
                                                             FilteringTextInputFormatter.deny(RegExp(r',')),
                                                             FilteringTextInputFormatter.deny(RegExp(r'\+')),
                                                             FilteringTextInputFormatter.deny(RegExp(r'\*')),
@@ -372,7 +372,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                               Row(
                                                 mainAxisAlignment: MainAxisAlignment.center ,
                                                 children: [
-                                                  *//*TextButton(
+                                                  /*TextButton(
                                                     style: TextButton.styleFrom(
                                                       backgroundColor: ConstantColors
                                                           .comColor
@@ -392,7 +392,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                         FontWeight.w600,
                                                       ),
                                                     ),
-                                                  ),*//*
+                                                  ),*/
                                                   Container(
                                                     height: MediaQuery.of(context).size.width / 8.5,
                                                     width: MediaQuery.of(context).size.width / 4,
@@ -464,7 +464,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                       ),
                                     ),
                                   ),
-                                ),*/
+                                ),
                               ],
                             ),
                           ),

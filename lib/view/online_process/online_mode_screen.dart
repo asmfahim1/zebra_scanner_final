@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:flutter_datawedge/flutter_datawedge.dart';
@@ -249,7 +250,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                   ),
                                 ),
                               ),
-                             /* GestureDetector(
+                              GestureDetector(
                                 onTap: () async {
                                   onlineController.updateTQ(
                                       '${products.scanQty}');
@@ -322,9 +323,9 @@ class _OnlineModeState extends State<OnlineMode> {
                                                           FilteringTextInputFormatter
                                                               .deny(RegExp(
                                                                   r'^0')),
-                                                          FilteringTextInputFormatter
+                                                          /*FilteringTextInputFormatter
                                                               .deny(RegExp(
-                                                                  r'-')),
+                                                                  r'-')),*/
                                                           FilteringTextInputFormatter
                                                               .deny(RegExp(
                                                                   r',')),
@@ -400,7 +401,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
-                                                *//*TextButton(
+                                                /*TextButton(
                                                   style: TextButton.styleFrom(
                                                     backgroundColor: ConstantColors
                                                         .comColor
@@ -429,7 +430,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                           FontWeight.w600,
                                                     ),
                                                   ),
-                                                ),*//*
+                                                ),*/
                                                 Container(
                                                   height: MediaQuery.of(context).size.width / 8.5,
                                                   width: MediaQuery.of(context).size.width / 4,
@@ -499,7 +500,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                     ),
                                   ),
                                 ),
-                              ),*/
+                              ),
                             ],
                           ),
                         ),

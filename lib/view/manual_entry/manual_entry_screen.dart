@@ -230,7 +230,7 @@ class _ManualEntryState extends State<ManualEntry> {
                 controller: manual.qtyController,
                 inputFormatters: [
                   //FilteringTextInputFormatter.deny(RegExp(r'^0')),
-                  FilteringTextInputFormatter.deny(RegExp(r'-')),
+                  // FilteringTextInputFormatter.deny(RegExp(r'-')),
                   FilteringTextInputFormatter.deny(RegExp(r',')),
                   FilteringTextInputFormatter.deny(RegExp(r'\+')),
                   FilteringTextInputFormatter.deny(RegExp(r'\*')),
@@ -316,7 +316,7 @@ class _ManualEntryState extends State<ManualEntry> {
               Row(
                 children: [
                   Text(
-                    'Previous Count :',
+                    'Total Count :',
                     style: GoogleFonts.urbanist(
                       color: Colors.black,
                       fontSize: 12,
@@ -330,6 +330,52 @@ class _ManualEntryState extends State<ManualEntry> {
                       fontSize: 13,
                       fontWeight: FontWeight.w800,
                     ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'Auto Count :',
+                        style: GoogleFonts.urbanist(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        '${manual.manualAddedProduct?.quantity.toString()}',
+                        style: GoogleFonts.urbanist(
+                          color: Colors.black,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(width: 10,),
+                  Row(
+                    children: [
+                      Text(
+                        'Manual Count :',
+                        style: GoogleFonts.urbanist(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        '${manual.manualAddedProduct?.quantity.toString()}',
+                        style: GoogleFonts.urbanist(
+                          color: Colors.black,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -367,10 +413,11 @@ class _ManualEntryState extends State<ManualEntry> {
                      fontWeight: FontWeight.w500,
                    ),
                  ),
+
                  Row(
                    children: [
                      Text(
-                       'Previous Count :',
+                       'Total Count :',
                        style: GoogleFonts.urbanist(
                          color: Colors.black,
                          fontSize: 12,
@@ -384,6 +431,51 @@ class _ManualEntryState extends State<ManualEntry> {
                          fontSize: 13,
                          fontWeight: FontWeight.w800,
                        ),
+                     ),
+                   ],
+                 ),
+                 Row(
+                   mainAxisAlignment: MainAxisAlignment.start,
+                   children: [
+                     Row(
+                       children: [
+                         Text(
+                           'Auto Count :',
+                           style: GoogleFonts.urbanist(
+                             color: Colors.black,
+                             fontSize: 12,
+                             fontWeight: FontWeight.w500,
+                           ),
+                         ),
+                         Text(
+                           manual.singleAddedProducts[0]["quantity"].toString(),
+                           style: GoogleFonts.urbanist(
+                             color: Colors.black,
+                             fontSize: 13,
+                             fontWeight: FontWeight.w800,
+                           ),
+                         ),
+                       ],
+                     ),
+                     Row(
+                       children: [
+                         Text(
+                           'Manual Count :',
+                           style: GoogleFonts.urbanist(
+                             color: Colors.black,
+                             fontSize: 12,
+                             fontWeight: FontWeight.w500,
+                           ),
+                         ),
+                         Text(
+                           manual.singleAddedProducts[0]["quantity"].toString(),
+                           style: GoogleFonts.urbanist(
+                             color: Colors.black,
+                             fontSize: 13,
+                             fontWeight: FontWeight.w800,
+                           ),
+                         ),
+                       ],
                      ),
                    ],
                  ),
