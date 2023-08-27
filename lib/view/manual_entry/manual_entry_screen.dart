@@ -136,17 +136,14 @@ class _ManualEntryState extends State<ManualEntry> {
                       await manual.getManualAddedProduct(widget.tagNum.toString(), manual.productCode.text);
                     }else{
                     }
-                  }else if(widget.mode == 'Offline'){
+                  }else{
                     print('offline entered');
                     if(manual.productCode.text.length >= 5){
                       print('onChanged Call: ${manual.productCode.text}');
                       await manual.getSingleScannedProduct();
                     }else{
                     }
-                  }else{
-
                   }
-
                 },
               ),
             ),
@@ -363,7 +360,7 @@ class _ManualEntryState extends State<ManualEntry> {
                mainAxisAlignment: MainAxisAlignment.center,
                children: [
                  Text(
-                   manual.singleAddedProducts[0]["itemdesc"] ?? 'Description : ',
+                   manual.singleAddedProducts[0]["xdesc"],
                    style: GoogleFonts.poppins(
                      color: Colors.black,
                      fontSize: 12,
@@ -381,7 +378,7 @@ class _ManualEntryState extends State<ManualEntry> {
                        ),
                      ),
                      Text(
-                       manual.singleAddedProducts[0]["scanqty"] ?? 'Description : ',
+                       manual.singleAddedProducts[0]["quantity"].toString(),
                        style: GoogleFonts.urbanist(
                          color: Colors.black,
                          fontSize: 13,
