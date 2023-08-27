@@ -20,7 +20,8 @@ class ManualController extends GetxController {
       if(productCode.text.isEmpty || qtyController.text.isEmpty){
         //entryDone(false);
         isEmptyField(true);
-        Get.snackbar('Warning!',
+        Get.snackbar(
+            'Warning!',
             'Please fill up all the field',
             backgroundColor: Colors.red,
             colorText: Colors.white,
@@ -41,7 +42,9 @@ class ManualController extends GetxController {
           if(response.statusCode == 200){
             clearTextField();
             await getManualAddedProduct(tagNum,userId);
-            Get.snackbar('Success', 'Product added',
+            Get.snackbar(
+              'Success',
+              'Product added',
               backgroundColor: ConstantColors.uniGreen,
               colorText: Colors.white,
               duration: const Duration(seconds: 2),
@@ -86,7 +89,7 @@ class ManualController extends GetxController {
       entryDone(true);
       var response = await http
           .get(Uri.parse('http://${login.serverIp.value}/unistock/zebra/lastAddedProduct.php?tag_no=$tagNum&userID=$userId'));
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && response.body.isNotEmpty) {
         entryDone(false);
         manualAddedProduct = manualAddedProductModelFromJson(response.body);
       } else {
