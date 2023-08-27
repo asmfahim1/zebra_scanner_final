@@ -39,8 +39,9 @@ class LoginController extends GetxController {
       //BotToast.showLoading();
       serverIp.value = prefs.getString('ipAddress')!;
       deviceID.value = prefs.getString('deviceId')!;
+      print('Api: http://${serverIp.value}/unistock/zebra/login.php?zemail=${user.text}&xpassword=${pass.text}&device=${deviceID.value.toString()}');
       var response = await http.get(Uri.parse(
-          'http://${serverIp.value}/unistock/zebra/login.php?zemail=${user.text}&xpassword=${pass.text}'));
+          'http://${serverIp.value}/unistock/zebra/login.php?zemail=${user.text}&xpassword=${pass.text}&device=${deviceID.value.toString()}'));
       if (response.statusCode == 200) {
         loginModel = loginModelFromJson(response.body);
         if(user.text == loginModel.zemail && pass.text == loginModel.xpassword){
@@ -101,6 +102,7 @@ class LoginController extends GetxController {
       }
     }catch(e){
       isLoading(false);
+      print('There is a issue: $e');
       //BotToast.closeAllLoading();
       Get.snackbar('Warning!', 'Failed to connect server',
           borderWidth: 1.5,
@@ -183,7 +185,7 @@ class LoginController extends GetxController {
   );
 
 
-  RxBool isLogout = false.obs;
+/*  RxBool isLogout = false.obs;
   Future<void> loginOutMethod(BuildContext context) async {
     try{
       isLogout(true);
@@ -217,7 +219,7 @@ class LoginController extends GetxController {
           duration: const Duration(seconds: 2),
           snackPosition: SnackPosition.TOP);
     }
-  }
+  }*/
 
 
 

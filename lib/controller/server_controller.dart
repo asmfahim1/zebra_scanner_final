@@ -57,6 +57,7 @@ class ServerController extends GetxController {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('ipAddress', server.text,);
         prefs.setString('deviceId', deviceId,);
+        print('deviceId: $deviceId');
         var response = await http.post(
             Uri.parse('http://${server.text}/unistock/zebra/server_config.php'),
             body: <String, dynamic>{
