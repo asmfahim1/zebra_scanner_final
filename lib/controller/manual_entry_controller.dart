@@ -40,9 +40,9 @@ class ManualController extends GetxController {
                 "store": storeId,
                 "device": deviceID
               }));
+          print('response: ${response.statusCode}');
           if(response.statusCode == 200){
             clearTextField();
-            //await getManualAddedProduct(tagNum,userId);
             Get.snackbar('Success', 'Product added',
               backgroundColor: ConstantColors.uniGreen,
               colorText: Colors.white,
@@ -56,20 +56,23 @@ class ManualController extends GetxController {
             isEmptyField(false);
             if (context.mounted){
               BotToast.closeAllLoading();
+              final responseBody = json.decode(response.body) as Map<String, dynamic>;
+              final errorMessage = responseBody['error'] as String;
+              print('-------------$errorMessage');
               showDialog<String>(
                 context: context,
-                builder: (BuildContext context) => const ReusableAlerDialogue(
+                builder: (BuildContext context) => ReusableAlerDialogue(
                   headTitle: "Warning!",
-                  message: "Invalid item code",
+                  message: errorMessage,
                   btnText: "Back",
                 ),
               );
             }
-
           }
         }catch(e){
           entryDone(false);
           isEmptyField(false);
+          print('error: $e');
           BotToast.closeAllLoading();
           Get.snackbar('Warning!', 'Failed to connect server',
               borderWidth: 1.5,

@@ -28,16 +28,16 @@ class ReusableAlerDialogue extends StatelessWidget {
           children: [
             Image.asset(
               "images/waeng1.png",
-              height: MediaQuery.of(context).size.height / 12,
+              height: MediaQuery.of(context).size.height / 10,
             ),
             const SizedBox(
-              height: 10,
+              height: 20,
             ),
             Text(
               message!,
               style: GoogleFonts.urbanist(
                 color: Colors.black,
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
             ),

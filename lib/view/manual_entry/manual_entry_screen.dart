@@ -272,14 +272,12 @@ class _ManualEntryState extends State<ManualEntry> {
                         widget.storeId.toString(),
                       );
                     }else{
-                      print('offline entered');
                       manual.addManuallyOffline(context);
                     }
                   },
                   child:  const Text('Submit', style: TextStyle(fontSize: 16),)
               ),
             ),
-
           ],
         ),
       )
@@ -314,26 +312,6 @@ class _ManualEntryState extends State<ManualEntry> {
                 ),
               ),
               Row(
-                children: [
-                  Text(
-                    'Total Count :',
-                    style: GoogleFonts.urbanist(
-                      color: Colors.black,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Text(
-                    '${manual.manualAddedProduct?.quantity.toString()}',
-                    style: GoogleFonts.urbanist(
-                      color: Colors.black,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Row(
@@ -347,7 +325,7 @@ class _ManualEntryState extends State<ManualEntry> {
                         ),
                       ),
                       Text(
-                        '${manual.manualAddedProduct?.quantity.toString()}',
+                        '${manual.manualAddedProduct?.autoQty.toString()}',
                         style: GoogleFonts.urbanist(
                           color: Colors.black,
                           fontSize: 13,
@@ -368,7 +346,7 @@ class _ManualEntryState extends State<ManualEntry> {
                         ),
                       ),
                       Text(
-                        '${manual.manualAddedProduct?.quantity.toString()}',
+                        '${manual.manualAddedProduct?.manualQty.toString()}',
                         style: GoogleFonts.urbanist(
                           color: Colors.black,
                           fontSize: 13,
@@ -376,6 +354,26 @@ class _ManualEntryState extends State<ManualEntry> {
                         ),
                       ),
                     ],
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Text(
+                    'Total Count :',
+                    style: GoogleFonts.urbanist(
+                      color: Colors.black,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Text(
+                    '${manual.manualAddedProduct?.scanQty.toString()}',
+                    style: GoogleFonts.urbanist(
+                      color: Colors.black,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ],
               ),
@@ -412,27 +410,6 @@ class _ManualEntryState extends State<ManualEntry> {
                      fontSize: 12,
                      fontWeight: FontWeight.w500,
                    ),
-                 ),
-
-                 Row(
-                   children: [
-                     Text(
-                       'Total Count :',
-                       style: GoogleFonts.urbanist(
-                         color: Colors.black,
-                         fontSize: 12,
-                         fontWeight: FontWeight.w500,
-                       ),
-                     ),
-                     Text(
-                       manual.singleAddedProducts[0]["quantity"].toString(),
-                       style: GoogleFonts.urbanist(
-                         color: Colors.black,
-                         fontSize: 13,
-                         fontWeight: FontWeight.w800,
-                       ),
-                     ),
-                   ],
                  ),
                  Row(
                    mainAxisAlignment: MainAxisAlignment.start,
@@ -476,6 +453,26 @@ class _ManualEntryState extends State<ManualEntry> {
                            ),
                          ),
                        ],
+                     ),
+                   ],
+                 ),
+                 Row(
+                   children: [
+                     Text(
+                       'Total Count :',
+                       style: GoogleFonts.urbanist(
+                         color: Colors.black,
+                         fontSize: 12,
+                         fontWeight: FontWeight.w500,
+                       ),
+                     ),
+                     Text(
+                       manual.singleAddedProducts[0]["quantity"].toString(),
+                       style: GoogleFonts.urbanist(
+                         color: Colors.black,
+                         fontSize: 13,
+                         fontWeight: FontWeight.w800,
+                       ),
                      ),
                    ],
                  ),
