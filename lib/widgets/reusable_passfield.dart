@@ -5,7 +5,8 @@ class ReusableTextPassField extends StatelessWidget {
   String hintText;
   String labelText;
   bool? obscureText;
-  TextEditingController server = TextEditingController();
+  TextEditingController controller = TextEditingController();
+  final ValueChanged<String>? onFieldSubmitted;
   Widget prefIcon;
   Widget sufIcon;
 
@@ -13,10 +14,12 @@ class ReusableTextPassField extends StatelessWidget {
       {Key? key,
       required this.hintText,
       required this.labelText,
-      required this.server,
+      required this.controller,
+      this.onFieldSubmitted,
       required this.prefIcon,
       required this.sufIcon,
-      this.obscureText})
+      this.obscureText,
+      })
       : super(key: key);
 
   ConstantColors colors = ConstantColors();
@@ -27,7 +30,7 @@ class ReusableTextPassField extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
       child: TextFormField(
-        controller: server,
+        controller: controller,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
             borderSide: const BorderSide(

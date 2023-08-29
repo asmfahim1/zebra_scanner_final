@@ -36,7 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   get: ^4.6.5
   bot_toast: ^4.0.4
-  google_fonts: ^3.0.1
+  google_fonts:
   device_info: ^2.0.3
   flutter_datawedge: ^0.0.3
   sqflite: ^2.0.3+1

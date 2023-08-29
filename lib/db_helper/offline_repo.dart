@@ -222,24 +222,56 @@ class OfflineRepo{
     return success;
   }
 
-  Future getManualAddedProduct() async{
+
+  // Future<List<Map<String, dynamic>>> getManualAddedProduct(String itemCode) async {
+  //   var dbClient = await conn.db;
+  //   List<Map<String, dynamic>> scannedProducts = [];
+  //
+  //   try {
+  //     scannedProducts = await dbClient!.rawQuery(
+  //         'SELECT * FROM ${DBHelper.scannerTable} WHERE itemcode = ?',
+  //         [itemCode]);
+  //     print('================$scannedProducts');
+  //   } catch (e) {
+  //     print("There are some issues getting products : $e");
+  //   }
+  //
+  //   return scannedProducts;
+  // }
+
+  Future<List<Map<String, dynamic>>> getManualAddedProduct(String itemCode) async {
     var dbClient = await conn.db;
-    List scannedProducts = [];
+    List<Map<String, dynamic>> scannedProducts = [];
+
     try {
-      List<Map<String, dynamic>> maps = await dbClient!.rawQuery(
-          "SELECT * FROM ${DBHelper.scannerTable} LIMIT 1");
-      for (var products in maps) {
-        scannedProducts.add(products);
-      }
+      scannedProducts = await dbClient!.rawQuery(
+        '''
+      SELECT
+        p.xitem,
+        p.xdesc,
+        COALESCE((
+          SELECT IFNULL(t.scanqty, 0) as scan_qty
+          FROM ${DBHelper.scannerTable} t
+          WHERE t.itemcode = ? 
+          LIMIT 1
+        ), 0) AS quantity,
+        p.xunit
+      FROM ${DBHelper.masterTable} p
+      WHERE p.xitem = ? OR p.xbodycode = ? OR xtheircode = ?
+      ''',
+        [itemCode, itemCode, itemCode, itemCode],
+      );
+
+      print('================$scannedProducts');
     } catch (e) {
       print("There are some issues getting products : $e");
     }
-    // print("All cart product from Header: $cartList");
+
     return scannedProducts;
   }
 
 
-  //Updating the Qty
+
   Future<void> updateQuantity(String item, String qty) async {
     try {
       var dbClient = await conn.db;
@@ -324,7 +356,7 @@ class OfflineRepo{
     List scannedProducts = [];
     try {
       List<Map<String, dynamic>> maps = await dbClient!.rawQuery(
-          "SELECT * FROM ${DBHelper.scannerTable}");
+          "SELECT * FROM ${DBHelper.scannerTable} order by createdAt desc");
       for (var products in maps) {
         scannedProducts.add(products);
       }

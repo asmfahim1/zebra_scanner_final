@@ -13,7 +13,7 @@ class LoginModel {
   String xposition;
   String zemail;
   String xpassword;
-  int xaccess;
+  String xaccess;
 
   LoginModel({
     required this.name,

@@ -40,11 +40,12 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 30,),
+              const SizedBox(height: 30,),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: GestureDetector(
                   onTap: (){
+                    //loginController.clearCache();
                     Get.offAll(()=> const ServerSetupScreen());
                   },
                   child: Row(
@@ -95,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ReusableTextFormField(
                           hintText: "Enter User Name",
                           labelText: "User name",
-                          server: loginController.user,
+                          controller: loginController.user,
                           icon: const Icon(
                             Icons.person,
                             size: 20,
@@ -104,11 +105,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Obx(
-                            () => ReusableTextPassField(
+                      Obx(() => ReusableTextPassField(
                           hintText: "Enter Password",
                           labelText: "Password",
-                          server: loginController.pass,
+                          controller: loginController.pass,
                           prefIcon: const Icon(
                             Icons.vpn_key_outlined,
                             size: 20,
@@ -160,31 +160,34 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(
                         height: 05,
                       ),
-                      GestureDetector(
-                        onTap: () async {
-                          loginController.loginMethod(context);
-                        },
-                        child: Container(
-                          height: MediaQuery.of(context).size.width / 7,
-                          width: MediaQuery.of(context).size.width / 3,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                            color: ConstantColors.comColor,
-                          ),
-                          child: const Center(
-                            child: Text(
-                              'LOGIN',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                              ),
+                      Obx((){
+                        return GestureDetector(
+                          onTap: () async {
+                            loginController.loginMethod(context);
+                          },
+                          child: Container(
+                            height: MediaQuery.of(context).size.width / 7,
+                            width: MediaQuery.of(context).size.width / 3,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                              color: ConstantColors.comColor,
                             ),
-                          ),
-                        ),
-                      ),
+                            child: loginController.isLoading.value
+                                    ? const CircularProgressIndicator(color: Colors.white,)
+                                    : const Text(
+                                        'LOGIN',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                            ),
+                        );
+                      }),
                       const SizedBox(
-                        height: 15,
+                        height: 10,
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),

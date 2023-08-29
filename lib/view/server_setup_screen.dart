@@ -89,7 +89,7 @@ class _ServerSetupScreenState extends State<ServerSetupScreen> {
                       height: 50,
                     ),
                     ReusableTextFormField(
-                      server: serverController.server,
+                      controller: serverController.server,
                       hintText: "ip address",
                       labelText: "Enter Server IP",
                       icon: const Icon(

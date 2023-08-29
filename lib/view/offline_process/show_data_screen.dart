@@ -27,9 +27,10 @@ class _ShowDataScreenState extends State<ShowDataScreen> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
-        child: ReusableAppBar(
+        child: AppBar(
+          backgroundColor: Colors.white,
           elevation: 0,
-          color: Colors.white,
+          automaticallyImplyLeading: false,
           leading: GestureDetector(
             onTap: () {
               Get.back();
@@ -40,6 +41,34 @@ class _ShowDataScreenState extends State<ShowDataScreen> {
               color: Colors.black,
             ),
           ),
+          title: Text(
+              "Saved data",
+              style: GoogleFonts.urbanist(
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GestureDetector(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return ReusableAlert(
+                          offline: offline,
+                        );
+                      });
+                },
+                child: const Icon(
+                  Icons.delete_outline,
+                  size: 30,
+                  color: Colors.red,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
       body: Obx((){
@@ -60,14 +89,14 @@ class _ShowDataScreenState extends State<ShowDataScreen> {
               )
             : Column(
                 children: [
-                  Text(
+                  /*Text(
                     "All Fetched Data",
                     style: GoogleFonts.urbanist(
                       color: Colors.black,
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
                     ),
-                  ),
+                  ),*/
                   Expanded(
                     child: Container(
                     child: offline.getAllData.isEmpty
@@ -139,6 +168,68 @@ class _ShowDataScreenState extends State<ShowDataScreen> {
                 ],
               );
       }),
+    );
+  }
+}
+
+class ReusableAlert extends StatelessWidget {
+  const ReusableAlert({
+    Key? key,
+    required this.offline,
+  }) : super(key: key);
+
+  final OfflineController offline;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(
+        'Delete data',
+        style: GoogleFonts.roboto(
+          fontSize: 20,
+          fontWeight: FontWeight.w800,
+        ),
+      ),
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: <Widget>[
+            Text(
+              'Do you want to delete data?',
+              style: GoogleFonts.roboto(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        TextButton(
+          child: Text(
+            'No',
+            style: GoogleFonts.roboto(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          onPressed: () {
+            Get.back();
+          },
+        ),
+        TextButton(
+          child: Text(
+            'Yes',
+            style: GoogleFonts.roboto(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          onPressed: () async {
+            await offline.deleteAllData();
+            Navigator.pop(context);
+          },
+        ),
+      ],
     );
   }
 }

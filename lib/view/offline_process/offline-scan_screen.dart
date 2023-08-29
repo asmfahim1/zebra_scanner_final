@@ -37,7 +37,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
           if (codeLength == 5 || codeLength == 12) {
             showDialog<String>(
               context: context,
-              builder: (BuildContext context) => ReusableAlerDialogue(
+              builder: (BuildContext context) => const ReusableAlerDialogue(
                 headTitle: "Warning!",
                 message: "Add Manually",
                 btnText: "OK",
@@ -47,7 +47,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
           } else if (codeLength < 5) {
             showDialog<String>(
               context: context,
-              builder: (BuildContext context) => ReusableAlerDialogue(
+              builder: (BuildContext context) => const ReusableAlerDialogue(
                 headTitle: "Warning!",
                 message: "Invalid code",
                 btnText: "OK",
@@ -57,8 +57,6 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
           } else {
               await offline.addItem(offline.lastCode.value);
           }
-
-
         },
         onStatusUpdate: (result) {
           ScannerStatusType status = result.status;
@@ -84,7 +82,14 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
               color: Colors.black,
             ),
           ),
-            title: Container(
+          title: Text(
+            "Automatic Scan",
+            style: GoogleFonts.urbanist(
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+            /*title: Container(
               height: 50,
               width: 250,
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
@@ -96,7 +101,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                     suffixIcon: Icon(Icons.search)),
                 onChanged: (value) => offline.searchProduct(value),
               ),
-            ),
+            ),*/
           actions: [
             GestureDetector(
             onTap: () {offline.uploadToServer();},
@@ -127,7 +132,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                           () => Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          const Text('Last code: '),
+                          const Text('Last code : '),
                           Text(offline.lastCode.value,
                               style: const TextStyle(fontSize: 14)),
                           const SizedBox(width: 10.0),
@@ -142,7 +147,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
               "List of Products added",
               style: GoogleFonts.urbanist(
                 color: Colors.black,
-                fontSize: 25,
+                fontSize: 16,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -166,10 +171,10 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                 if (offline.filteredProductList.isEmpty) {
                   return Center(
                       child: Text(
-                        "No product found",
+                        "No product added yet",
                         style: GoogleFonts.urbanist(
                           color: Colors.black,
-                          fontSize: 25,
+                          fontSize: 16,
                           fontWeight: FontWeight.w400,
                         ),
                       ));
@@ -186,8 +191,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                             borderRadius: BorderRadius.circular(20.0),
                           ),
                           child: Card(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
                             color: Colors.white,
                             elevation: 2,
                             shadowColor: Colors.blueGrey,
@@ -236,7 +240,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                     ),
                                   ),
                                 ),
-                                GestureDetector(
+                                /*GestureDetector(
                                   onTap: () async {
                                     offline.updateTQ('${scanned["scanqty"].toString()}');
                                     showDialog(
@@ -368,7 +372,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                               Row(
                                                 mainAxisAlignment: MainAxisAlignment.center ,
                                                 children: [
-                                                  /*TextButton(
+                                                  *//*TextButton(
                                                     style: TextButton.styleFrom(
                                                       backgroundColor: ConstantColors
                                                           .comColor
@@ -388,7 +392,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                         FontWeight.w600,
                                                       ),
                                                     ),
-                                                  ),*/
+                                                  ),*//*
                                                   Container(
                                                     height: MediaQuery.of(context).size.width / 8.5,
                                                     width: MediaQuery.of(context).size.width / 4,
@@ -460,7 +464,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                       ),
                                     ),
                                   ),
-                                ),
+                                ),*/
                               ],
                             ),
                           ),
@@ -473,9 +477,9 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      /*floatingActionButton: FloatingActionButton.extended(
         onPressed: () async{
-          Get.to(()=> ManualEntry(mode: 'offline',));
+          Get.to(()=> const ManualEntry(mode: 'offline',));
         },
         label: Row(
           children: [
@@ -512,7 +516,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
           ],
         ),
         backgroundColor: ConstantColors.uniGreen,
-      ),
+      ),*/
     );
   }
 }
