@@ -206,7 +206,7 @@ class _OnlineModeState extends State<OnlineMode> {
                           child: Row(
                             children: [
                               Container(
-                                width: MediaQuery.of(context).size.width / 1.4,
+                                width: MediaQuery.of(context).size.width / 1.6,
                                 padding: const EdgeInsets.only(left: 10,),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -249,7 +249,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                               style: GoogleFonts.urbanist(
                                                 fontSize: 11,
                                                 color: Colors.black54,
-                                                fontWeight: FontWeight.w700,
+                                                fontWeight: FontWeight.w800,
                                               ),
                                             ),
                                           ],
@@ -271,11 +271,12 @@ class _OnlineModeState extends State<OnlineMode> {
                                               style: GoogleFonts.urbanist(
                                                 fontSize: 11,
                                                 color: Colors.black54,
-                                                fontWeight: FontWeight.w700,
+                                                fontWeight: FontWeight.w800,
                                               ),
                                             ),
                                           ],
                                         ),
+                                        SizedBox(width: 5,),
                                       ],
                                     ),
                                     Text(
@@ -292,23 +293,20 @@ class _OnlineModeState extends State<OnlineMode> {
                               Expanded(
                                 child: GestureDetector(
                                   onTap: () async {
-                                    onlineController.updateTQ(
-                                        '${products.autoQty}');
+                                    onlineController.updateTQ('${products.autoQty}');
                                     showDialog(
                                         context: context,
                                         builder: (context) {
                                           return AlertDialog(
-                                            title: Text(
-                                              onlineController
-                                                  .products[index].itemCode,
+                                            title: Text(onlineController.products[index].itemCode,
                                               style: GoogleFonts.urbanist(
                                                   fontSize: 25,
                                                   fontWeight: FontWeight.w800,
-                                                  color: Colors.black54),
+                                                  color: Colors.black54,
+                                              ),
                                             ),
                                             content: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(
                                                   '${products.itemDesc}',
@@ -316,7 +314,8 @@ class _OnlineModeState extends State<OnlineMode> {
                                                       fontSize: 13,
                                                       fontWeight:
                                                           FontWeight.w800,
-                                                      color: Colors.black54),
+                                                      color: Colors.black54,
+                                                  ),
                                                 ),
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -373,7 +372,8 @@ class _OnlineModeState extends State<OnlineMode> {
                                                       fontSize: 12,
                                                       fontWeight:
                                                           FontWeight.w800,
-                                                      color: Colors.black54),
+                                                      color: Colors.black54,
+                                                  ),
                                                 ),
                                                 const SizedBox(
                                                   height: 10,

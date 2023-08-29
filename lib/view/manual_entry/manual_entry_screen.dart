@@ -48,9 +48,8 @@ class _ManualEntryState extends State<ManualEntry> {
   @override
   void dispose() {
     // TODO: implement dispose
-    print('dispose called');
-    manual.releaseVariables();
     super.dispose();
+    manual.releaseVariables(widget.mode.toString());
   }
 
   @override

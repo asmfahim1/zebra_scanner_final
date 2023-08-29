@@ -116,6 +116,7 @@ class OfflineController extends GetxController {
     try {
       productLoaded(true);
       scannedProductList = await OfflineRepo().getScannedProducts();
+      print('scanned product list: $scannedProductList');
       productLoaded(false);
     } catch (error) {
       productLoaded(false);

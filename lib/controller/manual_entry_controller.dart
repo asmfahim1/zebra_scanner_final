@@ -186,15 +186,18 @@ class ManualController extends GetxController {
     productCode.clear();
     manualAddedProduct = null;
     singleAddedProducts = [];
-    print('manual searched product: $manualAddedProduct');
     qtyController.clear();
   }
 
-  void releaseVariables(){
-    // Clear the fields and variables within the manual con
+  void releaseVariables(String mode){
    entryDone.value = false;
    isEmptyField.value = false;
-   manualAddedProduct = null;
-   singleAddedProducts = [];
+   productCode.clear();
+   qtyController.clear();
+   if(mode == 'Online'){
+     manualAddedProduct = null;
+   }else{
+     singleAddedProducts = [];
+   }
   }
 }

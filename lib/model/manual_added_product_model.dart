@@ -11,9 +11,9 @@ String manualAddedProductModelToJson(ManualAddedProductModel data) => json.encod
 class ManualAddedProductModel {
   String? xitem;
   String? xdesc;
-  int? scanQty;
-  int? autoQty;
-  int? manualQty;
+  double? scanQty;
+  double? autoQty;
+  double? manualQty;
   String? xunit;
 
   ManualAddedProductModel({
@@ -28,9 +28,9 @@ class ManualAddedProductModel {
   factory ManualAddedProductModel.fromJson(Map<String, dynamic> json) => ManualAddedProductModel(
     xitem: json["xitem"],
     xdesc: json["xdesc"],
-    scanQty: json["scan_qty"],
-    autoQty: json["auto_qty"],
-    manualQty: json["manual_qty"],
+    scanQty: json["scan_qty"]?.toDouble(),
+    autoQty: json["auto_qty"]?.toDouble(),
+    manualQty: json["manual_qty"]?.toDouble(),
     xunit: json["xunit"],
   );
 
