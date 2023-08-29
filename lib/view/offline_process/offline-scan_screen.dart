@@ -7,7 +7,6 @@ import 'package:zebra_scanner_final/controller/offline_controller.dart';
 import '../../controller/server_controller.dart';
 import '../../constants/const_colors.dart';
 import '../../widgets/reusable_alert.dart';
-import '../manual_entry/manual_entry_screen.dart';
 
 class OfflineScanScreen extends StatefulWidget {
   const OfflineScanScreen({Key? key}) : super(key: key);

@@ -25,6 +25,8 @@ class ManualEntry extends StatefulWidget {
 class _ManualEntryState extends State<ManualEntry> {
      LoginController login = Get.find<LoginController>();
      ManualController manual = Get.put(ManualController());
+     FocusNode quantityFocusNode = FocusNode();
+     FocusNode itemFocusNode = FocusNode();
 
   //controlling the scanner button
   Future<void> initScanner() async {
@@ -108,6 +110,7 @@ class _ManualEntryState extends State<ManualEntry> {
               child: TextFormField(
                 controller: manual.productCode,
                 autofocus: true,
+                focusNode: itemFocusNode,
                 inputFormatters: [
                   //FilteringTextInputFormatter.deny(RegExp(r'^0')),
                   FilteringTextInputFormatter.deny(RegExp(r'-')),
@@ -133,6 +136,7 @@ class _ManualEntryState extends State<ManualEntry> {
                     if(manual.productCode.text.length >= 5){
                       print('onChanged Call: ${manual.productCode.text}');
                       await manual.getManualAddedProduct(widget.tagNum.toString(), manual.productCode.text);
+                      FocusScope.of(context).requestFocus(quantityFocusNode);
                     }else{
                     }
                   }else{
@@ -140,6 +144,7 @@ class _ManualEntryState extends State<ManualEntry> {
                     if(manual.productCode.text.length >= 5){
                       print('onChanged Call: ${manual.productCode.text}');
                       await manual.getSingleScannedProduct();
+                      FocusScope.of(context).requestFocus(quantityFocusNode);
                     }else{
                     }
                   }
@@ -226,6 +231,7 @@ class _ManualEntryState extends State<ManualEntry> {
                 borderRadius: BorderRadius.circular(4.0),
               ),
               child: TextFormField(
+                focusNode: quantityFocusNode,
                 controller: manual.qtyController,
                 inputFormatters: [
                   //FilteringTextInputFormatter.deny(RegExp(r'^0')),
@@ -259,10 +265,9 @@ class _ManualEntryState extends State<ManualEntry> {
                   style: ElevatedButton.styleFrom(
                     primary: ConstantColors.uniGreen,
                   ),
-                  onPressed: () {
+                  onPressed: () async{
                     if(widget.mode == 'Online'){
-                      //online logic
-                      manual.addItemManually(
+                     await manual.addItemManually(
                         context,
                         login.serverIp.value,
                         login.deviceID.value,
@@ -270,11 +275,13 @@ class _ManualEntryState extends State<ManualEntry> {
                         widget.tagNum.toString(),
                         widget.storeId.toString(),
                       );
+                      FocusScope.of(context).requestFocus(itemFocusNode);
                     }else{
-                      manual.addManuallyOffline(context);
+                      await manual.addManuallyOffline(context);
+                      FocusScope.of(context).requestFocus(itemFocusNode);
                     }
                   },
-                  child:  const Text('Submit', style: TextStyle(fontSize: 16),)
+                  child:  const Text('Add', style: TextStyle(fontSize: 16),)
               ),
             ),
           ],

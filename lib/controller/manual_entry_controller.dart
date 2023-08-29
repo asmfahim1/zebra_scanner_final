@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:zebra_scanner_final/controller/login_controller.dart';
 import 'package:zebra_scanner_final/db_helper/offline_repo.dart';
+import 'package:zebra_scanner_final/model/last_added_item_model.dart';
 import '../constants/const_colors.dart';
 import '../model/manual_added_product_model.dart';
 import '../widgets/reusable_alert.dart';
@@ -15,6 +16,7 @@ class ManualController extends GetxController {
   TextEditingController qtyController = TextEditingController();
   RxString lastCode = ''.obs;
   RxBool isEmptyField = false.obs;
+  LastAddedProductModel? lastAddedItem;
 
   Future<void> addItemManually(BuildContext context, String idAddress,String deviceID,String userId,String tagNum,String storeId) async {
       BotToast.showLoading();
@@ -43,7 +45,8 @@ class ManualController extends GetxController {
           print('response: ${response.statusCode}');
           if(response.statusCode == 200){
             clearTextField();
-            Get.snackbar('Success', 'Product added',
+            lastAddedItem = lastAddedProductModelFromJson(response.body);
+            Get.snackbar('Success', '${lastAddedItem!.xdesc ?? ''} \nAuto count: ${lastAddedItem!.autoQty ?? ''},   Manual count: ${lastAddedItem!.manualQty ?? ''}\nTotal count: ${lastAddedItem!.scanQty ?? ''}',
               backgroundColor: ConstantColors.uniGreen,
               colorText: Colors.white,
               duration: const Duration(seconds: 2),
