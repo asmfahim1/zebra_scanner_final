@@ -424,7 +424,7 @@ class _ManualEntryState extends State<ManualEntry> {
                            ),
                          ),
                          Text(
-                           manual.singleAddedProducts[0]["quantity"].toString(),
+                           manual.singleAddedProducts[0]["autoqty"].toString(),
                            style: GoogleFonts.urbanist(
                              color: Colors.black,
                              fontSize: 13,
@@ -444,7 +444,7 @@ class _ManualEntryState extends State<ManualEntry> {
                            ),
                          ),
                          Text(
-                           manual.singleAddedProducts[0]["quantity"].toString(),
+                           manual.singleAddedProducts[0]["manualqty"].toString(),
                            style: GoogleFonts.urbanist(
                              color: Colors.black,
                              fontSize: 13,
@@ -466,7 +466,7 @@ class _ManualEntryState extends State<ManualEntry> {
                        ),
                      ),
                      Text(
-                       manual.singleAddedProducts[0]["quantity"].toString(),
+                       manual.singleAddedProducts[0]["scanqty"].toString(),
                        style: GoogleFonts.urbanist(
                          color: Colors.black,
                          fontSize: 13,

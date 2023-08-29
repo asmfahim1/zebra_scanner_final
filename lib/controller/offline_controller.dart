@@ -178,11 +178,9 @@ class OfflineController extends GetxController {
   Future<void> updateQty(String itemCode) async {
     if (qtyCon.text.isEmpty) {
       qtyCon.text = quantity.value.toString();
-      //update the database value delete the row
 
     } else {
       print('=========${qtyCon.text}');
-      //update the database value
       await OfflineRepo().updateQuantity(itemCode, qtyCon.text);
     }
     qtyCon.clear();
@@ -378,8 +376,8 @@ class OfflineController extends GetxController {
         await getScannerTable();
         productLoaded(false);
         Get.snackbar('Successful!', 'Uploaded to server successfully',
-            backgroundColor: Colors.red,
-            colorText: Colors.white,
+            backgroundColor: Colors.white,
+            colorText: Colors.black,
             duration: const Duration(seconds: 1));
         print("all data uploaded successfully and deleted form the table");
       }catch(e){

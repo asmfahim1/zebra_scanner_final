@@ -267,7 +267,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                         ],
                                       ),
                                       Text(
-                                        "Total Count : ${scanned["autoqty"]}",
+                                        "Total Count : ${scanned["scanqty"]}",
                                         style: GoogleFonts.urbanist(
                                           fontSize: 13,
                                           color: Colors.black,
@@ -425,9 +425,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                             style:
                                                             const TextStyle(
                                                                 fontSize: 50),
-                                                            keyboardType:
-                                                            TextInputType
-                                                                .number,
+                                                            keyboardType: TextInputType.number,
                                                           )),
                                                       const SizedBox(
                                                         width: 10,
