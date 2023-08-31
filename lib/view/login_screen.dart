@@ -48,9 +48,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     //loginController.clearCache();
                     Get.offAll(()=> const ServerSetupScreen());
                   },
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: const [
+                    children: [
                       Icon(Icons.arrow_back_ios),
                       Text(
                         "Server setup",

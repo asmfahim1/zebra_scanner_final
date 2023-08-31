@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
@@ -8,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zebra_scanner_final/constants/const_colors.dart';
 import '../model/login_model.dart';
-import '../view/login_screen.dart';
 import '../view/mode_selector_screen.dart';
 import '../widgets/reusable_alert.dart';
 
@@ -36,7 +34,6 @@ class LoginController extends GetxController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try{
       isLoading(true);
-      //BotToast.showLoading();
       serverIp.value = prefs.getString('ipAddress')!;
       deviceID.value = prefs.getString('deviceId')!;
       print('Api: http://${serverIp.value}/unistock/zebra/login.php?zemail=${user.text}&xpassword=${pass.text}&device=${deviceID.value.toString()}');
@@ -46,7 +43,6 @@ class LoginController extends GetxController {
         loginModel = loginModelFromJson(response.body);
         if(user.text == loginModel.zemail && pass.text == loginModel.xpassword){
           isLoading(false);
-          // BotToast.closeAllLoading();
           userId.value = loginModel.xposition.toString();
           await prefs.setString('accessToken', loginModel.xaccess.toString());
           accessToken.value = prefs.getString('accessToken')!;
@@ -61,13 +57,12 @@ class LoginController extends GetxController {
           );
         }else{
           isLoading(false);
-          //BotToast.closeAllLoading();
           if (context.mounted){
             showDialog<String>(
               context: context,
               builder: (BuildContext context) => const ReusableAlerDialogue(
                 headTitle: "Warning!",
-                message: "Invalid user name or password",
+                message: "Invalid User name or Password",
                 btnText: "Back",
               ),
             );
@@ -88,13 +83,12 @@ class LoginController extends GetxController {
         }
       }else if (response.statusCode == 404) {
         isLoading(false);
-        //BotToast.closeAllLoading();
         if (context.mounted){
           showDialog<String>(
             context: context,
             builder: (BuildContext context) => const ReusableAlerDialogue(
               headTitle: "Warning!",
-              message: "Invalid userid or password",
+              message: "Invalid User name or Password",
               btnText: "Back",
             ),
           );
@@ -103,7 +97,6 @@ class LoginController extends GetxController {
     }catch(e){
       isLoading(false);
       print('There is a issue: $e');
-      //BotToast.closeAllLoading();
       Get.snackbar('Warning!', 'Failed to connect server',
           borderWidth: 1.5,
           borderColor: Colors.black54,

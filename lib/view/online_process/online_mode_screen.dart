@@ -389,33 +389,17 @@ class _OnlineModeState extends State<OnlineMode> {
                                                         width: MediaQuery.of(context).size.width / 3,
                                                         child: TextField(
                                                           inputFormatters: [
-                                                            FilteringTextInputFormatter
-                                                                .deny(RegExp(
-                                                                    r'^0')),
                                                             /*FilteringTextInputFormatter
                                                                 .deny(RegExp(
-                                                                    r'-')),*/
-                                                            FilteringTextInputFormatter
-                                                                .deny(RegExp(
-                                                                    r',')),
-                                                            FilteringTextInputFormatter
-                                                                .deny(RegExp(
-                                                                    r'\+')),
-                                                            FilteringTextInputFormatter
-                                                                .deny(RegExp(
-                                                                    r'\*')),
-                                                            FilteringTextInputFormatter
-                                                                .deny(RegExp(
-                                                                    r'/')),
-                                                            FilteringTextInputFormatter
-                                                                .deny(RegExp(
-                                                                    r'=')),
-                                                            FilteringTextInputFormatter
-                                                                .deny(RegExp(
-                                                                    r'%')),
-                                                            FilteringTextInputFormatter
-                                                                .deny(RegExp(
-                                                                    r' ')),
+                                                                    r'^0')),*/
+                                                            FilteringTextInputFormatter.deny(RegExp(r'-')),
+                                                            FilteringTextInputFormatter.deny(RegExp(r',')),
+                                                            FilteringTextInputFormatter.deny(RegExp(r'\+')),
+                                                            FilteringTextInputFormatter.deny(RegExp(r'\*')),
+                                                            FilteringTextInputFormatter.deny(RegExp(r'/')),
+                                                            FilteringTextInputFormatter.deny(RegExp(r'=')),
+                                                            FilteringTextInputFormatter.deny(RegExp(r'%')),
+                                                            FilteringTextInputFormatter.deny(RegExp(r' ')),
                                                           ],
                                                           textAlign: TextAlign.center,
                                                           controller: onlineController.qtyCon,

@@ -378,8 +378,8 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                           width: MediaQuery.of(context).size.width / 3.5,
                                                           child: TextField(
                                                             inputFormatters: [
-                                                              /*FilteringTextInputFormatter.deny(RegExp(r'^0')),
-                                                              FilteringTextInputFormatter.deny(RegExp(r'-')),*/
+                                                              /*FilteringTextInputFormatter.deny(RegExp(r'^0')),*/
+                                                              FilteringTextInputFormatter.deny(RegExp(r'-')),
                                                               FilteringTextInputFormatter.deny(RegExp(r',')),
                                                               FilteringTextInputFormatter.deny(RegExp(r'\+')),
                                                               FilteringTextInputFormatter.deny(RegExp(r'\*')),
