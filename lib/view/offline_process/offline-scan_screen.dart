@@ -33,17 +33,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
         onScan: (result) async {
           offline.lastCode.value = result.data;
           int codeLength = offline.lastCode.string.length;
-          if (codeLength == 5 || codeLength == 12) {
-            showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => const ReusableAlerDialogue(
-                headTitle: "Warning!",
-                message: "Add Manually",
-                btnText: "OK",
-              ),
-            );
-            await offline.getScannerTable();
-          } else if (codeLength < 5) {
+          if (codeLength < 5) {
             showDialog<String>(
               context: context,
               builder: (BuildContext context) => const ReusableAlerDialogue(
