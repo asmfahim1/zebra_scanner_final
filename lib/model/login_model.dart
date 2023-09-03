@@ -9,18 +9,18 @@ LoginModel loginModelFromJson(String str) => LoginModel.fromJson(json.decode(str
 String loginModelToJson(LoginModel data) => json.encode(data.toJson());
 
 class LoginModel {
-  String name;
-  String xposition;
-  String zemail;
-  String xpassword;
-  String xaccess;
+  String? name;
+  String? xposition;
+  String? zemail;
+  String? xpassword;
+  String? xaccess;
 
   LoginModel({
-    required this.name,
-    required this.xposition,
-    required this.zemail,
-    required this.xpassword,
-    required this.xaccess,
+    this.name,
+    this.xposition,
+    this.zemail,
+    this.xpassword,
+    this.xaccess,
   });
 
   factory LoginModel.fromJson(Map<String, dynamic> json) => LoginModel(

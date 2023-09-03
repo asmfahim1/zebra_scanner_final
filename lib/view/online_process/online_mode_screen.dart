@@ -385,7 +385,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                             size: 20,
                                                           ),
                                                         )),
-                                                    Container(
+                                                    SizedBox(
                                                         width: MediaQuery.of(context).size.width / 3,
                                                         child: TextField(
                                                           inputFormatters: [
@@ -403,7 +403,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                           ],
                                                           textAlign: TextAlign.center,
                                                           controller: onlineController.qtyCon,
-                                                          //by using on submitted function, it will immediately after pressing the value done
+                                                          //by using on submitted function, it will immediately work after pressing the value done
                                                           onSubmitted: (value) {
                                                             if (value.isEmpty) {
                                                               onlineController.qtyCon.text = '0';

@@ -1,9 +1,7 @@
-import 'dart:io' show Platform, exit;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:zebra_scanner_final/constants/const_colors.dart';
-import 'dart:io';
 import '../model/taglist_model.dart';
 
 class TagController extends GetxController {
@@ -30,7 +28,8 @@ class TagController extends GetxController {
             backgroundColor: Colors.red,
             colorText: Colors.white,
             duration: const Duration(seconds: 2),
-            snackPosition: SnackPosition.TOP);
+            snackPosition: SnackPosition.TOP,
+        );
         tagList = [];
       }
       isLoading(false);
@@ -43,7 +42,6 @@ class TagController extends GetxController {
           colorText: Colors.white,
           duration: const Duration(seconds: 2),
           snackPosition: SnackPosition.TOP);
-      print('There is a issue connecting to internet: $e');
     }
   }
 

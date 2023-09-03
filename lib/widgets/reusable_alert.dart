@@ -28,7 +28,7 @@ class ReusableAlerDialogue extends StatelessWidget {
           children: [
             Image.asset(
               "images/waeng1.png",
-              height: MediaQuery.of(context).size.height / 10,
+              height: MediaQuery.of(context).size.height / 12,
             ),
             const SizedBox(
               height: 20,
