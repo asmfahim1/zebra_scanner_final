@@ -267,6 +267,7 @@ class _ManualEntryState extends State<ManualEntry> {
                   ),
                   onPressed: () async{
                     if(widget.mode == 'Online'){
+                      print('Store Id: ${widget.storeId}');
                      await manual.addItemManually(
                         context,
                         login.serverIp.value,

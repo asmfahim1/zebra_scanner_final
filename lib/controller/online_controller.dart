@@ -38,11 +38,11 @@ class OnlineController extends GetxController {
       haveProduct(true);
       var response = await http.get(Uri.parse(
           "http://$ipAddress/unistock/zebra/productlist_tag_device.php?tag_no=$tagNum&userID=${login.userId.value}"));
-      final responseBody = json.decode(response.body) as Map<String, dynamic>;
       if (response.statusCode == 200) {
         haveProduct(false);
         products = masterItemsModelFromJson(response.body);
       } else {
+        final responseBody = json.decode(response.body) as Map<String, dynamic>;
         final errorMessage = responseBody['error'] as String;
         haveProduct(false);
         Get.snackbar('Warning!', errorMessage,
@@ -55,6 +55,7 @@ class OnlineController extends GetxController {
         products = [];
       }
     }catch(e){
+      print('Error: $e');
       haveProduct(false);
       Get.snackbar('Warning!', 'Failed to connect server',
           borderWidth: 1.5,
@@ -102,7 +103,6 @@ class OnlineController extends GetxController {
       String storeId,
       String deviceID) async {
     try{
-      print('userId: ${login.userId.value}');
       postProduct(true);
       var response = await http.post(
           Uri.parse("http://$ipAddress/unistock/zebra/add_item.php"),
@@ -143,6 +143,7 @@ class OnlineController extends GetxController {
   }
 
   //manual entry quantity
+  RxBool isUpdate = false.obs;
   Future<void> updateQty(
       String ipAddress,
       String itemCode,
@@ -150,6 +151,7 @@ class OnlineController extends GetxController {
       String storeId,
       String deviceID) async {
     try{
+      isUpdate(true);
       if (qtyCon.text.isEmpty) {
         qtyCon.text = quantity.value.toString();
         var response = await http.post(
@@ -176,9 +178,11 @@ class OnlineController extends GetxController {
           ),
         );
       }
+      isUpdate(false);
       qtyCon.clear();
       quantity.value = 0;
     }catch(e){
+      isUpdate(false);
       Get.snackbar('Warning!', 'Failed to connect server',
           borderWidth: 1.5,
           borderColor: Colors.black54,

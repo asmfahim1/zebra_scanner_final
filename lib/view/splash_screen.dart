@@ -76,16 +76,17 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Uni",
+                  const Text("Uni",
                       style: TextStyle(
                           fontSize: 50,
                           fontWeight: FontWeight.w800,
-                          color: ConstantColors.comColor)),
+                          color: ConstantColors.comColor),
+                  ),
                   Image.asset(
                     'images/Upgraded S.png',
                     width: MediaQuery.of(context).size.width / 6.4,
                   ),
-                  Text(
+                  const Text(
                     "tock",
                     style: TextStyle(
                         fontSize: 50,

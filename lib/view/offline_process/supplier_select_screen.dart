@@ -36,6 +36,7 @@ class _SupSelScreenState extends State<SupSelScreen> {
           color: Colors.white,
           leading: GestureDetector(
             onTap: () {
+              name.clear();
               Get.back();
             },
             child: const Icon(

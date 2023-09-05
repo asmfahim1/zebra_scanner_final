@@ -70,6 +70,7 @@ class _OnlineScanTypeScreenState extends State<OnlineScanTypeScreen> {
                   MaterialPageRoute(
                     builder: (context) => ManualEntry(
                       tagNum: widget.tagNum,
+                      storeId: widget.storeId,
                       mode: 'Online',
                     ),
                   ),
