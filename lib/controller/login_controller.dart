@@ -39,8 +39,9 @@ class LoginController extends GetxController {
       //BotToast.showLoading();
       serverIp.value = prefs.getString('ipAddress')!;
       deviceID.value = prefs.getString('deviceId')!;
+      print('Api: http://${serverIp.value}/unistock/zebra/login.php?zemail=${user.text}&xpassword=${pass.text}&device=${deviceID.value.toString()}');
       var response = await http.get(Uri.parse(
-          'http://${serverIp.value}/unistock/zebra/login.php?zemail=${user.text}&xpassword=${pass.text}&device=${deviceID.value }'));
+          'http://${serverIp.value}/unistock/zebra/login.php?zemail=${user.text}&xpassword=${pass.text}&device=${deviceID.value.toString()}'));
       if (response.statusCode == 200) {
         loginModel = loginModelFromJson(response.body);
         if(user.text == loginModel.zemail && pass.text == loginModel.xpassword){
@@ -61,11 +62,26 @@ class LoginController extends GetxController {
         }else{
           isLoading(false);
           //BotToast.closeAllLoading();
+          if (context.mounted){
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => const ReusableAlerDialogue(
+                headTitle: "Warning!",
+                message: "Invalid user name or password",
+                btnText: "Back",
+              ),
+            );
+          }
+
+        }
+      }else if(response.statusCode == 403){
+        isLoading(false);
+        if (context.mounted){
           showDialog<String>(
             context: context,
             builder: (BuildContext context) => const ReusableAlerDialogue(
               headTitle: "Warning!",
-              message: "Invalid user name or password",
+              message: "User is already logged in from another device.",
               btnText: "Back",
             ),
           );
@@ -73,18 +89,20 @@ class LoginController extends GetxController {
       }else if (response.statusCode == 404) {
         isLoading(false);
         //BotToast.closeAllLoading();
-        showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => const ReusableAlerDialogue(
-            headTitle: "Warning!",
-            message: "Wrong Userid or Password or Device",
-            btnText: "Back",
-          ),
-        );
+        if (context.mounted){
+          showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => const ReusableAlerDialogue(
+              headTitle: "Warning!",
+              message: "Invalid userid or password",
+              btnText: "Back",
+            ),
+          );
+        }
       }
     }catch(e){
       isLoading(false);
-      print('Error: $e');
+      print('There is a issue: $e');
       //BotToast.closeAllLoading();
       Get.snackbar('Warning!', 'Failed to connect server',
           borderWidth: 1.5,
@@ -108,9 +126,9 @@ class LoginController extends GetxController {
           fontWeight: FontWeight.w800,
         ),
       ),
-      content: SingleChildScrollView(
+      content: const SingleChildScrollView(
         child: ListBody(
-          children: const <Widget>[
+          children: <Widget>[
             Text(
               'Do you want to exit the app?',
               style: TextStyle(
@@ -167,7 +185,7 @@ class LoginController extends GetxController {
   );
 
 
-  RxBool isLogout = false.obs;
+/*  RxBool isLogout = false.obs;
   Future<void> loginOutMethod(BuildContext context) async {
     try{
       isLogout(true);
@@ -180,14 +198,16 @@ class LoginController extends GetxController {
       }else{
         isLogout(false);
         BotToast.closeAllLoading();
-        showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => const ReusableAlerDialogue(
-            headTitle: "Warning!",
-            message: "Failed to connect server",
-            btnText: "Back",
-          ),
-        );
+        if (context.mounted){
+          showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => const ReusableAlerDialogue(
+              headTitle: "Warning!",
+              message: "Failed to connect server",
+              btnText: "Back",
+            ),
+          );
+        }
       }
     }catch(e){
       isLogout(false);
@@ -199,7 +219,7 @@ class LoginController extends GetxController {
           duration: const Duration(seconds: 2),
           snackPosition: SnackPosition.TOP);
     }
-  }
+  }*/
 
 
 

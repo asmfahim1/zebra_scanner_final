@@ -44,7 +44,8 @@ class _ModeSelectState extends State<ModeSelect> {
             action: [
               GestureDetector(
                 onTap: () async{
-                  await login.loginOutMethod(context);
+                  Get.offAll(()=> const LoginScreen());
+                 // await login.loginOutMethod(context);
                 },
                 child:  const Icon(
                   Icons.logout_sharp,

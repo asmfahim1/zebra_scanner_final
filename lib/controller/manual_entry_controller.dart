@@ -40,9 +40,9 @@ class ManualController extends GetxController {
               "store": storeId,
               "device": deviceID
             }));
+        print('response: ${response.statusCode}');
         if(response.statusCode == 200){
           clearTextField();
-          //await getManualAddedProduct(tagNum,userId);
           Get.snackbar('Success', 'Product added',
             backgroundColor: ConstantColors.uniGreen,
             colorText: Colors.white,
@@ -54,19 +54,25 @@ class ManualController extends GetxController {
         }else{
           entryDone(false);
           isEmptyField(false);
-          BotToast.closeAllLoading();
-          showDialog<String>(
-            context: context,
-            builder: (BuildContext context) => const ReusableAlerDialogue(
-              headTitle: "Warning!",
-              message: "Invalid item code",
-              btnText: "Back",
-            ),
-          );
+          if (context.mounted){
+            BotToast.closeAllLoading();
+            final responseBody = json.decode(response.body) as Map<String, dynamic>;
+            final errorMessage = responseBody['error'] as String;
+            print('-------------$errorMessage');
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => ReusableAlerDialogue(
+                headTitle: "Warning!",
+                message: errorMessage,
+                btnText: "Back",
+              ),
+            );
+          }
         }
       }catch(e){
         entryDone(false);
         isEmptyField(false);
+        print('error: $e');
         BotToast.closeAllLoading();
         Get.snackbar('Warning!', 'Failed to connect server',
             borderWidth: 1.5,
@@ -169,7 +175,6 @@ class ManualController extends GetxController {
       entryDone(true);
       singleAddedProducts = await OfflineRepo().getManualAddedProduct(productCode.text);
       entryDone(false);
-      print('single added product: $singleAddedProducts');
     } catch (error) {
       entryDone(false);
       singleAddedProducts = [];
@@ -181,15 +186,18 @@ class ManualController extends GetxController {
     productCode.clear();
     manualAddedProduct = null;
     singleAddedProducts = [];
-    print('manual searched product: $manualAddedProduct');
     qtyController.clear();
   }
 
-  void releaseVariables(){
-    // Clear the fields and variables within the manual con
+  void releaseVariables(String mode){
     entryDone.value = false;
     isEmptyField.value = false;
-    manualAddedProduct = null;
-    singleAddedProducts = [];
+    productCode.clear();
+    qtyController.clear();
+    if(mode == 'Online'){
+      manualAddedProduct = null;
+    }else{
+      singleAddedProducts = [];
+    }
   }
 }

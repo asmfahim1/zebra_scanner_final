@@ -48,9 +48,8 @@ class _ManualEntryState extends State<ManualEntry> {
   @override
   void dispose() {
     // TODO: implement dispose
-    print('dispose called');
-    manual.releaseVariables();
     super.dispose();
+    manual.releaseVariables(widget.mode.toString());
   }
 
   @override
@@ -230,7 +229,7 @@ class _ManualEntryState extends State<ManualEntry> {
                 controller: manual.qtyController,
                 inputFormatters: [
                   //FilteringTextInputFormatter.deny(RegExp(r'^0')),
-                  FilteringTextInputFormatter.deny(RegExp(r'-')),
+                  // FilteringTextInputFormatter.deny(RegExp(r'-')),
                   FilteringTextInputFormatter.deny(RegExp(r',')),
                   FilteringTextInputFormatter.deny(RegExp(r'\+')),
                   FilteringTextInputFormatter.deny(RegExp(r'\*')),
@@ -272,14 +271,12 @@ class _ManualEntryState extends State<ManualEntry> {
                         widget.storeId.toString(),
                       );
                     }else{
-                      print('offline entered');
                       manual.addManuallyOffline(context);
                     }
                   },
                   child:  const Text('Submit', style: TextStyle(fontSize: 16),)
               ),
             ),
-
           ],
         ),
       )
@@ -314,9 +311,55 @@ class _ManualEntryState extends State<ManualEntry> {
                 ),
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'Auto Count :',
+                        style: GoogleFonts.urbanist(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        '${manual.manualAddedProduct?.autoQty.toString()}',
+                        style: GoogleFonts.urbanist(
+                          color: Colors.black,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(width: 10,),
+                  Row(
+                    children: [
+                      Text(
+                        'Manual Count :',
+                        style: GoogleFonts.urbanist(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        '${manual.manualAddedProduct?.manualQty.toString()}',
+                        style: GoogleFonts.urbanist(
+                          color: Colors.black,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Row(
                 children: [
                   Text(
-                    'Previous Count :',
+                    'Total Count :',
                     style: GoogleFonts.urbanist(
                       color: Colors.black,
                       fontSize: 12,
@@ -324,7 +367,7 @@ class _ManualEntryState extends State<ManualEntry> {
                     ),
                   ),
                   Text(
-                    '${manual.manualAddedProduct?.quantity.toString()}',
+                    '${manual.manualAddedProduct?.scanQty.toString()}',
                     style: GoogleFonts.urbanist(
                       color: Colors.black,
                       fontSize: 13,
@@ -368,9 +411,54 @@ class _ManualEntryState extends State<ManualEntry> {
                    ),
                  ),
                  Row(
+                   mainAxisAlignment: MainAxisAlignment.start,
+                   children: [
+                     Row(
+                       children: [
+                         Text(
+                           'Auto Count :',
+                           style: GoogleFonts.urbanist(
+                             color: Colors.black,
+                             fontSize: 12,
+                             fontWeight: FontWeight.w500,
+                           ),
+                         ),
+                         Text(
+                           manual.singleAddedProducts[0]["quantity"].toString(),
+                           style: GoogleFonts.urbanist(
+                             color: Colors.black,
+                             fontSize: 13,
+                             fontWeight: FontWeight.w800,
+                           ),
+                         ),
+                       ],
+                     ),
+                     Row(
+                       children: [
+                         Text(
+                           'Manual Count :',
+                           style: GoogleFonts.urbanist(
+                             color: Colors.black,
+                             fontSize: 12,
+                             fontWeight: FontWeight.w500,
+                           ),
+                         ),
+                         Text(
+                           manual.singleAddedProducts[0]["quantity"].toString(),
+                           style: GoogleFonts.urbanist(
+                             color: Colors.black,
+                             fontSize: 13,
+                             fontWeight: FontWeight.w800,
+                           ),
+                         ),
+                       ],
+                     ),
+                   ],
+                 ),
+                 Row(
                    children: [
                      Text(
-                       'Previous Count :',
+                       'Total Count :',
                        style: GoogleFonts.urbanist(
                          color: Colors.black,
                          fontSize: 12,
