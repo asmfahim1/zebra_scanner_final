@@ -7,7 +7,6 @@ import 'package:zebra_scanner_final/controller/offline_controller.dart';
 import '../../controller/server_controller.dart';
 import '../../constants/const_colors.dart';
 import '../../widgets/reusable_alert.dart';
-import '../manual_entry/manual_entry_screen.dart';
 
 class OfflineScanScreen extends StatefulWidget {
   const OfflineScanScreen({Key? key}) : super(key: key);
@@ -34,17 +33,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
         onScan: (result) async {
           offline.lastCode.value = result.data;
           int codeLength = offline.lastCode.string.length;
-          if (codeLength == 5 || codeLength == 12) {
-            showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => const ReusableAlerDialogue(
-                headTitle: "Warning!",
-                message: "Add Manually",
-                btnText: "OK",
-              ),
-            );
-            await offline.getScannerTable();
-          } else if (codeLength < 5) {
+          if (codeLength < 5) {
             showDialog<String>(
               context: context,
               builder: (BuildContext context) => const ReusableAlerDialogue(
@@ -267,7 +256,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                         ],
                                       ),
                                       Text(
-                                        "Total Count : ${scanned["autoqty"]}",
+                                        "Total Count : ${scanned["scanqty"]}",
                                         style: GoogleFonts.urbanist(
                                           fontSize: 13,
                                           color: Colors.black,
@@ -389,8 +378,8 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                           width: MediaQuery.of(context).size.width / 3.5,
                                                           child: TextField(
                                                             inputFormatters: [
-                                                              /*FilteringTextInputFormatter.deny(RegExp(r'^0')),
-                                                              FilteringTextInputFormatter.deny(RegExp(r'-')),*/
+                                                              /*FilteringTextInputFormatter.deny(RegExp(r'^0')),*/
+                                                              FilteringTextInputFormatter.deny(RegExp(r'-')),
                                                               FilteringTextInputFormatter.deny(RegExp(r',')),
                                                               FilteringTextInputFormatter.deny(RegExp(r'\+')),
                                                               FilteringTextInputFormatter.deny(RegExp(r'\*')),
@@ -425,9 +414,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                             style:
                                                             const TextStyle(
                                                                 fontSize: 50),
-                                                            keyboardType:
-                                                            TextInputType
-                                                                .number,
+                                                            keyboardType: TextInputType.number,
                                                           )),
                                                       const SizedBox(
                                                         width: 10,

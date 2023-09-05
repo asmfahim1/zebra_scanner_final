@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:zebra_scanner_final/controller/login_controller.dart';
 import 'package:zebra_scanner_final/db_helper/offline_repo.dart';
+import 'package:zebra_scanner_final/model/last_added_item_model.dart';
 import '../constants/const_colors.dart';
 import '../model/manual_added_product_model.dart';
 import '../widgets/reusable_alert.dart';
@@ -15,105 +16,103 @@ class ManualController extends GetxController {
   TextEditingController qtyController = TextEditingController();
   RxString lastCode = ''.obs;
   RxBool isEmptyField = false.obs;
+  LastAddedProductModel? lastAddedItem;
 
-  Future<void> addItemManually(BuildContext context, String idAddress,String deviceID,String userId,String tagNum,String storeId) async {
+  Future<void> addItemManually(BuildContext context, String idAddress, String deviceID, String userId, String tagNum, String storeId) async {
     BotToast.showLoading();
-    if(productCode.text.isEmpty || qtyController.text.isEmpty){
+    if (productCode.text.isEmpty || qtyController.text.isEmpty) {
       entryDone(false);
       BotToast.closeAllLoading();
       isEmptyField(true);
-      Get.snackbar('Warning!',
-          'Please fill up all the field',
-          backgroundColor: Colors.red,
+      Get.snackbar(
+        'Warning!',
+        'Please fill up all the fields',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 2),
+      );
+      return;
+    }
+    try {
+      entryDone(true);
+      final response = await http.post(
+        Uri.parse("http://$idAddress/unistock/zebra/manual_Add.php"),
+        body: jsonEncode(<String, dynamic>{
+          "item": productCode.text,
+          "user_id": userId,
+          "qty": qtyController.text,
+          "tag_no": tagNum,
+          "store": storeId,
+          "device": deviceID,
+        }),
+      );
+      if (response.statusCode == 200) {
+        clearTextField();
+        lastAddedItem = lastAddedProductModelFromJson(response.body);
+        Get.snackbar(
+          'Success',
+          '${lastAddedItem!.xdesc ?? ''} \nAuto count: ${lastAddedItem!.autoQty ?? ''},   Manual count: ${lastAddedItem!.manualQty ?? ''}\nTotal count: ${lastAddedItem!.scanQty ?? ''}',
+          backgroundColor: ConstantColors.uniGreen,
           colorText: Colors.white,
-          duration: const Duration(seconds: 2));
-    }else{
-      try{
-        entryDone(true);
-        var response = await http.post(
-            Uri.parse("http://$idAddress/unistock/zebra/manual_Add.php"),
-            body: jsonEncode(<String, dynamic>{
-              "item": productCode.text,
-              "user_id": userId,
-              "qty": qtyController.text,
-              "tag_no": tagNum,
-              "store": storeId,
-              "device": deviceID
-            }));
-        print('response: ${response.statusCode}');
-        if(response.statusCode == 200){
-          clearTextField();
-          Get.snackbar('Success', 'Product added',
-            backgroundColor: ConstantColors.uniGreen,
-            colorText: Colors.white,
-            duration: const Duration(seconds: 2),
-          );
-          entryDone(false);
-          isEmptyField(false);
-          BotToast.closeAllLoading();
-        }else{
-          entryDone(false);
-          isEmptyField(false);
-          if (context.mounted){
-            BotToast.closeAllLoading();
-            final responseBody = json.decode(response.body) as Map<String, dynamic>;
-            final errorMessage = responseBody['error'] as String;
-            print('-------------$errorMessage');
-            showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => ReusableAlerDialogue(
-                headTitle: "Warning!",
-                message: errorMessage,
-                btnText: "Back",
-              ),
-            );
-          }
-        }
-      }catch(e){
+          duration: const Duration(seconds: 2),
+        );
         entryDone(false);
         isEmptyField(false);
-        print('error: $e');
         BotToast.closeAllLoading();
-        Get.snackbar('Warning!', 'Failed to connect server',
-            borderWidth: 1.5,
-            borderColor: Colors.black54,
-            backgroundColor: Colors.red,
-            colorText: Colors.white,
-            duration: const Duration(seconds: 2),
-            snackPosition: SnackPosition.TOP
-        );
+      } else {
+        entryDone(false);
+        isEmptyField(false);
+        if (context.mounted) {
+          BotToast.closeAllLoading();
+          final responseBody = json.decode(response.body) as Map<String, dynamic>;
+          final errorMessage = responseBody['error'] as String;
+          showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => ReusableAlerDialogue(
+              headTitle: "Warning!",
+              message: errorMessage,
+              btnText: "Back",
+            ),
+          );
+        }
       }
+    } catch (e) {
+      entryDone(false);
+      isEmptyField(false);
+      BotToast.closeAllLoading();
+      Get.snackbar(
+        'Warning!',
+        'Failed to connect to the server',
+        borderWidth: 1.5,
+        borderColor: Colors.black54,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 2),
+        snackPosition: SnackPosition.TOP,
+      );
     }
   }
 
   //for manual add in online mode
   ManualAddedProductModel? manualAddedProduct;
   RxBool entryDone = false.obs;
-  Future<void> getManualAddedProduct(String tagNum, String itemCode) async{
+  Future<void> getManualAddedProduct(String tagNum, String itemCode) async {
+    entryDone(true);
 
     try {
-      entryDone(true);
-      var response = await http
-          .get(Uri.parse('http://${login.serverIp.value}/unistock/zebra/searchedProduct.php?tag_no=$tagNum&userID=${login.userId.value}&device=${login.deviceID.value}&item=$itemCode'));
+      final response = await http.get(
+        Uri.parse('http://${login.serverIp.value}/unistock/zebra/searchedProduct.php?tag_no=$tagNum&userID=${login.userId.value}&device=${login.deviceID.value}&item=$itemCode'),
+      );
+
       if (response.statusCode == 200) {
-        entryDone(false);
         manualAddedProduct = manualAddedProductModelFromJson(response.body);
       } else {
-        entryDone(false);
-        manualAddedProduct =null;
-        /*Get.snackbar('Warning!', 'Invalid code',
-            borderWidth: 1.5,
-            borderColor: Colors.black54,
-            backgroundColor: Colors.red,
-            colorText: Colors.white,
-            duration: const Duration(seconds: 2),
-            snackPosition: SnackPosition.TOP);*/
+        manualAddedProduct = null;
       }
-      entryDone(false);
     } catch (e) {
-      entryDone(false);
       manualAddedProduct = null;
-      print('There is a issue connecting to internet: $e');
+    } finally {
+      entryDone(false);
     }
   }
 
@@ -178,7 +177,6 @@ class ManualController extends GetxController {
     } catch (error) {
       entryDone(false);
       singleAddedProducts = [];
-      print('There are some issue getting cart header list: $error');
     }
   }
 

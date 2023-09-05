@@ -47,16 +47,7 @@ class _OnlineModeState extends State<OnlineMode> {
         onScan: (result) async {
           onlineController.lastCode.value = result.data;
           int codeLength = onlineController.lastCode.string.length;
-          if (codeLength == 5 || codeLength == 12) {
-            showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => const ReusableAlerDialogue(
-                headTitle: "Warning!",
-                message: "Add Manually",
-                btnText: "OK",
-              ),
-            );
-          } else if (codeLength < 5) {
+          if (codeLength < 5) {
             showDialog<String>(
               context: context,
               builder: (BuildContext context) => const ReusableAlerDialogue(
@@ -394,41 +385,25 @@ class _OnlineModeState extends State<OnlineMode> {
                                                             size: 20,
                                                           ),
                                                         )),
-                                                    Container(
+                                                    SizedBox(
                                                         width: MediaQuery.of(context).size.width / 3,
                                                         child: TextField(
                                                           inputFormatters: [
-                                                            FilteringTextInputFormatter
-                                                                .deny(RegExp(
-                                                                    r'^0')),
                                                             /*FilteringTextInputFormatter
                                                                 .deny(RegExp(
-                                                                    r'-')),*/
-                                                            FilteringTextInputFormatter
-                                                                .deny(RegExp(
-                                                                    r',')),
-                                                            FilteringTextInputFormatter
-                                                                .deny(RegExp(
-                                                                    r'\+')),
-                                                            FilteringTextInputFormatter
-                                                                .deny(RegExp(
-                                                                    r'\*')),
-                                                            FilteringTextInputFormatter
-                                                                .deny(RegExp(
-                                                                    r'/')),
-                                                            FilteringTextInputFormatter
-                                                                .deny(RegExp(
-                                                                    r'=')),
-                                                            FilteringTextInputFormatter
-                                                                .deny(RegExp(
-                                                                    r'%')),
-                                                            FilteringTextInputFormatter
-                                                                .deny(RegExp(
-                                                                    r' ')),
+                                                                    r'^0')),*/
+                                                            FilteringTextInputFormatter.deny(RegExp(r'-')),
+                                                            FilteringTextInputFormatter.deny(RegExp(r',')),
+                                                            FilteringTextInputFormatter.deny(RegExp(r'\+')),
+                                                            FilteringTextInputFormatter.deny(RegExp(r'\*')),
+                                                            FilteringTextInputFormatter.deny(RegExp(r'/')),
+                                                            FilteringTextInputFormatter.deny(RegExp(r'=')),
+                                                            FilteringTextInputFormatter.deny(RegExp(r'%')),
+                                                            FilteringTextInputFormatter.deny(RegExp(r' ')),
                                                           ],
                                                           textAlign: TextAlign.center,
                                                           controller: onlineController.qtyCon,
-                                                          //by using on submitted function, it will immediately after pressing the value done
+                                                          //by using on submitted function, it will immediately work after pressing the value done
                                                           onSubmitted: (value) {
                                                             if (value.isEmpty) {
                                                               onlineController.qtyCon.text = '0';

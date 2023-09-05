@@ -1,5 +1,5 @@
+import 'dart:convert';
 import 'dart:developer';
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
@@ -8,9 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zebra_scanner_final/constants/const_colors.dart';
 import '../model/login_model.dart';
-import '../view/login_screen.dart';
 import '../view/mode_selector_screen.dart';
-import '../widgets/reusable_alert.dart';
 
 class LoginController extends GetxController {
   final GlobalKey<FormState> loginKey = GlobalKey();
@@ -34,83 +32,59 @@ class LoginController extends GetxController {
 
   Future<void> loginMethod(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    try{
-      isLoading(true);
-      //BotToast.showLoading();
-      serverIp.value = prefs.getString('ipAddress')!;
-      deviceID.value = prefs.getString('deviceId')!;
-      print('Api: http://${serverIp.value}/unistock/zebra/login.php?zemail=${user.text}&xpassword=${pass.text}&device=${deviceID.value.toString()}');
-      var response = await http.get(Uri.parse(
-          'http://${serverIp.value}/unistock/zebra/login.php?zemail=${user.text}&xpassword=${pass.text}&device=${deviceID.value.toString()}'));
+
+    isLoading(true);
+    serverIp.value = prefs.getString('ipAddress')!;
+    deviceID.value = prefs.getString('deviceId')!;
+
+    try {
+      final response = await http.get(
+        Uri.parse(
+            'http://${serverIp.value}/unistock/zebra/login.php?zemail=${user.text}&xpassword=${pass.text}&device=${deviceID.value.toString()}'),
+      );
+
+      final responseBody = json.decode(response.body) as Map<String, dynamic>;
+
       if (response.statusCode == 200) {
         loginModel = loginModelFromJson(response.body);
-        if(user.text == loginModel.zemail && pass.text == loginModel.xpassword){
-          isLoading(false);
-          // BotToast.closeAllLoading();
-          userId.value = loginModel.xposition.toString();
-          await prefs.setString('accessToken', loginModel.xaccess.toString());
-          accessToken.value = prefs.getString('accessToken')!;
-          Get.to(() => const ModeSelect());
-          Get.snackbar('Success!', "Successfully logged in",
-            borderWidth: 1.5,
-            borderColor: Colors.black54,
-            colorText: Colors.white,
-            backgroundColor: ConstantColors.comColor.withOpacity(0.4),
-            duration: const Duration(seconds: 1),
-            snackPosition: SnackPosition.TOP,
-          );
-        }else{
-          isLoading(false);
-          //BotToast.closeAllLoading();
-          if (context.mounted){
-            showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => const ReusableAlerDialogue(
-                headTitle: "Warning!",
-                message: "Invalid user name or password",
-                btnText: "Back",
-              ),
-            );
-          }
-
-        }
-      }else if(response.statusCode == 403){
-        isLoading(false);
-        if (context.mounted){
-          showDialog<String>(
-            context: context,
-            builder: (BuildContext context) => const ReusableAlerDialogue(
-              headTitle: "Warning!",
-              message: "User is already logged in from another device.",
-              btnText: "Back",
-            ),
-          );
-        }
-      }else if (response.statusCode == 404) {
-        isLoading(false);
-        //BotToast.closeAllLoading();
-        if (context.mounted){
-          showDialog<String>(
-            context: context,
-            builder: (BuildContext context) => const ReusableAlerDialogue(
-              headTitle: "Warning!",
-              message: "Invalid userid or password",
-              btnText: "Back",
-            ),
-          );
-        }
-      }
-    }catch(e){
-      isLoading(false);
-      print('There is a issue: $e');
-      //BotToast.closeAllLoading();
-      Get.snackbar('Warning!', 'Failed to connect server',
+        userId.value = loginModel.xposition.toString();
+        await prefs.setString('accessToken', loginModel.xaccess.toString());
+        accessToken.value = prefs.getString('accessToken')!;
+        Get.to(() => const ModeSelect());
+        Get.snackbar(
+          'Success!',
+          "Successfully logged in",
           borderWidth: 1.5,
           borderColor: Colors.black54,
-          backgroundColor: Colors.red,
           colorText: Colors.white,
-          duration: const Duration(seconds: 2),
-          snackPosition: SnackPosition.TOP);
+          backgroundColor: ConstantColors.comColor.withOpacity(0.6),
+          duration: const Duration(seconds: 1),
+          snackPosition: SnackPosition.TOP,
+        );
+      } else {
+        final errorMessage = responseBody['error'] as String;
+        Get.defaultDialog(
+          title: "Warning!",
+          middleText: errorMessage,
+          confirm: ElevatedButton(
+            onPressed: () => Get.back(),
+            child: const Text("Back"),
+          ),
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Warning!',
+        'Failed to connect to the server',
+        borderWidth: 1.5,
+        borderColor: Colors.black54,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 2),
+        snackPosition: SnackPosition.TOP,
+      );
+    } finally {
+      isLoading(false);
     }
   }
 

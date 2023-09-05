@@ -12,9 +12,7 @@ class OnlineController extends GetxController {
   RxString scannerStatus = "Scanner status".obs;
   RxString lastCode = ''.obs;
   TextEditingController qtyCon = TextEditingController();
-  //gradient calculation
   static const double fillPercent = 52;
-  // fills 56.23% for container from bottom
   static const double fillStop = (100 - fillPercent) / 95;
   final List<double> stops = [
     fillStop,
@@ -40,13 +38,14 @@ class OnlineController extends GetxController {
       haveProduct(true);
       var response = await http.get(Uri.parse(
           "http://$ipAddress/unistock/zebra/productlist_tag_device.php?tag_no=$tagNum&userID=${login.userId.value}"));
+      final responseBody = json.decode(response.body) as Map<String, dynamic>;
       if (response.statusCode == 200) {
-        //print(response.body);
         haveProduct(false);
         products = masterItemsModelFromJson(response.body);
       } else {
+        final errorMessage = responseBody['error'] as String;
         haveProduct(false);
-        Get.snackbar('Warning!', 'Failed to fetch products',
+        Get.snackbar('Warning!', errorMessage,
             borderWidth: 1.5,
             borderColor: Colors.black54,
             backgroundColor: Colors.red,
@@ -64,7 +63,6 @@ class OnlineController extends GetxController {
           colorText: Colors.white,
           duration: const Duration(seconds: 2),
           snackPosition: SnackPosition.TOP);
-      print('There is a issue connecting to internet: $e');
     }
   }
 
@@ -116,12 +114,13 @@ class OnlineController extends GetxController {
             "store": storeId,
             "device": deviceID
           }));
-      print("status code: ${response.statusCode}");
+      final responseBody = json.decode(response.body) as Map<String, dynamic>;
       if(response.statusCode == 200){
         postProduct(false);
       } else{
+        final errorMessage = responseBody['error'] as String;
         postProduct(false);
-        Get.snackbar('Error', 'Invalid item code',
+        Get.snackbar('Error', errorMessage,
             borderWidth: 1.5,
             borderColor: Colors.black54,
             backgroundColor: Colors.red,
@@ -138,7 +137,8 @@ class OnlineController extends GetxController {
           backgroundColor: Colors.red,
           colorText: Colors.white,
           duration: const Duration(seconds: 2),
-          snackPosition: SnackPosition.TOP);
+          snackPosition: SnackPosition.TOP,
+      );
     }
   }
 
@@ -185,7 +185,8 @@ class OnlineController extends GetxController {
           backgroundColor: Colors.red,
           colorText: Colors.white,
           duration: const Duration(seconds: 2),
-          snackPosition: SnackPosition.TOP);
+          snackPosition: SnackPosition.TOP,
+      );
     }
   }
 
@@ -197,7 +198,8 @@ class OnlineController extends GetxController {
       String itemCode,
       String tagNum,
       String storeId,
-      String deviceID) async {
+      String deviceID,
+      ) async {
     try{
       if (double.parse(qtyCon.text) > totalQty) {
         Get.snackbar(

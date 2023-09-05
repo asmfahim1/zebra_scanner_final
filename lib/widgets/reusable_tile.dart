@@ -17,7 +17,7 @@ class TileBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.width / 2.8,
+      height: MediaQuery.of(context).size.width / 2.9,
       width: MediaQuery.of(context).size.width / 2.8,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -44,7 +44,7 @@ class TileBtn extends StatelessWidget {
               children: [
                 Image(
                   image: AssetImage(imageName),
-                  height: MediaQuery.of(context).size.height / 10,
+                  height: MediaQuery.of(context).size.height / 11,
                   width: MediaQuery.of(context).size.width / 8,
                 ),
                 const SizedBox(
@@ -54,7 +54,7 @@ class TileBtn extends StatelessWidget {
                   buttonName,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.bakbakOne(
-                    fontSize: MediaQuery.of(context).size.height / 40,
+                    fontSize: MediaQuery.of(context).size.height / 42,
                     color: ConstantColors.uniGreen,
                   ),
                 )

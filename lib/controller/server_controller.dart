@@ -32,7 +32,9 @@ class ServerController extends GetxController {
         normalId = build.id;
       }
     } catch (e) {
-      print("Something occurs $e");
+      deviceName = '';
+      deviceId = '';
+      normalId = '';
     }
     isLoading(false);
     update();
@@ -57,7 +59,6 @@ class ServerController extends GetxController {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('ipAddress', server.text,);
         prefs.setString('deviceId', deviceId,);
-        print('deviceId: $deviceId');
         var response = await http.post(
             Uri.parse('http://${server.text}/unistock/zebra/server_config.php'),
             body: <String, dynamic>{
@@ -78,7 +79,6 @@ class ServerController extends GetxController {
             backgroundColor: Colors.red,
             duration: const Duration(seconds: 1),
           );
-          print('Something went wrong: ${response.statusCode}');
         }
       }
     }catch(e){
@@ -92,7 +92,6 @@ class ServerController extends GetxController {
         backgroundColor: Colors.red,
         duration: const Duration(seconds: 1),
       );
-      print('Server error: $e');
     }
   }
 }
