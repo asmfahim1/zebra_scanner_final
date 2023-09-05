@@ -13,7 +13,7 @@ class ShowDataScreen extends StatefulWidget {
 }
 
 class _ShowDataScreenState extends State<ShowDataScreen> {
-  OfflineController offline = Get.find<OfflineController>();
+  OfflineController offline = Get.put(OfflineController());
 
   @override
   void initState() {

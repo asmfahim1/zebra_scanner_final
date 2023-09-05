@@ -434,30 +434,14 @@ class _OnlineModeState extends State<OnlineMode> {
                                                               /*FilteringTextInputFormatter
                                                                 .deny(RegExp(
                                                                     r'^0')),*/
-                                                              FilteringTextInputFormatter
-                                                                  .deny(RegExp(
-                                                                      r'-')),
-                                                              FilteringTextInputFormatter
-                                                                  .deny(RegExp(
-                                                                      r',')),
-                                                              FilteringTextInputFormatter
-                                                                  .deny(RegExp(
-                                                                      r'\+')),
-                                                              FilteringTextInputFormatter
-                                                                  .deny(RegExp(
-                                                                      r'\*')),
-                                                              FilteringTextInputFormatter
-                                                                  .deny(RegExp(
-                                                                      r'/')),
-                                                              FilteringTextInputFormatter
-                                                                  .deny(RegExp(
-                                                                      r'=')),
-                                                              FilteringTextInputFormatter
-                                                                  .deny(RegExp(
-                                                                      r'%')),
-                                                              FilteringTextInputFormatter
-                                                                  .deny(RegExp(
-                                                                      r' ')),
+                                                              FilteringTextInputFormatter.deny(RegExp(r'-')),
+                                                              FilteringTextInputFormatter.deny(RegExp(r',')),
+                                                              FilteringTextInputFormatter.deny(RegExp(r'\+')),
+                                                              FilteringTextInputFormatter.deny(RegExp(r'\*')),
+                                                              FilteringTextInputFormatter.deny(RegExp(r'/')),
+                                                              FilteringTextInputFormatter.deny(RegExp(r'=')),
+                                                              FilteringTextInputFormatter.deny(RegExp(r'%')),
+                                                              FilteringTextInputFormatter.deny(RegExp(r' ')),
                                                             ],
                                                             textAlign: TextAlign
                                                                 .center,
@@ -481,23 +465,14 @@ class _OnlineModeState extends State<OnlineMode> {
                                                               }
                                                             },
                                                             decoration:
-                                                                InputDecoration(
-                                                              focusedBorder:
+                                                                InputDecoration(focusedBorder:
                                                                   OutlineInputBorder(
-                                                                borderSide:
-                                                                    const BorderSide(
-                                                                  width: 1.5,
-                                                                  color: ConstantColors
-                                                                      .comColor,
-                                                                ),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            5.5),
+                                                                    borderSide: const BorderSide(width: 1.5, color: ConstantColors.comColor,),
+                                                                borderRadius: BorderRadius.circular(5.5),
                                                               ),
                                                               filled: true,
                                                               hintText:
-                                                                  '${onlineController.products[index].scanQty}',
+                                                                  '${onlineController.products[index].autoQty}',
                                                               hintStyle: const TextStyle(
                                                                   color: Colors
                                                                       .white,
@@ -623,20 +598,14 @@ class _OnlineModeState extends State<OnlineMode> {
                                                             ),
                                                           ));
                                                         },
-                                                        child: Obx(() {
-                                                          return onlineController.isUpdate.value
-                                                              ? const Center(
-                                                                  child: CircularProgressIndicator(color: Colors.white,),
-                                                                )
-                                                              : Text(
-                                                                  "Update",
-                                                                  style: GoogleFonts.urbanist(
-                                                                    fontSize: 18,
-                                                                    color: Colors.white,
-                                                                    fontWeight: FontWeight.w600,
-                                                                  ),
-                                                                );
-                                                        }),
+                                                        child: Text(
+                                                          "Update",
+                                                          style: GoogleFonts.urbanist(
+                                                            fontSize: 18,
+                                                            color: Colors.white,
+                                                            fontWeight: FontWeight.w600,
+                                                          ),
+                                                        )
                                                       ),
                                                     ),
                                                   ],

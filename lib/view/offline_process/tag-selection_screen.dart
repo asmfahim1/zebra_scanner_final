@@ -16,7 +16,7 @@ class OfflineTagScreen extends StatefulWidget {
 
 class _OfflineTagScreenState extends State<OfflineTagScreen> {
   LoginController login = Get.find<LoginController>();
-  OfflineController offline = Get.find<OfflineController>();
+  OfflineController offline = Get.put(OfflineController());
   ConstantColors colors = ConstantColors();
 
   //need to call the tagList for first build

@@ -32,11 +32,9 @@ class LoginController extends GetxController {
 
   Future<void> loginMethod(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
     isLoading(true);
     serverIp.value = prefs.getString('ipAddress')!;
     deviceID.value = prefs.getString('deviceId')!;
-
     try {
       final response = await http.get(
         Uri.parse(

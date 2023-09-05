@@ -4,7 +4,6 @@ import 'package:zebra_scanner_final/view/manual_entry/manual_entry_screen.dart';
 import 'package:zebra_scanner_final/view/offline_process/offline-scan_screen.dart';
 import 'package:zebra_scanner_final/view/offline_process/show_data_screen.dart';
 import 'package:zebra_scanner_final/view/offline_process/tag-selection_screen.dart';
-import '../../controller/offline_controller.dart';
 import '../../widgets/appBar_widget.dart';
 import '../../widgets/reusable_tile.dart';
 
@@ -16,7 +15,6 @@ class ScanTypeScreen extends StatefulWidget {
 }
 
 class _ScanTypeScreenState extends State<ScanTypeScreen> {
-  OfflineController offline = Get.put(OfflineController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(

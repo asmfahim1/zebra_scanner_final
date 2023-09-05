@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -108,7 +109,7 @@ class OnlineController extends GetxController {
           Uri.parse("http://$ipAddress/unistock/zebra/add_item.php"),
           body: jsonEncode(<String, dynamic>{
             "item": itemCode,
-            "user_id": login.userId.value ?? '',
+            "user_id": login.userId.value,
             "qty": 1.0,
             "tag_no": tagNum,
             "store": storeId,
@@ -152,6 +153,7 @@ class OnlineController extends GetxController {
       String deviceID) async {
     try{
       isUpdate(true);
+      BotToast.showLoading();
       if (qtyCon.text.isEmpty) {
         qtyCon.text = quantity.value.toString();
         var response = await http.post(
@@ -179,10 +181,12 @@ class OnlineController extends GetxController {
         );
       }
       isUpdate(false);
+      BotToast.closeAllLoading();
       qtyCon.clear();
       quantity.value = 0;
     }catch(e){
       isUpdate(false);
+      BotToast.closeAllLoading();
       Get.snackbar('Warning!', 'Failed to connect server',
           borderWidth: 1.5,
           borderColor: Colors.black54,

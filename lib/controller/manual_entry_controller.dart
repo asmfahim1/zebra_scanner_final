@@ -96,9 +96,8 @@ class ManualController extends GetxController {
   //for manual add in online mode
   ManualAddedProductModel? manualAddedProduct;
   RxBool entryDone = false.obs;
-  Future<void> getManualAddedProduct(String tagNum, String itemCode) async {
+  Future<String> getManualAddedProduct(String tagNum, String itemCode) async {
     entryDone(true);
-
     try {
       final response = await http.get(
         Uri.parse('http://${login.serverIp.value}/unistock/zebra/searchedProduct.php?tag_no=$tagNum&userID=${login.userId.value}&device=${login.deviceID.value}&item=$itemCode'),
@@ -106,11 +105,14 @@ class ManualController extends GetxController {
 
       if (response.statusCode == 200) {
         manualAddedProduct = manualAddedProductModelFromJson(response.body);
+        return 'Success';
       } else {
         manualAddedProduct = null;
+        return 'Fail';
       }
     } catch (e) {
       manualAddedProduct = null;
+      return 'Fail';
     } finally {
       entryDone(false);
     }
@@ -169,14 +171,20 @@ class ManualController extends GetxController {
 
   //for manual add in offline mode
   List singleAddedProducts = [];
-  Future<void> getSingleScannedProduct() async{
+  Future<String> getSingleScannedProduct() async{
     try {
       entryDone(true);
       singleAddedProducts = await OfflineRepo().getManualAddedProduct(productCode.text);
       entryDone(false);
+      if(singleAddedProducts.isEmpty){
+        return 'Fail';
+      }else{
+        return 'Success';
+      }
     } catch (error) {
       entryDone(false);
       singleAddedProducts = [];
+      return 'Fail';
     }
   }
 
@@ -188,14 +196,14 @@ class ManualController extends GetxController {
   }
 
   void releaseVariables(String mode){
-   entryDone.value = false;
-   isEmptyField.value = false;
-   productCode.clear();
-   qtyController.clear();
-   if(mode == 'Online'){
-     manualAddedProduct = null;
-   }else{
-     singleAddedProducts = [];
-   }
+    entryDone.value = false;
+    isEmptyField.value = false;
+    productCode.clear();
+    qtyController.clear();
+    if(mode == 'Online'){
+      manualAddedProduct = null;
+    }else{
+      singleAddedProducts = [];
+    }
   }
 }

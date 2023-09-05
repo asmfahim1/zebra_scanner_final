@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zebra_scanner_final/controller/login_controller.dart';
 import 'package:zebra_scanner_final/view/login_screen.dart';
 import 'package:zebra_scanner_final/view/online_process/tag_selection.dart';
 import 'package:get/get.dart';
-import 'package:zebra_scanner_final/view/server_setup_screen.dart';
 import 'package:zebra_scanner_final/widgets/reusable_tile.dart';
 import '../constants/const_colors.dart';
 import '../widgets/appBar_widget.dart';
@@ -19,13 +17,6 @@ class ModeSelect extends StatefulWidget {
 
 class _ModeSelectState extends State<ModeSelect> {
   LoginController login = Get.find<LoginController>();
-
-/*  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    //login.fetchMasterItemsList();
-  }*/
 
   @override
   Widget build(BuildContext context) {

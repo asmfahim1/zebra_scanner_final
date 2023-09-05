@@ -79,6 +79,7 @@ class OfflineController extends GetxController {
   }
 
   //search mechanism for any name
+  TextEditingController name = TextEditingController();
   RxString searchQuery = ''.obs;
 
   // Filter suppliers based on search query
@@ -88,8 +89,8 @@ class OfflineController extends GetxController {
     } else {
       return supList
           .where((supplier) => supplier.xcus
-              .toLowerCase()
-              .contains(searchQuery.value.toLowerCase()))
+          .toLowerCase()
+          .contains(searchQuery.value.toLowerCase()))
           .toList();
     }
   }
@@ -128,8 +129,8 @@ class OfflineController extends GetxController {
     } else {
       return scannedProductList
           .where((addedProducts) => addedProducts["itemdesc"]
-              .toLowerCase()
-              .contains(filteredQuery.value.toLowerCase()))
+          .toLowerCase()
+          .contains(filteredQuery.value.toLowerCase()))
           .toList();
     }
   }
@@ -263,6 +264,7 @@ class OfflineController extends GetxController {
         }).toList();
         isFetched(false);
         if (context.mounted) {
+          clearTextField();
           showDialog<String>(
             context: context,
             builder: (BuildContext context) => SpecialAlert(
@@ -271,6 +273,7 @@ class OfflineController extends GetxController {
               btnText: "Back",
             ),
           );
+
         }
         return 'Product fetched Successfully';
       } else {
@@ -301,6 +304,11 @@ class OfflineController extends GetxController {
       );
       return 'Error in the method';
     }
+  }
+
+  void clearTextField(){
+    name.clear();
+    search('');
   }
 
   RxBool got = false.obs;
@@ -371,9 +379,9 @@ class OfflineController extends GetxController {
         await getScannerTable();
         productLoaded(false);
         Get.snackbar('Successful!', 'Uploaded to server successfully',
-            backgroundColor: Colors.white,
-            colorText: Colors.black,
-            duration: const Duration(seconds: 1),
+          backgroundColor: Colors.white,
+          colorText: Colors.black,
+          duration: const Duration(seconds: 1),
         );
       } catch (e) {
         productLoaded(false);

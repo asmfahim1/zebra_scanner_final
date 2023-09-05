@@ -25,7 +25,6 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     setState(() {
       obtainedIpAddress = savedIp;
     });
-    print('Saved Ip address is : $obtainedIpAddress');
   }
 
   @override

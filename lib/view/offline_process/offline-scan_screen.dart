@@ -394,10 +394,8 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                             onSubmitted: (value) {
                                                               if (value.isEmpty) {
                                                                 offline.qtyCon.text = '0';
-                                                                print('====${offline.quantity.value}======${offline.qtyCon.text}');
                                                               } else {
                                                                 offline.quantity.value = double.parse(value);
-                                                                print('====${offline.quantity.value}======${offline.qtyCon.text}');
                                                               }
                                                             },
                                                             decoration: InputDecoration(
@@ -407,7 +405,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                               ),
                                                               filled: true,
                                                               hintText:
-                                                              '${scanned["scanqty"]}',
+                                                              '${scanned["autoqty"]}',
                                                               hintStyle: const TextStyle(color: Colors.white, fontSize: 50,fontWeight: FontWeight.w600),
                                                               fillColor: Colors.blueGrey[50],
                                                             ),
@@ -476,24 +474,24 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                               .withOpacity(0.7),
                                                         ),
                                                         onPressed: () async {
-                                                          ScaffoldMessenger.of(context).showSnackBar(
-                                                              const SnackBar(
-                                                                duration: Duration(seconds: 1),
-                                                                content: Text(
-                                                                  "Product updated successfully",
-                                                                  textAlign:
-                                                                  TextAlign.center,
-                                                                  style: TextStyle(
-                                                                    //fontWeight: FontWeight.bold,
-                                                                    fontSize: 18,
-                                                                    color: Colors.white,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                          );
                                                           await offline.updateQty(scanned["itemcode"]);
                                                           await offline.getScannerTable();
                                                           Navigator.pop(context);
+                                                          ScaffoldMessenger.of(context).showSnackBar(
+                                                            const SnackBar(
+                                                              duration: Duration(seconds: 1),
+                                                              content: Text(
+                                                                "Product updated successfully",
+                                                                textAlign:
+                                                                TextAlign.center,
+                                                                style: TextStyle(
+                                                                  //fontWeight: FontWeight.bold,
+                                                                  fontSize: 18,
+                                                                  color: Colors.white,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          );
                                                         },
                                                         child: Text(
                                                           "Update",

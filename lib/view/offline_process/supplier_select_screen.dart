@@ -17,7 +17,7 @@ class SupSelScreen extends StatefulWidget {
 class _SupSelScreenState extends State<SupSelScreen> {
   LoginController login = Get.find<LoginController>();
   OfflineController offline = Get.find<OfflineController>();
-  TextEditingController name = TextEditingController();
+
 
   @override
   void initState() {
@@ -36,7 +36,7 @@ class _SupSelScreenState extends State<SupSelScreen> {
           color: Colors.white,
           leading: GestureDetector(
             onTap: () {
-              name.clear();
+              offline.clearTextField();
               Get.back();
             },
             child: const Icon(
@@ -68,7 +68,7 @@ class _SupSelScreenState extends State<SupSelScreen> {
               : Column(
                   children: [
                     TextFormField(
-                      controller: name,
+                      controller: offline.name,
                       decoration: const InputDecoration(
                           hintText: 'Search by name',
                           border: OutlineInputBorder(),

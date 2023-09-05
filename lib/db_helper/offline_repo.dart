@@ -198,72 +198,6 @@ class OfflineRepo{
     return success;
   }
 
-  //Manual Add
- /* Future<int> manualEntry(String itemCode,String qty,String deviceID,String userID) async {
-    var dbClient = await conn.db;
-    int success = 0;
-    int result = 0;
-    int codeLength = itemCode.length;
-    try {
-      String? itemDesc = '';
-      String? xcus = '';
-      String? tag_no = '';
-      //String? mainItem = '';
-      if (codeLength == 5 || codeLength == 7) {
-        print('Inside CodeLength 5-7');
-        var existingRow = await dbClient!.rawQuery(
-            'SELECT xitem,xdesc, xcus, tag_no  FROM ${DBHelper.masterTable} WHERE xitem = ? LIMIT 1',
-            [itemCode]);
-        if(existingRow.isNotEmpty){
-          print('Inside existingRow');
-          var scanningRow = await dbClient.rawQuery(
-              'SELECT itemcode FROM ${DBHelper.scannerTable} WHERE itemcode = ? LIMIT 1',
-              [itemCode]);
-
-          itemDesc = existingRow.first['xdesc'] as String?;
-          xcus = existingRow.first['xcus'] as String?;
-          tag_no = existingRow.first['tag_no'] as String?;
-          if (scanningRow.isNotEmpty) {
-            // Item exists, perform an update using raw SQL query
-            result = await dbClient.rawUpdate(
-              'UPDATE ${DBHelper.scannerTable} '
-                  'SET scanqty = scanqty + ? , autoqty = autoqty + 1 '
-                  'WHERE scanned_code = ?',
-              [qty,itemCode],
-            );
-          } else {
-            print('description: ${itemDesc}');
-            print('description: ${xcus}');
-            print('description: ${tag_no}');
-            // Item doesn't exist, perform an insert using raw SQL query
-            result = await dbClient.rawInsert(
-              'INSERT INTO ${DBHelper.scannerTable} '
-                  '(scanned_code, itemcode, itemdesc, scanqty, adjustqty, autoqty, manualqty, xcus, device_id, store_id, tag_num, user_id) '
-                  'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, "77", ?, ?)',
-              [itemCode, itemCode, itemDesc, qty, qty, qty, qty, xcus, deviceID, tag_no, userID],
-            );
-
-          }
-
-        }
-        else{
-          success = 1;
-          return success;
-        }
-
-      } else {
-        success = 1;
-        return success;
-      }
-    } catch (e) {
-      print('There are some issues: $e');
-      success = 1;
-      return success;
-    }
-    print('the items are: $result');
-    return success;
-  }*/
-
   // Manually insert to Scanner
   Future<int>  manualEntry(String itemCode,String qty,String deviceID,String userID) async {
     var dbClient = await conn.db;
@@ -296,6 +230,12 @@ class OfflineRepo{
               [qty, qty, itemCode],
             );
           } else {
+            double parsedQty = double.tryParse(qty) ?? 0.0;
+            if (parsedQty < 0.0) {
+              // Handle negative quantity here (e.g., show an error message)
+              success = 1;
+              return success;
+            }
             result = await dbClient.rawInsert(
               'INSERT INTO ${DBHelper.scannerTable} '
                   '(scanned_code, itemcode, itemdesc, scanqty, adjustqty, autoqty, manualqty, xcus, device_id, store_id, tag_num, user_id) '
@@ -330,6 +270,12 @@ class OfflineRepo{
               [qty, qty, itemCode],
             );
           } else {
+            double parsedQty = double.tryParse(qty) ?? 0.0;
+            if (parsedQty < 0.0) {
+              // Handle negative quantity here (e.g., show an error message)
+              success = 1;
+              return success;
+            }
             // Item doesn't exist, perform an insert using raw SQL query
             result = await dbClient.rawInsert(
               'INSERT INTO ${DBHelper.scannerTable} '
@@ -365,6 +311,12 @@ class OfflineRepo{
               [qty, qty, itemCode],
             );
           } else {
+            double parsedQty = double.tryParse(qty) ?? 0.0;
+            if (parsedQty < 0.0) {
+              // Handle negative quantity here (e.g., show an error message)
+              success = 1;
+              return success;
+            }
             // Item doesn't exist, perform an insert using raw SQL query
             result = await dbClient.rawInsert(
               'INSERT INTO ${DBHelper.scannerTable} '
@@ -402,6 +354,12 @@ class OfflineRepo{
               [qty, qty, itemCode],
             );
           } else {
+            double parsedQty = double.tryParse(qty) ?? 0.0;
+            if (parsedQty < 0.0) {
+              // Handle negative quantity here (e.g., show an error message)
+              success = 1;
+              return success;
+            }
             // Item doesn't exist, perform an insert using raw SQL query
             result = await dbClient.rawInsert(
               'INSERT INTO ${DBHelper.scannerTable} '
