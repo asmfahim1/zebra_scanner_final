@@ -176,8 +176,10 @@ class OfflineController extends GetxController {
   Future<void> updateQty(String itemCode) async {
     if (qtyCon.text.isEmpty) {
       qtyCon.text = quantity.value.toString();
+      print('auto quantity is : ${qtyCon.text}');
     } else {
       await OfflineRepo().updateQuantity(itemCode, qtyCon.text);
+      print('auto quantity is : ${qtyCon.text}');
     }
     qtyCon.clear();
     quantity.value = 0;

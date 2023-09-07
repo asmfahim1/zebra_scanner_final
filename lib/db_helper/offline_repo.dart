@@ -457,7 +457,7 @@ class OfflineRepo{
       } else {
         String updateSql = '''
         UPDATE ${DBHelper.scannerTable} 
-        SET scanqty = autoqty + manualqty + ?, autoqty = ?, createdAt = CURRENT_TIMESTAMP
+        SET scanqty = manualqty + ?, autoqty = ?, createdAt = CURRENT_TIMESTAMP
         WHERE itemcode = ?
       ''';
         await dbClient?.rawUpdate(updateSql, [qty, qty, item]);

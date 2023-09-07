@@ -78,19 +78,6 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
               fontWeight: FontWeight.w700,
             ),
           ),
-            /*title: Container(
-              height: 50,
-              width: 250,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
-              child: TextFormField(
-                controller: offline.searchByName,
-                decoration: const InputDecoration(
-                    hintText: 'Search by name',
-                    border: OutlineInputBorder(),
-                    suffixIcon: Icon(Icons.search)),
-                onChanged: (value) => offline.searchProduct(value),
-              ),
-            ),*/
           actions: [
             GestureDetector(
             onTap: () {offline.uploadToServer();},
@@ -374,7 +361,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
                                                       const SizedBox(
                                                         width: 10,
                                                       ),
-                                                      Container(
+                                                      SizedBox(
                                                           width: MediaQuery.of(context).size.width / 3.5,
                                                           child: TextField(
                                                             inputFormatters: [

@@ -448,6 +448,7 @@ class _ManualEntryState extends State<ManualEntry> {
                       ),
                     ],
                   ),
+                  SizedBox(width: 10,),
                   Row(
                     children: [
                       Text(
