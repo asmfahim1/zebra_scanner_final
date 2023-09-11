@@ -33,11 +33,9 @@ class _ManualEntryState extends State<ManualEntry> {
     FlutterDataWedge.initScanner(
       profileName: 'FlutterDataWedge',
       onScan: (result) async{
-        manual.productCode.clear();
-        manual.productCode.text = result.data;
+        print('scanned code : $result');
       },
     );
-
   }
 
   @override
@@ -86,8 +84,8 @@ class _ManualEntryState extends State<ManualEntry> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                height: 50,
-                width: double.maxFinite,
+                height: 40,
+                width: MediaQuery.of(context).size.width,
                 padding:
                 const EdgeInsets.only(left: 10, right: 10),
                 alignment: Alignment.centerLeft,
@@ -158,7 +156,7 @@ class _ManualEntryState extends State<ManualEntry> {
                   },
                 ),
               ),
-              const SizedBox(height: 10,),
+              const SizedBox(height: 5,),
               Obx(() {
                 if (manual.entryDone.value) {
                   return Container(); // Display a loading indicator
@@ -169,14 +167,14 @@ class _ManualEntryState extends State<ManualEntry> {
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Card(
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
                           color: Colors.white,
                           elevation: 2,
                           shadowColor: Colors.blueGrey,
                           child: Container(
-                            height: 100,
-                            width: double.maxFinite,
+                            height: 50,
+                            width: MediaQuery.of(context).size.width,
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: const Center(
                               child: Text('No product searched'),
@@ -193,13 +191,13 @@ class _ManualEntryState extends State<ManualEntry> {
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Card(
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
                           color: Colors.white,
                           elevation: 2,
                           shadowColor: Colors.blueGrey,
                           child: Container(
-                            height: 100,
+                            height: 50,
                             width: double.maxFinite,
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: const Center(
@@ -214,23 +212,21 @@ class _ManualEntryState extends State<ManualEntry> {
                   }
                 }
               }),
-              const SizedBox(height: 10,),
+              const SizedBox(height: 5,),
               Container(
-                height: 50,
-                width: double.maxFinite,
+                height: 40,
+                width: MediaQuery.of(context).size.width,
                 padding:
                 const EdgeInsets.only(left: 10, right: 10),
                 alignment: Alignment.centerLeft,
-                margin: const EdgeInsets.only(
-                    left: 10, top: 10, right: 10),
+                margin: const EdgeInsets.only(left: 10, top: 10, right: 10),
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: manual.isEmptyField.value ==
                         true
                         ? Colors.red
                         : Colors.grey,
-                    width:
-                    manual.isEmptyField.value ==
+                    width: manual.isEmptyField.value ==
                         true
                         ? 2.0
                         : 1.0,
@@ -261,10 +257,10 @@ class _ManualEntryState extends State<ManualEntry> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(height: 10,),
               Container(
-                height: 50,
-                width: 120,
+                height: 45,
+                width: 100,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0)),
                 clipBehavior: Clip.hardEdge,
@@ -310,8 +306,8 @@ class _ManualEntryState extends State<ManualEntry> {
         elevation: 2,
         shadowColor: Colors.blueGrey,
         child: Container(
-          height: 80,
-          width: double.maxFinite,
+          height: 50,
+          width: MediaQuery.of(context).size.width,
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -321,7 +317,7 @@ class _ManualEntryState extends State<ManualEntry> {
                 manual.manualAddedProduct?.xdesc ?? 'Description : ',
                 style: GoogleFonts.poppins(
                   color: Colors.black,
-                  fontSize: 12,
+                  fontSize: 10,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -334,7 +330,7 @@ class _ManualEntryState extends State<ManualEntry> {
                         'Auto Count :',
                         style: GoogleFonts.urbanist(
                           color: Colors.black,
-                          fontSize: 12,
+                          fontSize: 10,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -342,7 +338,7 @@ class _ManualEntryState extends State<ManualEntry> {
                         '${manual.manualAddedProduct?.autoQty.toString()}',
                         style: GoogleFonts.urbanist(
                           color: Colors.black,
-                          fontSize: 13,
+                          fontSize: 12,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
@@ -355,7 +351,7 @@ class _ManualEntryState extends State<ManualEntry> {
                         'Manual Count :',
                         style: GoogleFonts.urbanist(
                           color: Colors.black,
-                          fontSize: 12,
+                          fontSize: 10,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -363,7 +359,7 @@ class _ManualEntryState extends State<ManualEntry> {
                         '${manual.manualAddedProduct?.manualQty.toString()}',
                         style: GoogleFonts.urbanist(
                           color: Colors.black,
-                          fontSize: 13,
+                          fontSize: 12,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
@@ -377,7 +373,7 @@ class _ManualEntryState extends State<ManualEntry> {
                     'Total Count :',
                     style: GoogleFonts.urbanist(
                       color: Colors.black,
-                      fontSize: 12,
+                      fontSize: 10,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -385,7 +381,7 @@ class _ManualEntryState extends State<ManualEntry> {
                     '${manual.manualAddedProduct?.scanQty.toString()}',
                     style: GoogleFonts.urbanist(
                       color: Colors.black,
-                      fontSize: 13,
+                      fontSize: 12,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -410,8 +406,8 @@ class _ManualEntryState extends State<ManualEntry> {
         elevation: 2,
         shadowColor: Colors.blueGrey,
         child: Container(
-          height: 80,
-          width: double.maxFinite,
+          height: 50,
+          width: MediaQuery.of(context).size.width,
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -421,7 +417,7 @@ class _ManualEntryState extends State<ManualEntry> {
                 manual.singleAddedProducts[0]["xdesc"],
                 style: GoogleFonts.poppins(
                   color: Colors.black,
-                  fontSize: 12,
+                  fontSize: 10,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -434,7 +430,7 @@ class _ManualEntryState extends State<ManualEntry> {
                         'Auto Count :',
                         style: GoogleFonts.urbanist(
                           color: Colors.black,
-                          fontSize: 12,
+                          fontSize: 10,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -442,7 +438,7 @@ class _ManualEntryState extends State<ManualEntry> {
                         manual.singleAddedProducts[0]["autoqty"].toString(),
                         style: GoogleFonts.urbanist(
                           color: Colors.black,
-                          fontSize: 13,
+                          fontSize: 12,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
@@ -455,7 +451,7 @@ class _ManualEntryState extends State<ManualEntry> {
                         'Manual Count :',
                         style: GoogleFonts.urbanist(
                           color: Colors.black,
-                          fontSize: 12,
+                          fontSize: 10,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -463,7 +459,7 @@ class _ManualEntryState extends State<ManualEntry> {
                         manual.singleAddedProducts[0]["manualqty"].toString(),
                         style: GoogleFonts.urbanist(
                           color: Colors.black,
-                          fontSize: 13,
+                          fontSize: 12,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
@@ -477,7 +473,7 @@ class _ManualEntryState extends State<ManualEntry> {
                     'Total Count :',
                     style: GoogleFonts.urbanist(
                       color: Colors.black,
-                      fontSize: 12,
+                      fontSize: 10,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -485,7 +481,7 @@ class _ManualEntryState extends State<ManualEntry> {
                     manual.singleAddedProducts[0]["scanqty"].toString(),
                     style: GoogleFonts.urbanist(
                       color: Colors.black,
-                      fontSize: 13,
+                      fontSize: 12,
                       fontWeight: FontWeight.w800,
                     ),
                   ),

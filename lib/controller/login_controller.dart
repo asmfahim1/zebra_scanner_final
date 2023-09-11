@@ -26,6 +26,7 @@ class LoginController extends GetxController {
   RxBool isLoading = false.obs;
   late LoginModel loginModel;
   RxString userId = ''.obs;
+  RxString userName = ''.obs;
   RxString serverIp = ''.obs;
   RxString deviceID = ''.obs;
   RxString accessToken = ''.obs;
@@ -36,39 +37,53 @@ class LoginController extends GetxController {
     serverIp.value = prefs.getString('ipAddress')!;
     deviceID.value = prefs.getString('deviceId')!;
     try {
-      final response = await http.get(
-        Uri.parse(
-            'http://${serverIp.value}/unistock/zebra/login.php?zemail=${user.text}&xpassword=${pass.text}&device=${deviceID.value.toString()}'),
-      );
-
-      final responseBody = json.decode(response.body) as Map<String, dynamic>;
-
-      if (response.statusCode == 200) {
-        loginModel = loginModelFromJson(response.body);
-        userId.value = loginModel.xposition.toString();
-        await prefs.setString('accessToken', loginModel.xaccess.toString());
-        accessToken.value = prefs.getString('accessToken')!;
-        Get.to(() => const ModeSelect());
-        Get.snackbar(
-          'Success!',
-          "Successfully logged in",
-          borderWidth: 1.5,
-          borderColor: Colors.black54,
-          colorText: Colors.white,
-          backgroundColor: ConstantColors.comColor.withOpacity(0.6),
-          duration: const Duration(seconds: 1),
-          snackPosition: SnackPosition.TOP,
-        );
-      } else {
-        final errorMessage = responseBody['error'] as String;
+      if(user.text.isEmpty && pass.text.isEmpty){
         Get.defaultDialog(
           title: "Warning!",
-          middleText: errorMessage,
+          middleText: 'User id or Password can not be empty',
           confirm: ElevatedButton(
             onPressed: () => Get.back(),
             child: const Text("Back"),
           ),
         );
+      }else{
+        final response = await http.get(
+          Uri.parse(
+              'http://${serverIp.value}/unistock/zebra/login.php?zemail=${user.text}&xpassword=${pass.text}&device=${deviceID.value.toString()}'),
+        );
+
+        final responseBody = json.decode(response.body) as Map<String, dynamic>;
+
+        if (response.statusCode == 200) {
+          loginModel = loginModelFromJson(response.body);
+          await prefs.setString('accessToken', loginModel.xaccess.toString());
+          await prefs.setString('userName', loginModel.name.toString());
+          await prefs.setString('userID', loginModel.xposition.toString());
+          accessToken.value = prefs.getString('accessToken')!;
+          userId.value = prefs.getString('userID')!;
+          userName.value = prefs.getString('userName')!;
+          Get.to(() => const ModeSelect());
+          Get.snackbar(
+            'Success!',
+            "Successfully logged in",
+            borderWidth: 1.5,
+            borderColor: Colors.black54,
+            colorText: Colors.white,
+            backgroundColor: ConstantColors.comColor.withOpacity(0.6),
+            duration: const Duration(seconds: 1),
+            snackPosition: SnackPosition.TOP,
+          );
+        } else {
+          final errorMessage = responseBody['error'] as String;
+          Get.defaultDialog(
+            title: "Warning!",
+            middleText: errorMessage,
+            confirm: ElevatedButton(
+              onPressed: () => Get.back(),
+              child: const Text("Back"),
+            ),
+          );
+        }
       }
     } catch (e) {
       Get.snackbar(
@@ -156,51 +171,16 @@ class LoginController extends GetxController {
     ),
   );
 
-
-/*  RxBool isLogout = false.obs;
-  Future<void> loginOutMethod(BuildContext context) async {
-    try{
-      isLogout(true);
-      BotToast.showLoading();
-      var response = await http.post(Uri.parse('http://${serverIp.value}/unistock/login.php?zemail=${userId.value}'));
-      if (response.statusCode == 200) {
-        isLogout(false);
-        BotToast.closeAllLoading();
-        Get.offAll(()=> const LoginScreen());
-      }else{
-        isLogout(false);
-        BotToast.closeAllLoading();
-        if (context.mounted){
-          showDialog<String>(
-            context: context,
-            builder: (BuildContext context) => const ReusableAlerDialogue(
-              headTitle: "Warning!",
-              message: "Failed to connect server",
-              btnText: "Back",
-            ),
-          );
-        }
-      }
-    }catch(e){
-      isLogout(false);
-      Get.snackbar('Warning!', 'Failed to connect server',
-          borderWidth: 1.5,
-          borderColor: Colors.black54,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-          duration: const Duration(seconds: 2),
-          snackPosition: SnackPosition.TOP);
-    }
-  }*/
-
-
-
   //clear cache memory
   Future<void> clearCache() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try{
-      await prefs.remove('ipAddress');
-      await prefs.remove('deviceId');
+      print('Preferences are removed');
+      /*await prefs.remove('ipAddress');
+      await prefs.remove('deviceId');*/
+      await prefs.remove('accessToken');
+      await prefs.remove('userName');
+      await prefs.remove('userId');
     }catch(e){
       log("Failed to clear cache");
     }

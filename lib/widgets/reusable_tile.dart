@@ -25,9 +25,9 @@ class TileBtn extends StatelessWidget {
         boxShadow: const [
           BoxShadow(
             color: ConstantColors.comColor,
-            spreadRadius: 1,
-            blurRadius: 2,
-            offset: Offset(0, 3), // changes position of shadow
+            spreadRadius: 0.5,
+            blurRadius: 1,
+            offset: Offset(0, 2), // changes position of shadow
           ),
         ],
       ),

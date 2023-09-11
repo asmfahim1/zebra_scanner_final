@@ -35,6 +35,7 @@ class _ModeSelectState extends State<ModeSelect> {
             action: [
               GestureDetector(
                 onTap: () async{
+                  login.clearCache();
                   Get.offAll(()=> const LoginScreen());
                  // await login.loginOutMethod(context);
                 },
@@ -47,20 +48,59 @@ class _ModeSelectState extends State<ModeSelect> {
             ],
           ),
         ),
-        body: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              TileBtn(imageName: 'images/wireless-symbol.png', buttonName: 'Online Mode', onPressed: (){
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const TagSelectScreen()));
-              }),
-              TileBtn(imageName: 'images/no-internet.png', buttonName: 'Offline Mode', onPressed: (){
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const ScanTypeScreen()));
-              }),
-            ],
-          ),
+        body: Column(
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height / 6,
+              width: MediaQuery.of(context).size.height / 1.8,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                border: Border.all(),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                children: [
+                  const CircleAvatar(
+                    backgroundColor: ConstantColors.uniGreen,
+                    child: Icon(
+                      Icons.person,
+                      size: 30,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(width: 10,),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(login.userId.value, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
+                      Text(login.userName.value, style: const TextStyle(fontSize: 12,),),
+                      Text(login.deviceID.value, style: const TextStyle(fontSize: 12,),),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 5,
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TileBtn(imageName: 'images/wireless-symbol.png', buttonName: 'Online Mode', onPressed: (){
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => const TagSelectScreen()));
+                  }),
+                  TileBtn(imageName: 'images/no-internet.png', buttonName: 'Offline Mode', onPressed: (){
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => const ScanTypeScreen()));
+                  }),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
