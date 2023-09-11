@@ -51,7 +51,7 @@ class ManualController extends GetxController {
         lastAddedItem = lastAddedProductModelFromJson(response.body);
         Get.snackbar(
           'Success',
-          '${lastAddedItem!.xdesc ?? ''} \nAuto count: ${lastAddedItem!.autoQty ?? ''},   Manual count: ${lastAddedItem!.manualQty ?? ''}\nTotal count: ${lastAddedItem!.scanQty ?? ''}',
+          'Product',
           backgroundColor: ConstantColors.uniGreen,
           colorText: Colors.white,
           duration: const Duration(seconds: 2),

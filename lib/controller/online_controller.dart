@@ -131,6 +131,7 @@ class OnlineController extends GetxController {
         );
       }
     }catch(e){
+      print('Error: $e');
       postProduct(false);
       Get.snackbar('Warning!', 'Failed to connect server',
           borderWidth: 1.5,
