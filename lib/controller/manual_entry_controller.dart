@@ -51,7 +51,7 @@ class ManualController extends GetxController {
         lastAddedItem = lastAddedProductModelFromJson(response.body);
         Get.snackbar(
           'Success',
-          'Product',
+          'Product added successfully',
           backgroundColor: ConstantColors.uniGreen,
           colorText: Colors.white,
           duration: const Duration(seconds: 2),
@@ -202,6 +202,7 @@ class ManualController extends GetxController {
     qtyController.clear();
     if(mode == 'Online'){
       manualAddedProduct = null;
+      lastAddedItem = null;
     }else{
       singleAddedProducts = [];
     }

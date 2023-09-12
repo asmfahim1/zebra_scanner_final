@@ -288,6 +288,30 @@ class _ManualEntryState extends State<ManualEntry> {
                     child:  const Text('Add', style: TextStyle(fontSize: 16),)
                 ),
               ),
+              const SizedBox(height: 20,),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                alignment: Alignment.centerLeft,
+                child: Text('Last added : ',style: GoogleFonts.urbanist(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w700,
+                ),),
+              ),
+              Obx(() {
+                if (manual.entryDone.value) {
+                  return Container(); // Display a loading indicator
+                } else {
+                  if (widget.mode == 'Online') {
+                    if (manual.lastAddedItem == null) {
+                      return Container();
+                    } else {
+                      return _lastAddedWidget(manual: manual);
+                    }
+                  } else {
+                    return Container();
+                  }
+                }
+              }),
             ],
           ),
         )
@@ -344,7 +368,7 @@ class _ManualEntryState extends State<ManualEntry> {
                       ),
                     ],
                   ),
-                  SizedBox(width: 10,),
+                  const SizedBox(width: 10,),
                   Row(
                     children: [
                       Text(
@@ -444,7 +468,7 @@ class _ManualEntryState extends State<ManualEntry> {
                       ),
                     ],
                   ),
-                  SizedBox(width: 10,),
+                  const SizedBox(width: 10,),
                   Row(
                     children: [
                       Text(
@@ -479,6 +503,106 @@ class _ManualEntryState extends State<ManualEntry> {
                   ),
                   Text(
                     manual.singleAddedProducts[0]["scanqty"].toString(),
+                    style: GoogleFonts.urbanist(
+                      color: Colors.black,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _lastAddedWidget({
+    required ManualController manual
+  }){
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Card(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0)),
+        color: Colors.white,
+        elevation: 2,
+        shadowColor: Colors.blueGrey,
+        child: Container(
+          height: 50,
+          width: MediaQuery.of(context).size.width,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                manual.lastAddedItem?.xdesc ?? 'Description : ',
+                style: GoogleFonts.poppins(
+                  color: Colors.black,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'Auto Count :',
+                        style: GoogleFonts.urbanist(
+                          color: Colors.black,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        '${ manual.lastAddedItem?.autoQty.toString()}',
+                        style: GoogleFonts.urbanist(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 10,),
+                  Row(
+                    children: [
+                      Text(
+                        'Manual Count :',
+                        style: GoogleFonts.urbanist(
+                          color: Colors.black,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        '${ manual.lastAddedItem?.manualQty.toString()}',
+                        style: GoogleFonts.urbanist(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Text(
+                    'Total Count :',
+                    style: GoogleFonts.urbanist(
+                      color: Colors.black,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Text(
+                    '${ manual.lastAddedItem?.scanQty.toString()}',
                     style: GoogleFonts.urbanist(
                       color: Colors.black,
                       fontSize: 12,

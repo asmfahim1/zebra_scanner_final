@@ -25,13 +25,14 @@ class ReusableAlerDialogue extends StatelessWidget {
       content: SizedBox(
         height: 120,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Image.asset(
               "images/waeng1.png",
-              height: MediaQuery.of(context).size.height / 12,
+              height: MediaQuery.of(context).size.height / 10,
             ),
             const SizedBox(
-              height: 20,
+              height: 10,
             ),
             Text(
               message!,
