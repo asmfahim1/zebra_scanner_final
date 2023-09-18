@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_datawedge/flutter_datawedge.dart';
+import 'package:zebra_scanner_final/controller/added_product_list_model.dart';
 import 'package:zebra_scanner_final/controller/login_controller.dart';
 import '../model/productList_model.dart';
 import '../constants/const_colors.dart';
@@ -23,15 +24,15 @@ class OnlineController extends GetxController {
   ConstantColors colors = ConstantColors();
 
   //API for ProductList
-  RxBool haveProduct = false.obs;
-  RxBool postProduct = false.obs;
-  List<MasterItemsModel> products = [];
+  //RxBool haveProduct = false.obs;
+  // RxBool postProduct = false.obs;
+  // List<MasterItemsModel> products = [];
   RxString tagNumber = ''.obs;
   RxString ipAdd = ''.obs;
   RxString user = ''.obs;
   RxString storeID = ''.obs;
 
-  Future<void> productList(String tagNum, String ipAddress, String store) async {
+  /*Future<void> productList(String tagNum, String ipAddress, String store) async {
     try{
       tagNumber.value = tagNum;
       ipAdd.value = ipAddress;
@@ -66,9 +67,9 @@ class OnlineController extends GetxController {
           duration: const Duration(seconds: 2),
           snackPosition: SnackPosition.TOP);
     }
-  }
+  }*/
 
-  TextEditingController searchByName = TextEditingController();
+/*  TextEditingController searchByName = TextEditingController();
   //search mechanism for any name
   RxString searchQuery = ''.obs;
 
@@ -79,15 +80,15 @@ class OnlineController extends GetxController {
     } else {
       return products.where((addedProducts) {
         final lowerCaseQuery = searchQuery.value.toLowerCase();
-        return addedProducts.itemCode.toLowerCase().contains(lowerCaseQuery);
+        return addedProducts.itemCode!.toLowerCase().contains(lowerCaseQuery);
       }).toList();
     }
-  }
+  }*/
 
   // Set the search query
-  void search(String query) {
+/*  void search(String query) {
     searchQuery.value = query;
-  }
+  }*/
 
   void clearValue() {
     tagNumber.close();
@@ -97,6 +98,8 @@ class OnlineController extends GetxController {
   }
 
   //addItem(automatically)
+  RxBool postProduct = false.obs;
+  List<AddedProductList> productList = [];
   Future<void> addItem(
       String ipAddress,
       String itemCode,
@@ -104,6 +107,9 @@ class OnlineController extends GetxController {
       String storeId,
       String deviceID) async {
     try{
+      tagNumber.value = tagNum;
+      ipAdd.value = ipAddress;
+      storeID.value = storeId;
       postProduct(true);
       var response = await http.post(
           Uri.parse("http://$ipAddress/unistock/zebra/add_item.php"),
@@ -115,13 +121,12 @@ class OnlineController extends GetxController {
             "store": storeId,
             "device": deviceID
           }));
-      final responseBody = json.decode(response.body) as Map<String, dynamic>;
       if(response.statusCode == 200){
         postProduct(false);
-      } else{
-        final errorMessage = responseBody['error'] as String;
+        productList = addedProductListFromJson(response.body);
+      }else if(response.statusCode == 406){
         postProduct(false);
-        Get.snackbar('Error', errorMessage,
+        Get.snackbar('Error', 'Invalid item code length.',
             borderWidth: 1.5,
             borderColor: Colors.black54,
             backgroundColor: Colors.red,
@@ -129,6 +134,29 @@ class OnlineController extends GetxController {
             duration: const Duration(seconds: 2),
             snackPosition: SnackPosition.TOP
         );
+        productList = addedProductListFromJson(response.body);
+      }else if(response.statusCode == 400){
+        postProduct(false);
+        Get.snackbar('Error', 'Direct Supplier code cannot be scanned.',
+            borderWidth: 1.5,
+            borderColor: Colors.black54,
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+            duration: const Duration(seconds: 2),
+            snackPosition: SnackPosition.TOP
+        );
+        productList = addedProductListFromJson(response.body);
+      }else{
+        postProduct(false);
+        Get.snackbar('Error', 'Invalid product code',
+            borderWidth: 1.5,
+            borderColor: Colors.black54,
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+            duration: const Duration(seconds: 2),
+            snackPosition: SnackPosition.TOP
+        );
+        productList = addedProductListFromJson(response.body);
       }
     }catch(e){
       print('Error: $e');

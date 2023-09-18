@@ -213,84 +213,89 @@ class _ManualEntryState extends State<ManualEntry> {
                 }
               }),
               const SizedBox(height: 5,),
-              Container(
-                height: 40,
-                width: MediaQuery.of(context).size.width,
-                padding:
-                const EdgeInsets.only(left: 10, right: 10),
-                alignment: Alignment.centerLeft,
-                margin: const EdgeInsets.only(left: 10, top: 10, right: 10),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: manual.isEmptyField.value ==
-                        true
-                        ? Colors.red
-                        : Colors.grey,
-                    width: manual.isEmptyField.value ==
-                        true
-                        ? 2.0
-                        : 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(4.0),
-                ),
-                child: TextFormField(
-                  focusNode: quantityFocusNode,
-                  controller: manual.qtyController,
-                  inputFormatters: [
-                    //FilteringTextInputFormatter.deny(RegExp(r'^0')),
-                    // FilteringTextInputFormatter.deny(RegExp(r'-')),
-                    FilteringTextInputFormatter.deny(RegExp(r',')),
-                    FilteringTextInputFormatter.deny(RegExp(r'\+')),
-                    FilteringTextInputFormatter.deny(RegExp(r'\*')),
-                    FilteringTextInputFormatter.deny(RegExp(r'/')),
-                    FilteringTextInputFormatter.deny(RegExp(r'=')),
-                    FilteringTextInputFormatter.deny(RegExp(r'%')),
-                    FilteringTextInputFormatter.deny(RegExp(r' ')),
-                  ],
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Enter quantity',
-                  ),
-                  style: const TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10,),
-              Container(
-                height: 45,
-                width: 100,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0)),
-                clipBehavior: Clip.hardEdge,
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: ConstantColors.uniGreen,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 40,
+                    width: MediaQuery.of(context).size.width / 2,
+                    padding:
+                    const EdgeInsets.only(left: 10, right: 10),
+                    margin: const EdgeInsets.only(left: 10, right: 10),
+                    alignment: Alignment.centerLeft,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: manual.isEmptyField.value ==
+                            true
+                            ? Colors.red
+                            : Colors.grey,
+                        width: manual.isEmptyField.value ==
+                            true
+                            ? 2.0
+                            : 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(4.0),
                     ),
-                    onPressed: () async{
-                      if(widget.mode == 'Online'){
-                        FocusScope.of(context).requestFocus(itemFocusNode);
-                        await manual.addItemManually(
-                          context,
-                          login.serverIp.value,
-                          login.deviceID.value,
-                          login.userId.value,
-                          widget.tagNum.toString(),
-                          widget.storeId.toString(),
-                        );
+                    child: TextFormField(
+                      focusNode: quantityFocusNode,
+                      controller: manual.qtyController,
+                      inputFormatters: [
+                        //FilteringTextInputFormatter.deny(RegExp(r'^0')),
+                        // FilteringTextInputFormatter.deny(RegExp(r'-')),
+                        FilteringTextInputFormatter.deny(RegExp(r',')),
+                        FilteringTextInputFormatter.deny(RegExp(r'\+')),
+                        FilteringTextInputFormatter.deny(RegExp(r'\*')),
+                        FilteringTextInputFormatter.deny(RegExp(r'/')),
+                        FilteringTextInputFormatter.deny(RegExp(r'=')),
+                        FilteringTextInputFormatter.deny(RegExp(r'%')),
+                        FilteringTextInputFormatter.deny(RegExp(r' ')),
+                      ],
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Enter quantity',
+                      ),
+                      style: const TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 20,),
+                  Container(
+                    height: 40,
+                    width: MediaQuery.of(context).size.width / 3,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(13)),
+                    clipBehavior: Clip.hardEdge,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: ConstantColors.uniGreen,
+                        ),
+                        onPressed: () async{
+                          if(widget.mode == 'Online'){
+                            FocusScope.of(context).requestFocus(itemFocusNode);
+                            await manual.addItemManually(
+                              context,
+                              login.serverIp.value,
+                              login.deviceID.value,
+                              login.userId.value,
+                              widget.tagNum.toString(),
+                              widget.storeId.toString(),
+                            );
 
-                      }else{
-                        FocusScope.of(context).requestFocus(itemFocusNode);
-                        await manual.addManuallyOffline(context);
-                      }
-                    },
-                    child:  const Text('Add', style: TextStyle(fontSize: 16),)
-                ),
+                          }else{
+                            FocusScope.of(context).requestFocus(itemFocusNode);
+                            await manual.addManuallyOffline(context);
+                          }
+                        },
+                        child:  const Text('Add', style: TextStyle(fontSize: 16),)
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 20,),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 alignment: Alignment.centerLeft,
                 child: Text('Last added : ',style: GoogleFonts.urbanist(
                   color: Colors.black,

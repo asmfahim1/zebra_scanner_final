@@ -30,8 +30,7 @@ class _OnlineModeState extends State<OnlineMode> {
 
   @override
   void initState() {
-    onlineController.productList(
-        widget.tagNum, login.serverIp.value, widget.storeId);
+    // onlineController.productList(widget.tagNum, login.serverIp.value, widget.storeId);
     initScanner(
       login.serverIp.value,
       widget.tagNum,
@@ -66,8 +65,7 @@ class _OnlineModeState extends State<OnlineMode> {
               storeId,
               deviceId,
             );
-            await onlineController.productList(
-                widget.tagNum, ipAddress, storeId);
+            // await onlineController.productList(widget.tagNum, ipAddress, storeId);
           }
         },
         onStatusUpdate: (result) {
@@ -153,14 +151,14 @@ class _OnlineModeState extends State<OnlineMode> {
           ),
           Expanded(
             child: Obx(() {
-              if (onlineController.haveProduct.value) {
+              if (onlineController.postProduct.value) {
                 return const Center(
                   child: CircularProgressIndicator(
                     color: ConstantColors.comColor,
                   ),
                 );
               } else {
-                if (onlineController.filteredProductList.isEmpty) {
+                if (onlineController.productList.isEmpty) {
                   return Center(
                       child: Text(
                     "No product added yet",
@@ -172,10 +170,10 @@ class _OnlineModeState extends State<OnlineMode> {
                   ));
                 } else {
                   return ListView.builder(
-                      itemCount: onlineController.filteredProductList.length,
+                      itemCount: onlineController.productList.length,
                       itemBuilder: (context, index) {
                         var products =
-                            onlineController.filteredProductList[index];
+                            onlineController.productList[index];
                         return Container(
                           height: MediaQuery.of(context).size.height / 4.22,
                           padding: const EdgeInsets.only(
@@ -193,7 +191,7 @@ class _OnlineModeState extends State<OnlineMode> {
                               children: [
                                 Container(
                                   width:
-                                      MediaQuery.of(context).size.width / 1.6,
+                                      MediaQuery.of(context).size.width / 1.2,
                                   padding: const EdgeInsets.only(
                                     left: 10,
                                   ),
@@ -204,7 +202,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                         MainAxisAlignment.spaceEvenly,
                                     children: [
                                       Text(
-                                        products.itemCode,
+                                        products.itemCode!,
                                         style: GoogleFonts.urbanist(
                                           color: Colors.black,
                                           fontSize: 14,
@@ -212,7 +210,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                         ),
                                       ),
                                       Text(
-                                        products.itemDesc,
+                                        products.itemDesc!,
                                         overflow: TextOverflow.ellipsis,
                                         style: GoogleFonts.urbanist(
                                           fontSize: 12,
@@ -284,7 +282,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                     ],
                                   ),
                                 ),
-                                Expanded(
+                                /*Expanded(
                                   child: GestureDetector(
                                     onTap: () async {
                                       onlineController
@@ -431,9 +429,9 @@ class _OnlineModeState extends State<OnlineMode> {
                                                               3,
                                                           child: TextField(
                                                             inputFormatters: [
-                                                              /*FilteringTextInputFormatter
+                                                              *//*FilteringTextInputFormatter
                                                                 .deny(RegExp(
-                                                                    r'^0')),*/
+                                                                    r'^0')),*//*
                                                               FilteringTextInputFormatter.deny(RegExp(r'-')),
                                                               FilteringTextInputFormatter.deny(RegExp(r',')),
                                                               FilteringTextInputFormatter.deny(RegExp(r'\+')),
@@ -448,8 +446,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                             controller:
                                                                 onlineController
                                                                     .qtyCon,
-                                                            //by using on submitted function, it will immediately work after pressing the value done
-                                                            onSubmitted:
+                                                           onSubmitted:
                                                                 (value) {
                                                               if (value
                                                                   .isEmpty) {
@@ -517,7 +514,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
                                                   children: [
-                                                    /*TextButton(
+                                                    *//*TextButton(
                                                     style: TextButton.styleFrom(
                                                       backgroundColor: ConstantColors
                                                           .comColor
@@ -546,7 +543,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                                             FontWeight.w600,
                                                       ),
                                                     ),
-                                                  ),*/
+                                                  ),*//*
                                                     Container(
                                                       height:
                                                           MediaQuery.of(context)
@@ -635,7 +632,7 @@ class _OnlineModeState extends State<OnlineMode> {
                                       ),
                                     ),
                                   ),
-                                ),
+                                ),*/
                               ],
                             ),
                           ),
