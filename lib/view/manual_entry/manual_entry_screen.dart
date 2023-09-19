@@ -131,8 +131,11 @@ class _ManualEntryState extends State<ManualEntry> {
                   ),
                   onChanged: (value) async{
                     if(widget.mode == 'Online'){
-                      if(manual.productCode.text.length >= 5){
-                        final result = await manual.getManualAddedProduct(widget.tagNum.toString(), manual.productCode.text);
+                      print('last added code before assign: ${manual.productCode.text}');
+                      String itemCode = manual.productCode.text;
+                      print('last added code after assign: $itemCode');
+                      if(itemCode.length >= 5){
+                        final result = await manual.getManualAddedProduct(widget.tagNum.toString(), itemCode);
                         if(result == 'Success'){
                           FocusScope.of(context).requestFocus(quantityFocusNode);
                         }else{

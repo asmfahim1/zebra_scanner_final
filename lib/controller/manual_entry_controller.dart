@@ -99,12 +99,14 @@ class ManualController extends GetxController {
   Future<String> getManualAddedProduct(String tagNum, String itemCode) async {
     entryDone(true);
     try {
+      print('itemCode for post: $itemCode');
       final response = await http.get(
         Uri.parse('http://${login.serverIp.value}/unistock/zebra/searchedProduct.php?tag_no=$tagNum&userID=${login.userId.value}&device=${login.deviceID.value}&item=$itemCode'),
       );
 
       if (response.statusCode == 200) {
         manualAddedProduct = manualAddedProductModelFromJson(response.body);
+        print('Return item code: ${manualAddedProduct!.xitem} && Description: ${manualAddedProduct!.xdesc}');
         return 'Success';
       } else {
         manualAddedProduct = null;
