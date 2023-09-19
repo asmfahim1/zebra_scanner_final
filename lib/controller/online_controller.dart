@@ -6,8 +6,11 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_datawedge/flutter_datawedge.dart';
 import 'package:zebra_scanner_final/controller/added_product_list_model.dart';
 import 'package:zebra_scanner_final/controller/login_controller.dart';
-import '../model/productList_model.dart';
+import '../model/automatic_added_product_model.dart';
+import '../model/last_added_item_model.dart';
 import '../constants/const_colors.dart';
+import '../model/last_auto_added_product_model.dart';
+import '../widgets/reusable_alert.dart';
 
 class OnlineController extends GetxController {
   LoginController login = Get.find<LoginController>();
@@ -329,5 +332,146 @@ class OnlineController extends GetxController {
       quantity.value = quantity.value - 1;
       qtyCon.text = quantity.value.toString();
     }
+  }
+
+  ///for update auto scan field in the auto scan edit screen
+  TextEditingController automaticProductCode = TextEditingController();
+  TextEditingController automaticQty = TextEditingController();
+  AutomaticAddedProductModel? automaticAddedProductModel;
+  RxBool isAutoUpdate = false.obs;
+  RxBool isAutoFieldEmpty = false.obs;
+  LastAutoAddedProductModel? lastAutoAddedProductModel;
+  Future<String> updateAutomaticScanned(BuildContext context, String ipAddress, String deviceID, String userId, String tagNum, String storeId) async {
+    BotToast.showLoading();
+    if (automaticProductCode.text.isEmpty || automaticQty.text.isEmpty) {
+      isAutoUpdate(false);
+      BotToast.closeAllLoading();
+      isAutoFieldEmpty(true);
+      Get.snackbar(
+        'Warning!',
+        'Please fill up all the fields',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 2),
+      );
+      return 'Fail';
+    }
+    try {
+      if(automaticQty.text.startsWith('-')) {
+        isAutoUpdate(true);
+        final response = await http.post(
+          Uri.parse("http://$ipAddress/unistock/zebra/autoScanUpdate.php"),
+          body: jsonEncode(<String, dynamic>{
+            "xitem": automaticProductCode.text,
+            "user_id": userId,
+            "qty": automaticQty.text,
+            "tag_no": tagNum,
+            "store": storeId,
+            "device": deviceID,
+          }),
+        );
+        if (response.statusCode == 200) {
+          clearAutoEditScreenTextField();
+          lastAutoAddedProductModel =
+              lastAutoAddedProductModelFromJson(response.body);
+          Get.snackbar(
+            'Success',
+            'Product updated successfully',
+            backgroundColor: ConstantColors.uniGreen,
+            colorText: Colors.white,
+            duration: const Duration(seconds: 2),
+          );
+          isAutoUpdate(false);
+          isAutoFieldEmpty(false);
+          BotToast.closeAllLoading();
+          return 'Success';
+        } else {
+          isAutoUpdate(false);
+          isAutoFieldEmpty(false);
+          if (context.mounted) {
+            BotToast.closeAllLoading();
+            final responseBody = json.decode(response.body) as Map<String, dynamic>;
+            final errorMessage = responseBody['error'] as String;
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) =>
+                  ReusableAlerDialogue(
+                    headTitle: "Warning!",
+                    message: errorMessage,
+                    btnText: "Back",
+                  ),
+            );
+            return 'Fail';
+          }
+        }
+      }else{
+        isAutoUpdate(false);
+        isAutoFieldEmpty(false);
+        BotToast.closeAllLoading();
+        Get.snackbar(
+          'Warning!',
+          'Quantity must be negative',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 2),
+        );
+        return 'Fail';
+      }
+    } catch (e) {
+      print('Error occured :$e ');
+      isAutoUpdate(false);
+      isAutoFieldEmpty(false);
+      BotToast.closeAllLoading();
+      Get.snackbar(
+        'Warning!',
+        'Failed to connect to the server',
+        borderWidth: 1.5,
+        borderColor: Colors.black54,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 2),
+        snackPosition: SnackPosition.TOP,
+      );
+    }
+    return '';
+  }
+
+  Future<String> getSearchedAutomaticProduct(String tagNum, String itemCode) async {
+    isAutoUpdate(true);
+    try {
+      print('itemCode for post: $itemCode');
+      final response = await http.get(
+        Uri.parse('http://${login.serverIp.value}/unistock/zebra/autoSearchedProduct.php?tag_no=$tagNum&userID=${login.userId.value}&device=${login.deviceID.value}&xitem=$itemCode'),
+      );
+
+      if (response.statusCode == 200) {
+        automaticAddedProductModel = automaticAddedProductModelFromJson(response.body);
+        print('Return item code: ${automaticAddedProductModel!.itemCode} && Description: ${automaticAddedProductModel!.itemDesc}');
+        return 'Success';
+      } else {
+        automaticAddedProductModel = null;
+        return 'Fail';
+      }
+    } catch (e) {
+      automaticAddedProductModel = null;
+      return 'Fail';
+    } finally {
+      isAutoUpdate(false);
+    }
+  }
+
+  void clearAutoEditScreenTextField(){
+    automaticProductCode.clear();
+    automaticAddedProductModel = null;
+    automaticQty.clear();
+  }
+
+  void releaseAutoEditScreenVariables(){
+    isAutoUpdate.value = false;
+    isAutoFieldEmpty.value = false;
+    automaticProductCode.clear();
+    automaticQty.clear();
+    automaticAddedProductModel = null;
+    lastAutoAddedProductModel = null;
   }
 }

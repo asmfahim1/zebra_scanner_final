@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:zebra_scanner_final/controller/login_controller.dart';
 import 'package:zebra_scanner_final/db_helper/offline_repo.dart';
+import 'package:zebra_scanner_final/model/automatic_added_product_model.dart';
 import 'package:zebra_scanner_final/model/last_added_item_model.dart';
 import '../constants/const_colors.dart';
 import '../model/manual_added_product_model.dart';
@@ -18,7 +19,7 @@ class ManualController extends GetxController {
   RxBool isEmptyField = false.obs;
   LastAddedProductModel? lastAddedItem;
 
-  Future<void> addItemManually(BuildContext context, String idAddress, String deviceID, String userId, String tagNum, String storeId) async {
+  Future<void> addItemManually(BuildContext context, String ipAddress, String deviceID, String userId, String tagNum, String storeId) async {
     BotToast.showLoading();
     if (productCode.text.isEmpty || qtyController.text.isEmpty) {
       entryDone(false);
@@ -36,7 +37,7 @@ class ManualController extends GetxController {
     try {
       entryDone(true);
       final response = await http.post(
-        Uri.parse("http://$idAddress/unistock/zebra/manual_Add.php"),
+        Uri.parse("http://$ipAddress/unistock/zebra/manual_Add.php"),
         body: jsonEncode(<String, dynamic>{
           "item": productCode.text,
           "user_id": userId,
@@ -47,7 +48,7 @@ class ManualController extends GetxController {
         }),
       );
       if (response.statusCode == 200) {
-        clearTextField();
+        clearManualScreenTextField();
         lastAddedItem = lastAddedProductModelFromJson(response.body);
         Get.snackbar(
           'Success',
@@ -120,16 +121,13 @@ class ManualController extends GetxController {
     }
   }
 
-
-
-
   Future<void> addManuallyOffline(BuildContext context) async {
     entryDone(true);
-    BotToast.showLoading();
+    // BotToast.showLoading();
     if(productCode.text.isEmpty || qtyController.text.isEmpty){
       entryDone(false);
       isEmptyField(true);
-      BotToast.closeAllLoading();
+      // BotToast.closeAllLoading();
       Get.snackbar('Warning!',
           'Please fill up all the field',
           backgroundColor: Colors.red,
@@ -139,7 +137,7 @@ class ManualController extends GetxController {
       try{
         int result = await OfflineRepo().manualEntry(productCode.text, qtyController.text, login.deviceID.value, login.userId.value);
         if(result == 0){
-          clearTextField();
+          clearManualScreenTextField();
           Get.snackbar('Success', 'Product added',
             backgroundColor: ConstantColors.uniGreen,
             colorText: Colors.white,
@@ -157,17 +155,37 @@ class ManualController extends GetxController {
         }
         entryDone(false);
         isEmptyField(false);
-        BotToast.closeAllLoading();
+        // BotToast.closeAllLoading();
       }catch(e){
         entryDone(false);
         isEmptyField(false);
-        BotToast.closeAllLoading();
+        // BotToast.closeAllLoading();
         Get.snackbar('Error', 'Something went wrong',
           backgroundColor: Colors.red,
           colorText: Colors.white,
           duration: const Duration(seconds: 2),
         );
       }
+    }
+  }
+
+  void clearManualScreenTextField(){
+    productCode.clear();
+    manualAddedProduct = null;
+    singleAddedProducts = [];
+    qtyController.clear();
+  }
+
+  void releaseVariables(String mode){
+    entryDone.value = false;
+    isEmptyField.value = false;
+    productCode.clear();
+    qtyController.clear();
+    if(mode == 'Online'){
+      manualAddedProduct = null;
+      lastAddedItem = null;
+    }else{
+      singleAddedProducts = [];
     }
   }
 
@@ -190,23 +208,5 @@ class ManualController extends GetxController {
     }
   }
 
-  void clearTextField(){
-    productCode.clear();
-    manualAddedProduct = null;
-    singleAddedProducts = [];
-    qtyController.clear();
-  }
 
-  void releaseVariables(String mode){
-    entryDone.value = false;
-    isEmptyField.value = false;
-    productCode.clear();
-    qtyController.clear();
-    if(mode == 'Online'){
-      manualAddedProduct = null;
-      lastAddedItem = null;
-    }else{
-      singleAddedProducts = [];
-    }
-  }
 }

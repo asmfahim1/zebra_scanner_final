@@ -4,27 +4,25 @@ import 'package:flutter_datawedge/flutter_datawedge.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zebra_scanner_final/constants/const_colors.dart';
 import 'package:zebra_scanner_final/controller/login_controller.dart';
-import 'package:zebra_scanner_final/controller/manual_entry_controller.dart';
 import 'package:get/get.dart';
+import 'package:zebra_scanner_final/controller/online_controller.dart';
 
-class ManualEntry extends StatefulWidget {
-  final String? mode;
+class AutoScanEditScreen extends StatefulWidget {
   final String? tagNum;
   final String? storeId;
-  const ManualEntry({
-    this.mode,
+  const AutoScanEditScreen({
     this.tagNum,
     this.storeId,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<ManualEntry> createState() => _ManualEntryState();
+  State<AutoScanEditScreen> createState() => _AutoScanEditScreenState();
 }
 
-class _ManualEntryState extends State<ManualEntry> {
+class _AutoScanEditScreenState extends State<AutoScanEditScreen> {
   LoginController login = Get.find<LoginController>();
-  ManualController manual = Get.put(ManualController());
+  OnlineController online = Get.find<OnlineController>();
   FocusNode quantityFocusNode = FocusNode();
   FocusNode itemFocusNode = FocusNode();
 
@@ -49,7 +47,7 @@ class _ManualEntryState extends State<ManualEntry> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    manual.releaseVariables(widget.mode.toString());
+    online.releaseAutoEditScreenVariables();
   }
 
   @override
@@ -71,7 +69,7 @@ class _ManualEntryState extends State<ManualEntry> {
               ),
             ),
             title: Text(
-              "Manual Scan",
+              "Auto Scan Edit",
               style: GoogleFonts.urbanist(
                 color: Colors.black,
                 fontWeight: FontWeight.w700,
@@ -93,12 +91,12 @@ class _ManualEntryState extends State<ManualEntry> {
                     left: 10, top: 10, right: 10),
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: manual.isEmptyField.value ==
+                    color: online.isAutoFieldEmpty.value ==
                         true
                         ? Colors.red
                         : Colors.grey,
                     width:
-                    manual.isEmptyField.value ==
+                    online.isAutoFieldEmpty.value ==
                         true
                         ? 2.0
                         : 1.0,
@@ -106,7 +104,7 @@ class _ManualEntryState extends State<ManualEntry> {
                   borderRadius: BorderRadius.circular(4.0),
                 ),
                 child: TextFormField(
-                  controller: manual.productCode,
+                  controller: online.automaticProductCode,
                   autofocus: true,
                   focusNode: itemFocusNode,
                   inputFormatters: [
@@ -158,88 +156,47 @@ class _ManualEntryState extends State<ManualEntry> {
                   //   }
                   // },
                   onFieldSubmitted: (value) async{
-                    if(widget.mode == 'Online'){
-                      print('last added code before assign: ${manual.productCode.text}');
-                      String itemCode = manual.productCode.text;
-                      print('last added code after assign: $itemCode');
-                      if(itemCode.length >= 5){
-                        final result = await manual.getManualAddedProduct(widget.tagNum.toString(), itemCode);
-                        if(result == 'Success'){
-                          FocusScope.of(context).requestFocus(quantityFocusNode);
-                        }else{
-                          null ;
-                        }
+                    String itemCode = online.automaticProductCode.text;
+                    if(itemCode.length >= 5){
+                      final result = await online.getSearchedAutomaticProduct(widget.tagNum.toString(), itemCode);
+                      if(result == 'Success'){
+                        FocusScope.of(context).requestFocus(quantityFocusNode);
                       }else{
                         null ;
                       }
                     }else{
-                      if(manual.productCode.text.length >= 5){
-                        final result = await manual.getSingleScannedProduct();
-                        if(result == 'Success'){
-                          FocusScope.of(context).requestFocus(quantityFocusNode);
-                        }else{
-                          null ;
-                        }
-                      }else{
-                        null ;
-                      }
+                      null ;
                     }
                   },
                 ),
               ),
               const SizedBox(height: 5,),
               Obx(() {
-                if (manual.entryDone.value) {
+                if (online.isAutoUpdate.value) {
                   return Container(); // Display a loading indicator
                 } else {
-                  if (widget.mode == 'Online') {
-                    if (manual.manualAddedProduct == null) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          color: Colors.white,
-                          elevation: 2,
-                          shadowColor: Colors.blueGrey,
-                          child: Container(
-                            height: 50,
-                            width: MediaQuery.of(context).size.width,
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: const Center(
-                              child: Text('No product searched'),
-                            ),
+                  if (online.automaticAddedProductModel == null) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        color: Colors.white,
+                        elevation: 2,
+                        shadowColor: Colors.blueGrey,
+                        child: Container(
+                          height: 50,
+                          width: MediaQuery.of(context).size.width,
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: const Center(
+                            child: Text('No product searched'),
                           ),
                         ),
-                      );
-                    } else {
-                      return _manualAddedProduct(manual: manual);
-                    }
+                      ),
+                    );
                   } else {
-                    if (manual.singleAddedProducts.isEmpty) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          color: Colors.white,
-                          elevation: 2,
-                          shadowColor: Colors.blueGrey,
-                          child: Container(
-                            height: 50,
-                            width: double.maxFinite,
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: const Center(
-                              child: Text('No product searched'),
-                            ),
-                          ),
-                        ),
-                      );
-                    } else {
-                      return _manualOfflineAddedProduct(manual: manual);
-                    }
+                    return _automaticAddedProduct(online: online);
                   }
                 }
               }),
@@ -256,11 +213,11 @@ class _ManualEntryState extends State<ManualEntry> {
                     alignment: Alignment.centerLeft,
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: manual.isEmptyField.value ==
+                        color: online.isAutoFieldEmpty.value ==
                             true
                             ? Colors.red
                             : Colors.grey,
-                        width: manual.isEmptyField.value ==
+                        width: online.isAutoFieldEmpty.value ==
                             true
                             ? 2.0
                             : 1.0,
@@ -269,7 +226,7 @@ class _ManualEntryState extends State<ManualEntry> {
                     ),
                     child: TextFormField(
                       focusNode: quantityFocusNode,
-                      controller: manual.qtyController,
+                      controller: online.automaticQty,
                       inputFormatters: [
                         //FilteringTextInputFormatter.deny(RegExp(r'^0')),
                         // FilteringTextInputFormatter.deny(RegExp(r'-')),
@@ -303,9 +260,22 @@ class _ManualEntryState extends State<ManualEntry> {
                           primary: ConstantColors.uniGreen,
                         ),
                         onPressed: () async{
-                          if(widget.mode == 'Online'){
+                          final result = await online.updateAutomaticScanned(
+                            context,
+                            login.serverIp.value,
+                            login.deviceID.value,
+                            login.userId.value,
+                            widget.tagNum.toString(),
+                            widget.storeId.toString(),
+                          );
+                          if(result == 'Success'){
                             FocusScope.of(context).requestFocus(itemFocusNode);
-                            await manual.addItemManually(
+                          }else{
+
+                          }
+                          /*if(online.automaticQty.text.startsWith('-')){
+                            FocusScope.of(context).requestFocus(itemFocusNode);
+                            await online.updateAutomaticScanned(
                               context,
                               login.serverIp.value,
                               login.deviceID.value,
@@ -313,13 +283,17 @@ class _ManualEntryState extends State<ManualEntry> {
                               widget.tagNum.toString(),
                               widget.storeId.toString(),
                             );
-
                           }else{
-                            FocusScope.of(context).requestFocus(itemFocusNode);
-                            await manual.addManuallyOffline(context);
-                          }
+                            Get.snackbar(
+                              'Warning!',
+                              'Quantity must be negative',
+                              backgroundColor: Colors.red,
+                              colorText: Colors.white,
+                              duration: const Duration(seconds: 2),
+                            );
+                          }*/
                         },
-                        child:  const Text('Add', style: TextStyle(fontSize: 16),)
+                        child:  const Text('Update', style: TextStyle(fontSize: 16),),
                     ),
                   ),
                 ],
@@ -328,23 +302,19 @@ class _ManualEntryState extends State<ManualEntry> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 alignment: Alignment.centerLeft,
-                child: Text('Last added : ',style: GoogleFonts.urbanist(
+                child: Text('Last Updated : ',style: GoogleFonts.urbanist(
                   color: Colors.black,
                   fontWeight: FontWeight.w700,
                 ),),
               ),
               Obx(() {
-                if (manual.entryDone.value) {
+                if (online.isAutoUpdate.value) {
                   return Container(); // Display a loading indicator
                 } else {
-                  if (widget.mode == 'Online') {
-                    if (manual.lastAddedItem == null) {
-                      return Container();
-                    } else {
-                      return _lastAddedWidget(manual: manual);
-                    }
-                  } else {
+                  if (online.lastAutoAddedProductModel == null) {
                     return Container();
+                  } else {
+                    return _lastAddedWidget(online: online);
                   }
                 }
               }),
@@ -354,8 +324,8 @@ class _ManualEntryState extends State<ManualEntry> {
     );
   }
 
-  Widget _manualAddedProduct({
-    required ManualController manual
+  Widget _automaticAddedProduct({
+    required OnlineController online
   }){
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -374,7 +344,7 @@ class _ManualEntryState extends State<ManualEntry> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                manual.manualAddedProduct?.xdesc ?? 'Description : ',
+                online.automaticAddedProductModel?.itemDesc ?? 'Description : ',
                 style: GoogleFonts.poppins(
                   color: Colors.black,
                   fontSize: 10,
@@ -395,7 +365,7 @@ class _ManualEntryState extends State<ManualEntry> {
                         ),
                       ),
                       Text(
-                        '${manual.manualAddedProduct?.autoQty.toString()}',
+                        '${online.automaticAddedProductModel?.autoQty.toString()}',
                         style: GoogleFonts.urbanist(
                           color: Colors.black,
                           fontSize: 12,
@@ -416,7 +386,7 @@ class _ManualEntryState extends State<ManualEntry> {
                         ),
                       ),
                       Text(
-                        '${manual.manualAddedProduct?.manualQty.toString()}',
+                        '${online.automaticAddedProductModel?.manualQty.toString()}',
                         style: GoogleFonts.urbanist(
                           color: Colors.black,
                           fontSize: 12,
@@ -438,107 +408,7 @@ class _ManualEntryState extends State<ManualEntry> {
                     ),
                   ),
                   Text(
-                    '${manual.manualAddedProduct?.scanQty.toString()}',
-                    style: GoogleFonts.urbanist(
-                      color: Colors.black,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _manualOfflineAddedProduct({
-    required ManualController manual
-  }){
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Card(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0)),
-        color: Colors.white,
-        elevation: 2,
-        shadowColor: Colors.blueGrey,
-        child: Container(
-          height: 50,
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                manual.singleAddedProducts[0]["xdesc"],
-                style: GoogleFonts.poppins(
-                  color: Colors.black,
-                  fontSize: 10,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        'Auto Count :',
-                        style: GoogleFonts.urbanist(
-                          color: Colors.black,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Text(
-                        manual.singleAddedProducts[0]["autoqty"].toString(),
-                        style: GoogleFonts.urbanist(
-                          color: Colors.black,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(width: 10,),
-                  Row(
-                    children: [
-                      Text(
-                        'Manual Count :',
-                        style: GoogleFonts.urbanist(
-                          color: Colors.black,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Text(
-                        manual.singleAddedProducts[0]["manualqty"].toString(),
-                        style: GoogleFonts.urbanist(
-                          color: Colors.black,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Text(
-                    'Total Count :',
-                    style: GoogleFonts.urbanist(
-                      color: Colors.black,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Text(
-                    manual.singleAddedProducts[0]["scanqty"].toString(),
+                    '${online.automaticAddedProductModel?.scanQty.toString()}',
                     style: GoogleFonts.urbanist(
                       color: Colors.black,
                       fontSize: 12,
@@ -555,7 +425,7 @@ class _ManualEntryState extends State<ManualEntry> {
   }
 
   Widget _lastAddedWidget({
-    required ManualController manual
+    required OnlineController online
   }){
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -574,7 +444,7 @@ class _ManualEntryState extends State<ManualEntry> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                manual.lastAddedItem?.xdesc ?? 'Description : ',
+                online.lastAutoAddedProductModel?.itemDesc ?? 'Description : ',
                 style: GoogleFonts.poppins(
                   color: Colors.black,
                   fontSize: 10,
@@ -595,7 +465,7 @@ class _ManualEntryState extends State<ManualEntry> {
                         ),
                       ),
                       Text(
-                        '${ manual.lastAddedItem?.autoQty.toString()}',
+                        '${ online.lastAutoAddedProductModel?.autoQty.toString()}',
                         style: GoogleFonts.urbanist(
                           color: Colors.black,
                           fontSize: 12,
@@ -616,7 +486,7 @@ class _ManualEntryState extends State<ManualEntry> {
                         ),
                       ),
                       Text(
-                        '${ manual.lastAddedItem?.manualQty.toString()}',
+                        '${ online.lastAutoAddedProductModel?.manualQty.toString()}',
                         style: GoogleFonts.urbanist(
                           color: Colors.black,
                           fontSize: 12,
@@ -638,7 +508,7 @@ class _ManualEntryState extends State<ManualEntry> {
                     ),
                   ),
                   Text(
-                    '${ manual.lastAddedItem?.scanQty.toString()}',
+                    '${ online.lastAutoAddedProductModel?.scanQty.toString()}',
                     style: GoogleFonts.urbanist(
                       color: Colors.black,
                       fontSize: 12,

@@ -7,6 +7,7 @@ import 'package:zebra_scanner_final/constants/app_constants.dart';
 import 'package:zebra_scanner_final/controller/login_controller.dart';
 import 'package:zebra_scanner_final/controller/online_controller.dart';
 import 'package:zebra_scanner_final/constants/const_colors.dart';
+import 'package:zebra_scanner_final/view/online_process/online_edit_screen.dart';
 import '../../widgets/reusable_alert.dart';
 
 class OnlineMode extends StatefulWidget {
@@ -102,13 +103,28 @@ class _OnlineModeState extends State<OnlineMode> {
           ),
           actions: [
             GestureDetector(
-              onTap: () {},
-              child: const Padding(
-                  padding: EdgeInsets.only(right: 10),
-                  child: Icon(
-                    Icons.upload_rounded,
-                    size: 30,
-                    color: Colors.white,
+              onTap: () {
+                Get.to(() => AutoScanEditScreen(tagNum: widget.tagNum, storeId: widget.storeId,));
+              },
+              child: Container(
+                  width: MediaQuery.of(context).size.width / 5,
+                  margin: EdgeInsets.only(right: 10),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.grey
+                    ),
+                      borderRadius: BorderRadius.circular(13)),
+                  clipBehavior: Clip.hardEdge,
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Icon(
+                        Icons.mode_edit_outline,
+                        size: 15,
+                        color: Colors.black,
+                      ),
+                      Text('Edit', style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black),)
+                    ],
                   )),
             )
           ],
@@ -132,7 +148,7 @@ class _OnlineModeState extends State<OnlineMode> {
                       children: [
                         const Text('Last code: '),
                         Text(onlineController.lastCode.value,
-                            style: const TextStyle(fontSize: 14)),
+                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                         const SizedBox(width: 10.0),
                       ],
                     ),
