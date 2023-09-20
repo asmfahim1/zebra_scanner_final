@@ -130,34 +130,6 @@ class _AutoScanEditScreenState extends State<AutoScanEditScreen> {
                     style: const TextStyle(
                       fontSize: 14,
                     ),
-                    // onChanged: (value) async{
-                    //   if(widget.mode == 'Online'){
-                    //     print('last added code before assign: ${manual.productCode.text}');
-                    //     String itemCode = manual.productCode.text;
-                    //     print('last added code after assign: $itemCode');
-                    //     if(itemCode.length >= 5){
-                    //       final result = await manual.getManualAddedProduct(widget.tagNum.toString(), itemCode);
-                    //       if(result == 'Success'){
-                    //         FocusScope.of(context).requestFocus(quantityFocusNode);
-                    //       }else{
-                    //         null ;
-                    //       }
-                    //     }else{
-                    //       null ;
-                    //     }
-                    //   }else{
-                    //     if(manual.productCode.text.length >= 5){
-                    //       final result = await manual.getSingleScannedProduct();
-                    //       if(result == 'Success'){
-                    //         FocusScope.of(context).requestFocus(quantityFocusNode);
-                    //       }else{
-                    //         null ;
-                    //       }
-                    //     }else{
-                    //       null ;
-                    //     }
-                    //   }
-                    // },
                     onFieldSubmitted: (value) async{
                       String itemCode = online.automaticProductCode.text;
                       if(itemCode.length >= 5){
@@ -194,7 +166,7 @@ class _AutoScanEditScreenState extends State<AutoScanEditScreen> {
                           width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: const Center(
-                            child: Text('No product searched'),
+                            child: Text('No product found'),
                           ),
                         ),
                       ),

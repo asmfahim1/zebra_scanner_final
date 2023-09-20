@@ -83,110 +83,84 @@ class _ManualEntryState extends State<ManualEntry> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                height: 40,
-                width: MediaQuery.of(context).size.width,
-                padding:
-                const EdgeInsets.only(left: 10, right: 10),
-                alignment: Alignment.centerLeft,
-                margin: const EdgeInsets.only(
-                    left: 10, top: 10, right: 10),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: manual.isEmptyField.value ==
-                        true
-                        ? Colors.red
-                        : Colors.grey,
-                    width:
-                    manual.isEmptyField.value ==
-                        true
-                        ? 2.0
-                        : 1.0,
+              Obx((){
+                return Container(
+                  height: 40,
+                  width: MediaQuery.of(context).size.width,
+                  padding:
+                  const EdgeInsets.only(left: 10, right: 10),
+                  alignment: Alignment.centerLeft,
+                  margin: const EdgeInsets.only(
+                      left: 10, top: 10, right: 10),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: manual.isEmptyField.value ==
+                          true
+                          ? Colors.red
+                          : Colors.grey,
+                      width:
+                      manual.isEmptyField.value ==
+                          true
+                          ? 2.0
+                          : 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(4.0),
                   ),
-                  borderRadius: BorderRadius.circular(4.0),
-                ),
-                child: TextFormField(
-                  controller: manual.productCode,
-                  autofocus: true,
-                  focusNode: itemFocusNode,
-                  inputFormatters: [
-                    //FilteringTextInputFormatter.deny(RegExp(r'^0')),
-                    FilteringTextInputFormatter.deny(RegExp(r'-')),
-                    FilteringTextInputFormatter.deny(RegExp(r'\.')),
-                    FilteringTextInputFormatter.deny(RegExp(r',')),
-                    FilteringTextInputFormatter.deny(RegExp(r'\+')),
-                    FilteringTextInputFormatter.deny(RegExp(r'\*')),
-                    FilteringTextInputFormatter.deny(RegExp(r'/')),
-                    FilteringTextInputFormatter.deny(RegExp(r'=')),
-                    FilteringTextInputFormatter.deny(RegExp(r'%')),
-                    FilteringTextInputFormatter.deny(RegExp(r' ')),
-                  ],
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Enter product code',
-                  ),
-                  style: const TextStyle(
-                    fontSize: 14,
-                  ),
-                  // onChanged: (value) async{
-                  //   if(widget.mode == 'Online'){
-                  //     print('last added code before assign: ${manual.productCode.text}');
-                  //     String itemCode = manual.productCode.text;
-                  //     print('last added code after assign: $itemCode');
-                  //     if(itemCode.length >= 5){
-                  //       final result = await manual.getManualAddedProduct(widget.tagNum.toString(), itemCode);
-                  //       if(result == 'Success'){
-                  //         FocusScope.of(context).requestFocus(quantityFocusNode);
-                  //       }else{
-                  //         null ;
-                  //       }
-                  //     }else{
-                  //       null ;
-                  //     }
-                  //   }else{
-                  //     if(manual.productCode.text.length >= 5){
-                  //       final result = await manual.getSingleScannedProduct();
-                  //       if(result == 'Success'){
-                  //         FocusScope.of(context).requestFocus(quantityFocusNode);
-                  //       }else{
-                  //         null ;
-                  //       }
-                  //     }else{
-                  //       null ;
-                  //     }
-                  //   }
-                  // },
-                  onFieldSubmitted: (value) async{
-                    if(widget.mode == 'Online'){
-                      print('last added code before assign: ${manual.productCode.text}');
-                      String itemCode = manual.productCode.text;
-                      print('last added code after assign: $itemCode');
-                      if(itemCode.length >= 5){
-                        final result = await manual.getManualAddedProduct(widget.tagNum.toString(), itemCode);
-                        if(result == 'Success'){
-                          FocusScope.of(context).requestFocus(quantityFocusNode);
+                  child: TextFormField(
+                    controller: manual.productCode,
+                    autofocus: true,
+                    focusNode: itemFocusNode,
+                    inputFormatters: [
+                      //FilteringTextInputFormatter.deny(RegExp(r'^0')),
+                      FilteringTextInputFormatter.deny(RegExp(r'-')),
+                      FilteringTextInputFormatter.deny(RegExp(r'\.')),
+                      FilteringTextInputFormatter.deny(RegExp(r',')),
+                      FilteringTextInputFormatter.deny(RegExp(r'\+')),
+                      FilteringTextInputFormatter.deny(RegExp(r'\*')),
+                      FilteringTextInputFormatter.deny(RegExp(r'/')),
+                      FilteringTextInputFormatter.deny(RegExp(r'=')),
+                      FilteringTextInputFormatter.deny(RegExp(r'%')),
+                      FilteringTextInputFormatter.deny(RegExp(r' ')),
+                    ],
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Enter product code',
+                    ),
+                    style: const TextStyle(
+                      fontSize: 14,
+                    ),
+                    onFieldSubmitted: (value) async{
+                      if(widget.mode == 'Online'){
+                        print('last added code before assign: ${manual.productCode.text}');
+                        String itemCode = manual.productCode.text;
+                        print('last added code after assign: $itemCode');
+                        if(itemCode.length >= 5){
+                          final result = await manual.getManualAddedProduct(widget.tagNum.toString(), itemCode);
+                          if(result == 'Success'){
+                            FocusScope.of(context).requestFocus(quantityFocusNode);
+                          }else{
+                            null ;
+                          }
                         }else{
                           null ;
                         }
                       }else{
-                        null ;
-                      }
-                    }else{
-                      if(manual.productCode.text.length >= 5){
-                        final result = await manual.getSingleScannedProduct();
-                        if(result == 'Success'){
-                          FocusScope.of(context).requestFocus(quantityFocusNode);
+                        if(manual.productCode.text.length >= 5){
+                          final result = await manual.getSingleScannedProduct();
+                          if(result == 'Success'){
+                            FocusScope.of(context).requestFocus(quantityFocusNode);
+                          }else{
+                            null ;
+                          }
                         }else{
                           null ;
                         }
-                      }else{
-                        null ;
                       }
-                    }
-                  },
-                ),
-              ),
+                    },
+                  ),
+                );
+              }),
               const SizedBox(height: 5,),
               Obx(() {
                 if (manual.entryDone.value) {
@@ -208,7 +182,7 @@ class _ManualEntryState extends State<ManualEntry> {
                             width: MediaQuery.of(context).size.width,
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: const Center(
-                              child: Text('No product searched'),
+                              child: Text('No product found'),
                             ),
                           ),
                         ),
@@ -247,50 +221,52 @@ class _ManualEntryState extends State<ManualEntry> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                    height: 40,
-                    width: MediaQuery.of(context).size.width / 2,
-                    padding:
-                    const EdgeInsets.only(left: 10, right: 10),
-                    margin: const EdgeInsets.only(left: 10, right: 10),
-                    alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: manual.isEmptyField.value ==
-                            true
-                            ? Colors.red
-                            : Colors.grey,
-                        width: manual.isEmptyField.value ==
-                            true
-                            ? 2.0
-                            : 1.0,
+                  Obx((){
+                    return Container(
+                      height: 40,
+                      width: MediaQuery.of(context).size.width / 2,
+                      padding:
+                      const EdgeInsets.only(left: 10, right: 10),
+                      margin: const EdgeInsets.only(left: 10, right: 10),
+                      alignment: Alignment.centerLeft,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: manual.isEmptyField.value ==
+                              true
+                              ? Colors.red
+                              : Colors.grey,
+                          width: manual.isEmptyField.value ==
+                              true
+                              ? 2.0
+                              : 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(4.0),
                       ),
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                    child: TextFormField(
-                      focusNode: quantityFocusNode,
-                      controller: manual.qtyController,
-                      inputFormatters: [
-                        //FilteringTextInputFormatter.deny(RegExp(r'^0')),
-                        // FilteringTextInputFormatter.deny(RegExp(r'-')),
-                        FilteringTextInputFormatter.deny(RegExp(r',')),
-                        FilteringTextInputFormatter.deny(RegExp(r'\+')),
-                        FilteringTextInputFormatter.deny(RegExp(r'\*')),
-                        FilteringTextInputFormatter.deny(RegExp(r'/')),
-                        FilteringTextInputFormatter.deny(RegExp(r'=')),
-                        FilteringTextInputFormatter.deny(RegExp(r'%')),
-                        FilteringTextInputFormatter.deny(RegExp(r' ')),
-                      ],
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Enter quantity',
+                      child: TextFormField(
+                        focusNode: quantityFocusNode,
+                        controller: manual.qtyController,
+                        inputFormatters: [
+                          //FilteringTextInputFormatter.deny(RegExp(r'^0')),
+                          // FilteringTextInputFormatter.deny(RegExp(r'-')),
+                          FilteringTextInputFormatter.deny(RegExp(r',')),
+                          FilteringTextInputFormatter.deny(RegExp(r'\+')),
+                          FilteringTextInputFormatter.deny(RegExp(r'\*')),
+                          FilteringTextInputFormatter.deny(RegExp(r'/')),
+                          FilteringTextInputFormatter.deny(RegExp(r'=')),
+                          FilteringTextInputFormatter.deny(RegExp(r'%')),
+                          FilteringTextInputFormatter.deny(RegExp(r' ')),
+                        ],
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Enter quantity',
+                        ),
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
                       ),
-                      style: const TextStyle(
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
+                    );
+                  }),
                   const SizedBox(width: 20,),
                   Container(
                     height: 40,
