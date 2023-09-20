@@ -97,24 +97,23 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
         padding: const EdgeInsets.all(5.0),
         child: Column(
           children: [
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+            Container(
+              height: MediaQuery.of(context).size.height / 12,
+              decoration: BoxDecoration(
+                  border: Border.all(
+                      color: Colors.grey
+                  )
+              ),
+              margin: EdgeInsets.symmetric(horizontal: 10),
+              child: Obx(
+                    () => Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Obx(
-                          () => Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const Text('Last code : '),
-                          Text(offline.lastCode.value,
-                              style: const TextStyle(fontSize: 14)),
-                          const SizedBox(width: 10.0),
-                        ],
-                      ),
-                    )
+                    const Text('Scan Code : ',
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    Text(offline.lastCode.value,
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: ConstantColors.uniGreen)),
+                    const SizedBox(width: 10.0),
                   ],
                 ),
               ),
@@ -123,7 +122,7 @@ class _OfflineScanScreenState extends State<OfflineScanScreen> {
               "List of Products added",
               style: GoogleFonts.urbanist(
                 color: Colors.black,
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w700,
               ),
             ),

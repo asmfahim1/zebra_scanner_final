@@ -15,7 +15,7 @@ import '../widgets/reusable_alert.dart';
 class OnlineController extends GetxController {
   LoginController login = Get.find<LoginController>();
   RxString scannerStatus = "Scanner status".obs;
-  RxString lastCode = ''.obs;
+  RxString lastCode = 'Start scanning...'.obs;
   TextEditingController qtyCon = TextEditingController();
   static const double fillPercent = 52;
   static const double fillStop = (100 - fillPercent) / 95;

@@ -101,58 +101,30 @@ class _OnlineModeState extends State<OnlineMode> {
               fontWeight: FontWeight.w700,
             ),
           ),
-          actions: [
-            GestureDetector(
-              onTap: () {
-                Get.to(() => AutoScanEditScreen(tagNum: widget.tagNum, storeId: widget.storeId,));
-              },
-              child: Container(
-                  width: MediaQuery.of(context).size.width / 5,
-                  margin: EdgeInsets.only(right: 10),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.grey
-                    ),
-                      borderRadius: BorderRadius.circular(13)),
-                  clipBehavior: Clip.hardEdge,
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Icon(
-                        Icons.mode_edit_outline,
-                        size: 15,
-                        color: Colors.black,
-                      ),
-                      Text('Edit', style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black),)
-                    ],
-                  )),
-            )
-          ],
         ),
       ),
       body: Column(
         children: [
           const SizedBox(
-            height: 10,
+            height: 5,
           ),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+          Container(
+            height: MediaQuery.of(context).size.height / 12,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.grey
+              )
+            ),
+            margin: EdgeInsets.symmetric(horizontal: 10),
+            child: Obx(
+              () => Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Obx(
-                    () => Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const Text('Last code: '),
-                        Text(onlineController.lastCode.value,
-                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                        const SizedBox(width: 10.0),
-                      ],
-                    ),
-                  )
+                  const Text('Scan Code : ',
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text(onlineController.lastCode.value,
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: ConstantColors.uniGreen)),
+                  const SizedBox(width: 10.0),
                 ],
               ),
             ),
@@ -161,7 +133,7 @@ class _OnlineModeState extends State<OnlineMode> {
             "List of Products added",
             style: GoogleFonts.urbanist(
               color: Colors.black,
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.w700,
             ),
           ),

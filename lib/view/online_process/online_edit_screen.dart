@@ -43,6 +43,14 @@ class _AutoScanEditScreenState extends State<AutoScanEditScreen> {
     initScanner();
   }
 
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    online.releaseAutoEditScreenVariables();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

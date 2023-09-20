@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:zebra_scanner_final/view/manual_entry/manual_entry_screen.dart';
+import 'package:zebra_scanner_final/view/online_process/online_edit_screen.dart';
 import 'package:zebra_scanner_final/view/online_process/online_mode_screen.dart';
 import 'package:zebra_scanner_final/widgets/reusable_tile.dart';
 
@@ -95,7 +96,7 @@ class _OnlineScanTypeScreenState extends State<OnlineScanTypeScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => OnlineMode(
+                          builder: (context) => AutoScanEditScreen(
                             tagNum: widget.tagNum,
                             storeId: widget.storeId,
                           ),
