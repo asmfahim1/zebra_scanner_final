@@ -44,13 +44,6 @@ class _AutoScanEditScreenState extends State<AutoScanEditScreen> {
   }
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    online.releaseAutoEditScreenVariables();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: PreferredSize(
@@ -81,95 +74,97 @@ class _AutoScanEditScreenState extends State<AutoScanEditScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                height: 40,
-                width: MediaQuery.of(context).size.width,
-                padding:
-                const EdgeInsets.only(left: 10, right: 10),
-                alignment: Alignment.centerLeft,
-                margin: const EdgeInsets.only(
-                    left: 10, top: 10, right: 10),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: online.isAutoFieldEmpty.value ==
-                        true
-                        ? Colors.red
-                        : Colors.grey,
-                    width:
-                    online.isAutoFieldEmpty.value ==
-                        true
-                        ? 2.0
-                        : 1.0,
+              Obx((){
+                return Container(
+                  height: 40,
+                  width: MediaQuery.of(context).size.width,
+                  padding:
+                  const EdgeInsets.only(left: 10, right: 10),
+                  alignment: Alignment.centerLeft,
+                  margin: const EdgeInsets.only(
+                      left: 10, top: 10, right: 10),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: online.isAutoFieldEmpty.value ==
+                          true
+                          ? Colors.red
+                          : Colors.grey,
+                      width:
+                      online.isAutoFieldEmpty.value ==
+                          true
+                          ? 2.0
+                          : 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(4.0),
                   ),
-                  borderRadius: BorderRadius.circular(4.0),
-                ),
-                child: TextFormField(
-                  controller: online.automaticProductCode,
-                  autofocus: true,
-                  focusNode: itemFocusNode,
-                  inputFormatters: [
-                    //FilteringTextInputFormatter.deny(RegExp(r'^0')),
-                    FilteringTextInputFormatter.deny(RegExp(r'-')),
-                    FilteringTextInputFormatter.deny(RegExp(r'\.')),
-                    FilteringTextInputFormatter.deny(RegExp(r',')),
-                    FilteringTextInputFormatter.deny(RegExp(r'\+')),
-                    FilteringTextInputFormatter.deny(RegExp(r'\*')),
-                    FilteringTextInputFormatter.deny(RegExp(r'/')),
-                    FilteringTextInputFormatter.deny(RegExp(r'=')),
-                    FilteringTextInputFormatter.deny(RegExp(r'%')),
-                    FilteringTextInputFormatter.deny(RegExp(r' ')),
-                  ],
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Enter product code',
-                  ),
-                  style: const TextStyle(
-                    fontSize: 14,
-                  ),
-                  // onChanged: (value) async{
-                  //   if(widget.mode == 'Online'){
-                  //     print('last added code before assign: ${manual.productCode.text}');
-                  //     String itemCode = manual.productCode.text;
-                  //     print('last added code after assign: $itemCode');
-                  //     if(itemCode.length >= 5){
-                  //       final result = await manual.getManualAddedProduct(widget.tagNum.toString(), itemCode);
-                  //       if(result == 'Success'){
-                  //         FocusScope.of(context).requestFocus(quantityFocusNode);
-                  //       }else{
-                  //         null ;
-                  //       }
-                  //     }else{
-                  //       null ;
-                  //     }
-                  //   }else{
-                  //     if(manual.productCode.text.length >= 5){
-                  //       final result = await manual.getSingleScannedProduct();
-                  //       if(result == 'Success'){
-                  //         FocusScope.of(context).requestFocus(quantityFocusNode);
-                  //       }else{
-                  //         null ;
-                  //       }
-                  //     }else{
-                  //       null ;
-                  //     }
-                  //   }
-                  // },
-                  onFieldSubmitted: (value) async{
-                    String itemCode = online.automaticProductCode.text;
-                    if(itemCode.length >= 5){
-                      final result = await online.getSearchedAutomaticProduct(widget.tagNum.toString(), itemCode);
-                      if(result == 'Success'){
-                        FocusScope.of(context).requestFocus(quantityFocusNode);
+                  child: TextFormField(
+                    controller: online.automaticProductCode,
+                    autofocus: true,
+                    focusNode: itemFocusNode,
+                    inputFormatters: [
+                      //FilteringTextInputFormatter.deny(RegExp(r'^0')),
+                      FilteringTextInputFormatter.deny(RegExp(r'-')),
+                      FilteringTextInputFormatter.deny(RegExp(r'\.')),
+                      FilteringTextInputFormatter.deny(RegExp(r',')),
+                      FilteringTextInputFormatter.deny(RegExp(r'\+')),
+                      FilteringTextInputFormatter.deny(RegExp(r'\*')),
+                      FilteringTextInputFormatter.deny(RegExp(r'/')),
+                      FilteringTextInputFormatter.deny(RegExp(r'=')),
+                      FilteringTextInputFormatter.deny(RegExp(r'%')),
+                      FilteringTextInputFormatter.deny(RegExp(r' ')),
+                    ],
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Enter product code',
+                    ),
+                    style: const TextStyle(
+                      fontSize: 14,
+                    ),
+                    // onChanged: (value) async{
+                    //   if(widget.mode == 'Online'){
+                    //     print('last added code before assign: ${manual.productCode.text}');
+                    //     String itemCode = manual.productCode.text;
+                    //     print('last added code after assign: $itemCode');
+                    //     if(itemCode.length >= 5){
+                    //       final result = await manual.getManualAddedProduct(widget.tagNum.toString(), itemCode);
+                    //       if(result == 'Success'){
+                    //         FocusScope.of(context).requestFocus(quantityFocusNode);
+                    //       }else{
+                    //         null ;
+                    //       }
+                    //     }else{
+                    //       null ;
+                    //     }
+                    //   }else{
+                    //     if(manual.productCode.text.length >= 5){
+                    //       final result = await manual.getSingleScannedProduct();
+                    //       if(result == 'Success'){
+                    //         FocusScope.of(context).requestFocus(quantityFocusNode);
+                    //       }else{
+                    //         null ;
+                    //       }
+                    //     }else{
+                    //       null ;
+                    //     }
+                    //   }
+                    // },
+                    onFieldSubmitted: (value) async{
+                      String itemCode = online.automaticProductCode.text;
+                      if(itemCode.length >= 5){
+                        final result = await online.getSearchedAutomaticProduct(widget.tagNum.toString(), itemCode);
+                        if(result == 'Success'){
+                          FocusScope.of(context).requestFocus(quantityFocusNode);
+                        }else{
+                          null ;
+                        }
                       }else{
                         null ;
                       }
-                    }else{
-                      null ;
-                    }
-                  },
-                ),
-              ),
+                    },
+                  ),
+                );
+              }),
               const SizedBox(height: 5,),
               Obx(() {
                 if (online.isAutoUpdate.value) {
@@ -204,50 +199,52 @@ class _AutoScanEditScreenState extends State<AutoScanEditScreen> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                    height: 40,
-                    width: MediaQuery.of(context).size.width / 2,
-                    padding:
-                    const EdgeInsets.only(left: 10, right: 10),
-                    margin: const EdgeInsets.only(left: 10, right: 10),
-                    alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: online.isAutoFieldEmpty.value ==
-                            true
-                            ? Colors.red
-                            : Colors.grey,
-                        width: online.isAutoFieldEmpty.value ==
-                            true
-                            ? 2.0
-                            : 1.0,
+                  Obx((){
+                    return Container(
+                      height: 40,
+                      width: MediaQuery.of(context).size.width / 2,
+                      padding:
+                      const EdgeInsets.only(left: 10, right: 10),
+                      margin: const EdgeInsets.only(left: 10, right: 10),
+                      alignment: Alignment.centerLeft,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: online.isAutoFieldEmpty.value ==
+                              true
+                              ? Colors.red
+                              : Colors.grey,
+                          width: online.isAutoFieldEmpty.value ==
+                              true
+                              ? 2.0
+                              : 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(4.0),
                       ),
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                    child: TextFormField(
-                      focusNode: quantityFocusNode,
-                      controller: online.automaticQty,
-                      inputFormatters: [
-                        //FilteringTextInputFormatter.deny(RegExp(r'^0')),
-                        // FilteringTextInputFormatter.deny(RegExp(r'-')),
-                        FilteringTextInputFormatter.deny(RegExp(r',')),
-                        FilteringTextInputFormatter.deny(RegExp(r'\+')),
-                        FilteringTextInputFormatter.deny(RegExp(r'\*')),
-                        FilteringTextInputFormatter.deny(RegExp(r'/')),
-                        FilteringTextInputFormatter.deny(RegExp(r'=')),
-                        FilteringTextInputFormatter.deny(RegExp(r'%')),
-                        FilteringTextInputFormatter.deny(RegExp(r' ')),
-                      ],
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Enter quantity',
+                      child: TextFormField(
+                        focusNode: quantityFocusNode,
+                        controller: online.automaticQty,
+                        inputFormatters: [
+                          //FilteringTextInputFormatter.deny(RegExp(r'^0')),
+                          // FilteringTextInputFormatter.deny(RegExp(r'-')),
+                          FilteringTextInputFormatter.deny(RegExp(r',')),
+                          FilteringTextInputFormatter.deny(RegExp(r'\+')),
+                          FilteringTextInputFormatter.deny(RegExp(r'\*')),
+                          FilteringTextInputFormatter.deny(RegExp(r'/')),
+                          FilteringTextInputFormatter.deny(RegExp(r'=')),
+                          FilteringTextInputFormatter.deny(RegExp(r'%')),
+                          FilteringTextInputFormatter.deny(RegExp(r' ')),
+                        ],
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Enter quantity',
+                        ),
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
                       ),
-                      style: const TextStyle(
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
+                    );
+                  }),
                   const SizedBox(width: 20,),
                   Container(
                     height: 40,
@@ -267,6 +264,7 @@ class _AutoScanEditScreenState extends State<AutoScanEditScreen> {
                             login.userId.value,
                             widget.tagNum.toString(),
                             widget.storeId.toString(),
+                            online.automaticAddedProductModel!.itemCode.toString()
                           );
                           if(result == 'Success'){
                             FocusScope.of(context).requestFocus(itemFocusNode);

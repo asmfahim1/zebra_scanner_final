@@ -341,7 +341,7 @@ class OnlineController extends GetxController {
   RxBool isAutoUpdate = false.obs;
   RxBool isAutoFieldEmpty = false.obs;
   LastAutoAddedProductModel? lastAutoAddedProductModel;
-  Future<String> updateAutomaticScanned(BuildContext context, String ipAddress, String deviceID, String userId, String tagNum, String storeId) async {
+  Future<String> updateAutomaticScanned(BuildContext context, String ipAddress, String deviceID, String userId, String tagNum, String storeId, String itemCode) async {
     BotToast.showLoading();
     if (automaticProductCode.text.isEmpty || automaticQty.text.isEmpty) {
       isAutoUpdate(false);
@@ -362,7 +362,7 @@ class OnlineController extends GetxController {
         final response = await http.post(
           Uri.parse("http://$ipAddress/unistock/zebra/autoScanUpdate.php"),
           body: jsonEncode(<String, dynamic>{
-            "xitem": automaticProductCode.text,
+            "xitem": itemCode,
             "user_id": userId,
             "qty": automaticQty.text,
             "tag_no": tagNum,
@@ -388,8 +388,8 @@ class OnlineController extends GetxController {
         } else {
           isAutoUpdate(false);
           isAutoFieldEmpty(false);
+          BotToast.closeAllLoading();
           if (context.mounted) {
-            BotToast.closeAllLoading();
             final responseBody = json.decode(response.body) as Map<String, dynamic>;
             final errorMessage = responseBody['error'] as String;
             showDialog<String>(
@@ -406,7 +406,7 @@ class OnlineController extends GetxController {
         }
       }else{
         isAutoUpdate(false);
-        isAutoFieldEmpty(false);
+        isAutoFieldEmpty(true);
         BotToast.closeAllLoading();
         Get.snackbar(
           'Warning!',
