@@ -43,39 +43,68 @@ class _OnlineScanTypeScreenState extends State<OnlineScanTypeScreen> {
             )),
       ),
       body: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TileBtn(
-              imageName: 'images/auto_scan.png',
-              buttonName: 'Automatic scan',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => OnlineMode(
-                      tagNum: widget.tagNum,
-                      storeId: widget.storeId,
-                    ),
-                  ),
-                );
-              },
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                TileBtn(
+                  imageName: 'images/auto_scan.png',
+                  buttonName: 'Automatic scan',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => OnlineMode(
+                          tagNum: widget.tagNum,
+                          storeId: widget.storeId,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                TileBtn(
+                  imageName: 'images/manual_scan.png',
+                  buttonName: 'Manual entry',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ManualEntry(
+                          tagNum: widget.tagNum,
+                          storeId: widget.storeId,
+                          mode: 'Online',
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
-            TileBtn(
-              imageName: 'images/manual_scan.png',
-              buttonName: 'Manual entry',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ManualEntry(
-                      tagNum: widget.tagNum,
-                      storeId: widget.storeId,
-                      mode: 'Online',
-                    ),
+            SizedBox(height: 15,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: TileBtn(
+                    imageName: 'images/edit_icon.png',
+                    buttonName: 'Edit auto scan',
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OnlineMode(
+                            tagNum: widget.tagNum,
+                            storeId: widget.storeId,
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+              ],
             ),
           ],
         ),

@@ -69,7 +69,7 @@ class LoginController extends GetxController {
             borderWidth: 1.5,
             borderColor: Colors.black54,
             colorText: Colors.white,
-            backgroundColor: ConstantColors.comColor.withOpacity(0.6),
+            backgroundColor: ConstantColors.uniGreen,
             duration: const Duration(seconds: 1),
             snackPosition: SnackPosition.TOP,
           );

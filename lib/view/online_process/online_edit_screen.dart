@@ -22,7 +22,7 @@ class AutoScanEditScreen extends StatefulWidget {
 
 class _AutoScanEditScreenState extends State<AutoScanEditScreen> {
   LoginController login = Get.find<LoginController>();
-  OnlineController online = Get.find<OnlineController>();
+  OnlineController online = Get.put(OnlineController());
   FocusNode quantityFocusNode = FocusNode();
   FocusNode itemFocusNode = FocusNode();
 
@@ -31,7 +31,7 @@ class _AutoScanEditScreenState extends State<AutoScanEditScreen> {
     FlutterDataWedge.initScanner(
       profileName: 'FlutterDataWedge',
       onScan: (result) async{
-        print('scanned code : ${result.data}');
+        print('scanned code======== : ${result.data}');
       },
     );
   }
@@ -54,6 +54,7 @@ class _AutoScanEditScreenState extends State<AutoScanEditScreen> {
             leading: GestureDetector(
               onTap: () async{
                 Get.back();
+                online.releaseAutoEditScreenVariables();
               },
               child: const Icon(
                 Icons.arrow_back,
